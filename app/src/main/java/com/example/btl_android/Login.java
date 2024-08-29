@@ -26,7 +26,7 @@ public class Login extends AppCompatActivity {
     ImageView showHidePass;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference dbRef = database.getReference("taikhoan");
+    DatabaseReference dbRef = database.getReference("san_pham");
 
     @SuppressLint("WrongViewCast")
     @Override
