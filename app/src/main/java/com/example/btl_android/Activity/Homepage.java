@@ -1,4 +1,4 @@
-package com.example.btl_android;
+package com.example.btl_android.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.SearchView;
 
+import com.example.btl_android.R;
+import com.example.btl_android.Adapter.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 
 public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

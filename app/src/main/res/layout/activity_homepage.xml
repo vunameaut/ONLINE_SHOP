@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Homepage"
+    tools:context=".Activity.Homepage"
     tools:openDrawer="start">
 
     <!-- Nội dung chính: ViewPager và Toolbar -->

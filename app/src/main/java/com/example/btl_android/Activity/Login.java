@@ -1,4 +1,4 @@
-package com.example.btl_android;
+package com.example.btl_android.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.btl_android.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -1,4 +1,4 @@
-package com.example.btl_android;
+package com.example.btl_android.Adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
