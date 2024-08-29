@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">BTL_Android</string>
+    <string name="logo">Logo</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="register">Đăng ký</string>
+    <string name="login">Đăng nhập</string>
+    <string name="email">Email</string>
+    <string name="cPass">Comfim password</string>
+    <string name="homepage">Trang chủ</string>
+    <string name="phone">Điện thoại</string>
+    <string name="laptop">Laptop</string>
+    <string name="computer">Máy tính</string>
+    <string name="order">Đơn hàng</string>
+    <string name="account">Tài khoản</string>
+    <string name="setting">Cài đặt</string>
+    <string name="nav_open">Open navigation drawer</string>
+    <string name="nav_close">Close navigation drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="show_pass">Show</string>
+</resources>
