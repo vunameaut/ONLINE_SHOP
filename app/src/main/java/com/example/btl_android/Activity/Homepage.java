@@ -147,6 +147,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         }
         if (item.getItemId() == R.id.nav_setting) {
             Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, Setting.class);
+            startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

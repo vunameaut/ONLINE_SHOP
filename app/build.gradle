@@ -43,6 +43,7 @@ dependencies {
     implementation libs.glide
     implementation libs.circleimageview
     implementation libs.picasso
+    implementation libs.preference
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
