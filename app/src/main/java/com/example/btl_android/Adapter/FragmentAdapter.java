@@ -2,68 +2,67 @@ package com.example.btl_android.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Model.SanPham;
 import com.example.btl_android.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class FragmentAdapter extends BaseAdapter {
-
-    ArrayList<SanPham> sanPhamList;
+public class FragmentAdapter extends RecyclerView.Adapter<FragmentAdapter.ItemHolder> {
 
     Context context;
+    ArrayList<SanPham> mangSanPham;
 
+    public FragmentAdapter(Context context, ArrayList<SanPham> mangSanPham) {
+        this.context = context;
+        this.mangSanPham = mangSanPham;
+    }
+
+    @androidx.annotation.NonNull
     @Override
-    public int getCount() {
-        return sanPhamList.size();
+    public ItemHolder onCreateViewHolder(@androidx.annotation.NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fragment, null);
+        return new ItemHolder(view);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onBindViewHolder(@androidx.annotation.NonNull ItemHolder holder, int position) {
+        SanPham sanPham = mangSanPham.get(position);
+        holder.nameSP.setText(sanPham.getTen_san_pham());
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        holder.priceSP.setText("Giá: " + decimalFormat.format(sanPham.getGia()) + "đ");
+        Picasso.get().load(sanPham.getHinh_anh())
+                .placeholder(R.drawable.ic_imagnot)
+                .error(R.drawable.ic_imageerror)
+                .into(holder.hinhSP);
+
     }
 
     @Override
-    public Object getItem(int position) {
-        return sanPhamList.get(position);
+    public int getItemCount() {
+        return mangSanPham.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public static class ItemHolder extends RecyclerView.ViewHolder {
+        public ImageView hinhSP;
+        public TextView nameSP, priceSP;
 
-    public static class ViewHolder {
-        ImageView iVSanPham;
-        TextView textViewName, textViewPrice;
-    }
-
-    @SuppressLint("InflateParams")
-    @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        ViewHolder holder;
-        if (view == null) {
-            holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.item_fragment, null);
-            holder.iVSanPham = view.findViewById(R.id.iv_sanpham);
-            holder.textViewName = view.findViewById(R.id.tv_name);
-            holder.textViewPrice = view.findViewById(R.id.tv_price);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-            SanPham sanPham = sanPhamList.get(position);
-            holder.textViewName.setText(sanPham.getTen_san_pham());
-            holder.textViewPrice.setText(String.valueOf(sanPham.getGia()));
-            Picasso.get().load(sanPham.getHinh_anh())
-                    .placeholder(R.drawable.ic_imagnot)
-                    .error(R.drawable.ic_imageerror)
-                    .into(holder.iVSanPham);
+        public ItemHolder(@NonNull View itemView) {
+            super(itemView);
+            hinhSP = itemView.findViewById(R.id.iv_sanpham);
+            nameSP = itemView.findViewById(R.id.tv_name);
+            priceSP = itemView.findViewById(R.id.tv_price);
         }
-
-        return view;
     }
 }

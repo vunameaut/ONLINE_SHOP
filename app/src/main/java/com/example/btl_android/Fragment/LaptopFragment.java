@@ -1,66 +1,92 @@
 package com.example.btl_android.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.btl_android.Adapter.FragmentAdapter;
+import com.example.btl_android.CheckConn;
+import com.example.btl_android.Model.SanPham;
 import com.example.btl_android.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LaptopFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class LaptopFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public LaptopFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LaptopFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LaptopFragment newInstance(String param1, String param2) {
-        LaptopFragment fragment = new LaptopFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    RecyclerView recyclerView;
+    DrawerLayout drawerLayout;
+    ArrayList<SanPham> mangSanPham;
+    FragmentAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_laptop, container, false);
+        View view = inflater.inflate(R.layout.fragment_computer, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        drawerLayout = view.findViewById(R.id.drawerLayout);
+        mangSanPham = new ArrayList<>();
+        adapter = new FragmentAdapter(requireContext(), mangSanPham);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        recyclerView.setAdapter(adapter);
+
+        if (CheckConn.haveNetworkConn(requireContext()))
+            getData();
+        else
+            CheckConn.showToast(requireContext(), "Không có kết nối mạng");
+
+        return view;
+    }
+
+    public void getData() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = database.getReference("san_pham");
+
+        dbRef.addValueEventListener(new ValueEventListener() {
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mangSanPham.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    String ten = snapshot.child("ten_san_pham").getValue(String.class);
+                    Integer gia = snapshot.child("gia").getValue(Integer.class);
+                    String anh = snapshot.child("hinh_anh").getValue(String.class);
+                    String loai = snapshot.child("loai").getValue(String.class);
+                    assert loai != null;
+                    if (loai.equals("Laptop")) {
+                        mangSanPham.add(new SanPham(ten, gia, anh, loai));
+                        //Log.d("PhoneFragment", "Tên sản phẩm: " + ten);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                CheckConn.showToast(requireContext(), "Lỗi: " + error.getMessage());
+            }
+        });
     }
 }

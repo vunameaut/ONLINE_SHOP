@@ -8,8 +8,11 @@ public class SanPham {
     private String loai;
     private int so_luong_ton_kho;
 
-    public SanPham() {
-        // Default constructor required for calls to DataSnapshot.getValue(Phone.class)
+    public SanPham(String tensp, int gia, String anh, String loai) {
+        this.ten_san_pham = tensp;
+        this.gia = gia;
+        this.hinh_anh = anh;
+        this.loai = loai;
     }
 
     // Getters and setters
