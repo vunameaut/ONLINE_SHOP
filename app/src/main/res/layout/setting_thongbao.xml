@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/introduce"
+            android:text="@string/notification"
             android:textSize="48sp"
             android:textStyle="bold"
             android:layout_marginTop="30dp"
@@ -32,20 +32,33 @@
             android:layout_marginEnd="50dp"/>
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="100dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle">
 
-        <TextView
-            android:id="@+id/tvTerms"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swApp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nội dung giới thiệu sẽ được hiển thị tại đây..."
-            android:textSize="16sp"
-            android:padding="10dp"/>
-    </ScrollView>
+            android:padding="10dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/notifiApp"
+            android:textSize="18sp"
+            tools:ignore="VisualLintButtonSize" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/swEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/TBmail"
+            android:textSize="18sp"
+            tools:ignore="VisualLintButtonSize" />
+    </LinearLayout>
 
 
 </LinearLayout>

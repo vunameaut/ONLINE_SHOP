@@ -32,15 +32,6 @@
             android:layout_marginEnd="50dp"/>
     </LinearLayout>
 
-    <!-- Header -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/setting"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:paddingBottom="16dp"/>
-
     <!-- Các item trong danh sách -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,96 +40,66 @@
         android:divider="?android:attr/dividerHorizontal"
         android:showDividers="middle">
 
-        <!-- Item 1 -->
         <Button
-            android:id="@+id/btnCaiDatChat"
+            android:id="@+id/btnThongBao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Cài đặt Chat"
+            android:text="@string/notification"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
-        <!-- Item 2 -->
         <Button
-            android:id="@+id/btnCaiDatThongBao"
+            android:id="@+id/btnTkBm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Cài đặt Thông báo"
+            android:text="@string/accountsecurity"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
-        <!-- Item 3 -->
         <Button
-            android:id="@+id/btnCaiDatAnToanBaoMat"
+            android:id="@+id/btnNgonNgu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Cài đặt An toàn và bảo mật"
+            android:text="@string/language"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
-        <!-- Item 4 -->
         <Button
-            android:id="@+id/btnCaiDatNgonNgu"
+            android:id="@+id/btnHoTro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Cài đặt Ngôn ngữ"
+            android:text="@string/support"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
-        <!-- Header Hỗ trợ -->
-        <TextView
-            android:id="@+id/tvHoTro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hỗ trợ"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:paddingTop="24dp"
-            android:paddingBottom="16dp"/>
-
-        <!-- Item 5 -->
         <Button
-            android:id="@+id/btnTrungTamHoTro"
+            android:id="@+id/btnCongDong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Trung tâm hỗ trợ"
+            android:text="@string/community"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
-        <!-- Item 6 -->
-        <Button
-            android:id="@+id/btnTieuChuanCongDong"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="@android:color/transparent"
-            android:textColor="@color/black"
-            android:text="Tiêu chuẩn cộng đồng"
-            android:textSize="16sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="8dp"/>
-
-        <!-- Item 7 -->
         <Button
             android:id="@+id/btnDieuKhoan"
             android:layout_width="match_parent"
@@ -146,12 +107,11 @@
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Điều khoản"
+            android:text="@string/clause"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
-        <!-- Item 8 -->
         <Button
             android:id="@+id/btnGioiThieu"
             android:layout_width="match_parent"
@@ -159,7 +119,7 @@
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
-            android:text="Giới thiệu"
+            android:text="@string/introduce"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
@@ -170,7 +130,7 @@
         android:id="@+id/btnDangXuat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Đăng xuất"
+        android:text="@string/logout"
         android:textSize="32sp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"

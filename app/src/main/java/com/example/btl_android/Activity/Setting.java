@@ -5,20 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_android.Activity.Settings.CongDong;
 import com.example.btl_android.Activity.Settings.DieuKhoan;
 import com.example.btl_android.Activity.Settings.GioiThieu;
+import com.example.btl_android.Activity.Settings.HoTro;
+import com.example.btl_android.Activity.Settings.NgonNgu;
+import com.example.btl_android.Activity.Settings.TKvaBM;
+import com.example.btl_android.Activity.Settings.ThongBao;
 import com.example.btl_android.R;
 
 public class Setting extends AppCompatActivity {
 
     ImageView btnBack;
-    Button btnCaiDatChat, btnCaiDatThongBao, btnCaiDatAnToanBaoMat, btnCaiDatNgonNgu,
-            btnTrungTamHoTro, btnTieuChuanCongDong, btnDieuKhoan, btnGioiThieu, btnDangXuat;
+    Button btnThongBao, btnTaiKhoanBaoMat, btnNgonNgu, btnHoTro,
+            btnCongDong, btnDieuKhoan, btnGioiThieu, btnDangXuat;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -26,25 +29,49 @@ public class Setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        // Ánh xạ các thành phần giao diện
+        Mapping();
+
+        // Đăng ký sự kiện nhấn
+        LoadActivity();
+
+        btnBack.setOnClickListener(v -> onBackPressed());
+        btnDangXuat.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+        });
+    }
+
+    private void Mapping() {
         btnBack =  findViewById(R.id.ivBack);
-        btnCaiDatChat = findViewById(R.id.btnCaiDatChat);
-        btnCaiDatThongBao = findViewById(R.id.btnCaiDatThongBao);
-        btnCaiDatAnToanBaoMat = findViewById(R.id.btnCaiDatAnToanBaoMat);
-        btnCaiDatNgonNgu = findViewById(R.id.btnCaiDatNgonNgu);
-        btnTrungTamHoTro = findViewById(R.id.btnTrungTamHoTro);
-        btnTieuChuanCongDong = findViewById(R.id.btnTieuChuanCongDong);
+        btnThongBao = findViewById(R.id.btnThongBao);
+        btnTaiKhoanBaoMat = findViewById(R.id.btnTkBm);
+        btnNgonNgu = findViewById(R.id.btnNgonNgu);
+        btnHoTro = findViewById(R.id.btnHoTro);
+        btnCongDong = findViewById(R.id.btnCongDong);
         btnDieuKhoan = findViewById(R.id.btnDieuKhoan);
         btnGioiThieu = findViewById(R.id.btnGioiThieu);
         btnDangXuat = findViewById(R.id.btnDangXuat);
+    }
 
-        // Đăng ký sự kiện nhấn
-        btnCaiDatChat.setOnClickListener(view -> showToast("Cài đặt Chat"));
-        btnCaiDatThongBao.setOnClickListener(view -> showToast("Cài đặt Thông báo"));
-        btnCaiDatAnToanBaoMat.setOnClickListener(view -> showToast("Cài đặt An toàn và bảo mật"));
-        btnCaiDatNgonNgu.setOnClickListener(view -> showToast("Cài đặt Ngôn ngữ"));
-
-        btnTrungTamHoTro.setOnClickListener(view -> showToast("Trung tâm hỗ trợ"));
-        btnTieuChuanCongDong.setOnClickListener(view -> {
+    private void LoadActivity() {
+        btnThongBao.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ThongBao.class);
+            startActivity(intent);
+        });
+        btnTaiKhoanBaoMat.setOnClickListener(view -> {
+            Intent intent = new Intent(this, TKvaBM.class);
+            startActivity(intent);
+        });
+        btnNgonNgu.setOnClickListener(view -> {
+            Intent intent = new Intent(this, NgonNgu.class);
+            startActivity(intent);
+        });
+        btnHoTro.setOnClickListener(view -> {
+            Intent intent = new Intent(this, HoTro.class);
+            startActivity(intent);
+        });
+        btnCongDong.setOnClickListener(view -> {
             Intent intent = new Intent(this, CongDong.class);
             startActivity(intent);
         });
@@ -56,15 +83,5 @@ public class Setting extends AppCompatActivity {
             Intent intent = new Intent(this, GioiThieu.class);
             startActivity(intent);
         });
-
-        btnBack.setOnClickListener(v -> onBackPressed());
-        btnDangXuat.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-        });
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
