@@ -43,4 +43,6 @@
     <string name="logout">Đăng xuất</string>
     <string name="notifiApp">Thông báo ứng dụng</string>
     <string name="TBmail">Thông báo về email</string>
+    <string name="changePass">Đổi mật khẩu</string>
+    <string name="profile">Hồ sơ cá nhân</string>
 </resources>

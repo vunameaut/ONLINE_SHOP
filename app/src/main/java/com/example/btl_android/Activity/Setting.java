@@ -42,6 +42,7 @@ public class Setting extends AppCompatActivity {
         });
     }
 
+    // Ánh xạ các thành phần giao diện
     private void Mapping() {
         btnBack =  findViewById(R.id.ivBack);
         btnThongBao = findViewById(R.id.btnThongBao);
