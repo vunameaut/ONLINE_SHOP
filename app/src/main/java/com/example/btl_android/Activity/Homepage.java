@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -25,7 +25,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     ViewPager viewPager;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    Toolbar toolbar;
+    ImageView imageViewMenu,imageViewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,25 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         viewPager = findViewById(R.id.view_pager);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
+        imageViewMenu = findViewById(R.id.imageViewMenu);
+        imageViewCart = findViewById(R.id.imageViewCart);
 
-        setSupportActionBar(toolbar);
+        // Gán sự kiện click cho ImageView để mở DrawerLayout
+        imageViewMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        // Thêm sự kiện click cho giỏ hàng để chuyển đến Cart Activity
+        imageViewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Homepage.this, Cart.class);
+                startActivity(intent);
+            }
+        });
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(adapter);
@@ -76,9 +92,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         });
 
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+
+        // Không cần ActionBarDrawerToggle vì không dùng Toolbar
 
         navigationView.setNavigationItemSelectedListener(this);
 

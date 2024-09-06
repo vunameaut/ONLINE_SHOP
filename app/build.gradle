@@ -24,13 +24,6 @@ android {
         }
     }
 
-    buildscript {
-        dependencies {
-            classpath libs.google.services
-        }
-    }
-
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -38,7 +31,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -52,9 +44,8 @@ dependencies {
     implementation libs.circleimageview
     implementation libs.picasso
     implementation libs.preference
-
-    // Firebase Cloud Messaging
-    implementation libs.firebase.firestore
+    implementation libs.firebase.storage
+    implementation libs.firebase.auth
     implementation libs.firebase.messaging
 
 
