@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -44,6 +43,8 @@ dependencies {
     implementation libs.circleimageview
     implementation libs.picasso
     implementation libs.preference
+    implementation libs.firebase.storage
+    implementation libs.firebase.auth
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

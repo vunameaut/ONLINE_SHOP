@@ -18,6 +18,8 @@ picasso = "2.71828"
 recyclerview = "1.3.2"
 recyclerviewVersion = "1.2.1"
 preference = "1.2.1"
+firebaseStorage = "21.0.0"
+firebaseAuth = "23.0.0"
 
 [libraries]
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
@@ -37,6 +39,8 @@ picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 recyclerview-v121 = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerviewVersion" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -7,11 +7,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_android.R;
-import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -20,15 +20,16 @@ public class Register extends AppCompatActivity {
     EditText userEditText, emailEditText, passEditText, cPassEditText;
     ImageView showHidePass;
 
+    FirebaseAuth auth;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = database.getReference("taikhoan");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
+
+        auth = FirebaseAuth.getInstance();
 
         showHidePass = findViewById(R.id.iv_Show);
         userEditText = findViewById(R.id.et_User);
@@ -53,43 +54,43 @@ public class Register extends AppCompatActivity {
         String inputUser = userEditText.getText().toString();
         String inputEmail = emailEditText.getText().toString();
         String inputPass = passEditText.getText().toString();
+        String inputCPass = cPassEditText.getText().toString();
 
-        checkInput();
+        checkInput(inputUser, inputEmail, inputPass, inputCPass);
 
-        dbRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+        auth.createUserWithEmailAndPassword(inputEmail, inputPass)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Đăng ký thành công
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(emailTask -> {
+                                        if (emailTask.isSuccessful()) {
+                                            // Lưu thông tin người dùng vào Realtime Database, sử dụng UID làm khóa ngoài
+                                            String userId = user.getUid(); // Lấy UID của người dùng
 
-                for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                    String username = snapshot.child("user").getValue(String.class);
-                    String email = snapshot.child("email").getValue(String.class);
+                                            DatabaseReference userRef = dbRef.child(userId); // Sử dụng UID làm khóa ngoài
+                                            userRef.child("uid").setValue(userId);
+                                            userRef.child("username").setValue(inputUser);
+                                            userRef.child("email").setValue(inputEmail);
+                                            userRef.child("diachi").setValue(""); // Địa chỉ mặc định
+                                            userRef.child("sdt").setValue(""); // Số điện thoại mặc định
 
-                    if (inputUser.equals(username)) {
-                        Toast.makeText(Register.this, "Tên đăng nhập đã tồn tại", Toast.LENGTH_SHORT).show();
-                        return;
+                                            Toast.makeText(Register.this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
+
+                                            Intent intent = new Intent(this, Login.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(Register.this, "Lỗi gửi email xác thực", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    } else {
+                        // Nếu đăng ký thất bại
+                        Toast.makeText(Register.this, "Lỗi đăng ký", Toast.LENGTH_SHORT).show();
                     }
-                    if (inputEmail.equals(email)) {
-                        Toast.makeText(Register.this, "Email đã tồn tại", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    long count = task.getResult().getChildrenCount() + 1;
-
-                    String key = "t" + count;
-
-                    dbRef.child(key).child("user").setValue(inputUser);
-                    dbRef.child(key).child("pass").setValue(inputPass);
-                    dbRef.child(key).child("email").setValue(inputEmail);
-
-                    Toast.makeText(Register.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                }
-            }
-            else {
-                Toast.makeText(Register.this, "Lỗi đăng ký", Toast.LENGTH_SHORT).show();
-            }
-        });
+                });
     }
 
     protected void ShowHidePass() {
@@ -97,29 +98,34 @@ public class Register extends AppCompatActivity {
             passEditText.setInputType(1);
             cPassEditText.setInputType(1);
             showHidePass.setImageResource(R.drawable.ic_hide);
-        }
-        else {
+        } else {
             passEditText.setInputType(129);
             cPassEditText.setInputType(129);
             showHidePass.setImageResource(R.drawable.ic_show);
         }
     }
 
-    protected void checkInput() {
-        String inputUser = userEditText.getText().toString();
-        String inputEmail = emailEditText.getText().toString();
-        String inputPass = passEditText.getText().toString();
-        String inputCPass = cPassEditText.getText().toString();
-
+    protected void checkInput(String inputUser, String inputEmail, String inputPass, String inputCPass) {
         if (inputUser.isEmpty()) {
-            Toast.makeText(Register.this,"Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
             userEditText.requestFocus();
+            return;
+        }
 
+        if (inputEmail.isEmpty()) {
+            Toast.makeText(Register.this, "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
+            emailEditText.requestFocus();
+            return;
+        }
+
+        if (inputPass.isEmpty()) {
+            Toast.makeText(Register.this, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+            passEditText.requestFocus();
             return;
         }
 
         if (!inputPass.equals(inputCPass)) {
-            Toast.makeText(Register.this,"Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Register.this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
             return;
         }
     }
