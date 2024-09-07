@@ -1,5 +1,6 @@
 package com.example.btl_android.Activity.Settings;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.btl_android.Activity.Homepage;
+import com.example.btl_android.Activity.Login;
+import com.example.btl_android.Activity.Register;
 import com.example.btl_android.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +36,9 @@ public class DieuKhoan extends AppCompatActivity {
     TextView tvTerms;
     ImageView btnBack;
     private static final String FILE_NAME = "dieu_khoan.txt";
-    private static final String PREFS_NAME = "DieuKhoanPrefs";
-    private static final String KEY_AGREED = "hasAgreed";
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference dbRef = database.getReference("taikhoan");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,31 +56,40 @@ public class DieuKhoan extends AppCompatActivity {
         tvTerms.setText(fileContent);
         tvTerms.setTextColor(getResources().getColor(R.color.black));
 
-        // Đọc trạng thái từ SharedPreferences
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean hasAgreed = prefs.getBoolean(KEY_AGREED, false);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", null);
 
-        if (hasAgreed) {
-//            cbAgree.setChecked(true);
-//            cbAgree.setEnabled(false); // Không cho phép người dùng thay đổi trạng thái của CheckBox
-//            btnContinue.setVisibility(View.GONE); // Ẩn nút "Tiếp tục"
+        dbRef.addValueEventListener(new ValueEventListener() {
 
-            cbAgree.setChecked(false);
-            cbAgree.setEnabled(true);
-            btnContinue.setVisibility(View.VISIBLE);
-        }
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Boolean dieukhoan = snapshot.child(uid).child("dieukhoan").getValue(Boolean.class);
+
+                if (dieukhoan != null && dieukhoan) {
+                    btnContinue.setVisibility(View.GONE);
+                    cbAgree.setChecked(true);
+                    cbAgree.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         btnContinue.setOnClickListener(view -> {
             if (cbAgree.isChecked()) {
-                Toast.makeText(DieuKhoan.this, "Bạn đã đồng ý với các điều khoản", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DieuKhoan.this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
 
-                // Lưu trạng thái đồng ý vào SharedPreferences
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean(KEY_AGREED, true);
-                editor.apply();
+                String intent_uid = getIntent().getStringExtra("intent_uid");
 
-                btnContinue.setVisibility(View.GONE);
-                cbAgree.setEnabled(false);
+                dbRef.child(intent_uid).child("dieukhoan").setValue(true);
+
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+
             } else {
                 Toast.makeText(DieuKhoan.this, "Vui lòng đồng ý với các điều khoản để tiếp tục", Toast.LENGTH_SHORT).show();
             }

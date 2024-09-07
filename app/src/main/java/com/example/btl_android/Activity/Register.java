@@ -1,7 +1,9 @@
 package com.example.btl_android.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.btl_android.Activity.Settings.DieuKhoan;
 import com.example.btl_android.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,13 +53,16 @@ public class Register extends AppCompatActivity {
         showHidePass.setOnClickListener(v -> ShowHidePass());
     }
 
-    protected void RegisterToLogin() {
+    public void RegisterToLogin() {
         String inputUser = userEditText.getText().toString();
         String inputEmail = emailEditText.getText().toString();
         String inputPass = passEditText.getText().toString();
         String inputCPass = cPassEditText.getText().toString();
 
-        checkInput(inputUser, inputEmail, inputPass, inputCPass);
+        if (!checkInput(inputUser, inputEmail, inputPass, inputCPass)) {
+            return;  // Dừng lại nếu thông tin đầu vào không hợp lệ
+        }
+
 
         auth.createUserWithEmailAndPassword(inputEmail, inputPass)
                 .addOnCompleteListener(this, task -> {
@@ -76,10 +82,11 @@ public class Register extends AppCompatActivity {
                                             userRef.child("email").setValue(inputEmail);
                                             userRef.child("diachi").setValue(""); // Địa chỉ mặc định
                                             userRef.child("sdt").setValue(""); // Số điện thoại mặc định
+                                            userRef.child("dieukhoan").setValue(false); // Đặt giá trị mặc định là false
 
-                                            Toast.makeText(Register.this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
 
-                                            Intent intent = new Intent(this, Login.class);
+                                            Intent intent = new Intent(this, DieuKhoan.class);
+                                            intent.putExtra("intent_uid", userId);
                                             startActivity(intent);
                                         } else {
                                             Toast.makeText(Register.this, "Lỗi gửi email xác thực", Toast.LENGTH_SHORT).show();
@@ -94,39 +101,45 @@ public class Register extends AppCompatActivity {
     }
 
     protected void ShowHidePass() {
-        if (passEditText.getInputType() == 129) {
-            passEditText.setInputType(1);
-            cPassEditText.setInputType(1);
+        if (passEditText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+            passEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+            cPassEditText.setInputType(InputType.TYPE_CLASS_TEXT);
             showHidePass.setImageResource(R.drawable.ic_hide);
         } else {
-            passEditText.setInputType(129);
-            cPassEditText.setInputType(129);
+            passEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            cPassEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             showHidePass.setImageResource(R.drawable.ic_show);
         }
+        // Move the cursor to the end of the text
+        passEditText.setSelection(passEditText.length());
+        cPassEditText.setSelection(cPassEditText.length());
     }
 
-    protected void checkInput(String inputUser, String inputEmail, String inputPass, String inputCPass) {
+    protected boolean checkInput(String inputUser, String inputEmail, String inputPass, String inputCPass) {
         if (inputUser.isEmpty()) {
             Toast.makeText(Register.this, "Vui lòng nhập tên đăng nhập", Toast.LENGTH_SHORT).show();
             userEditText.requestFocus();
-            return;
+            return false;
         }
 
         if (inputEmail.isEmpty()) {
             Toast.makeText(Register.this, "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
             emailEditText.requestFocus();
-            return;
+            return false;
         }
 
         if (inputPass.isEmpty()) {
             Toast.makeText(Register.this, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
             passEditText.requestFocus();
-            return;
+            return false;
         }
 
         if (!inputPass.equals(inputCPass)) {
             Toast.makeText(Register.this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
+
+        return true;
     }
+
 }

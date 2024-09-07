@@ -62,14 +62,8 @@ public class HomeFragment extends Fragment {
         sliderAdapter = new SliderAdapter(getContext(), sliderImageUrls);
         viewPagerSlider.setAdapter(sliderAdapter);
 
-
-
-
-
         fetchProductData();
         fetchSliderImages();
-
-
 
         return view;
     }

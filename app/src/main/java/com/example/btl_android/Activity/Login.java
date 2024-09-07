@@ -92,6 +92,7 @@ public class Login extends AppCompatActivity {
                                 Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(Login.this, Homepage.class);
                                 intent.putExtra("uid", uid); // Truyền uid qua Intent nếu cần
+
                                 startActivity(intent);
                                 finish(); // Đóng màn hình đăng nhập
                             } else {
