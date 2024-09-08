@@ -2,6 +2,7 @@ package com.example.btl_android.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,6 +38,11 @@ public class Setting extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> onBackPressed());
         btnDangXuat.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();  // Xóa tất cả dữ liệu
+            editor.apply();
+
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         });

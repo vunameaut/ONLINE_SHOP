@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BTL_Android</string>
     <string name="logo">Logo</string>
-    <string name="username">Tên đăng nhập</string>
+    <string name="username">Tên tài khoản</string>
     <string name="password">Mật khẩu</string>
     <string name="register">Đăng ký</string>
     <string name="login">Đăng nhập</string>
@@ -57,4 +57,9 @@
     <string name="pay">Thanh toán</string>
     <string name="product_image">ảnh sản phẩm\n</string>
     <string name="ChangePass">Đổi mật khẩu</string>
+    <string name="profile">Hồ sơ cá nhân</string>
+    <string name="notUpdate">Chưa cập nhật</string>
+    <string name="cancel">Hủy</string>
+    <string name="save">Lưu</string>
+
 </resources>

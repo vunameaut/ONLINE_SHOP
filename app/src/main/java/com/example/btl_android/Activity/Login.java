@@ -22,7 +22,6 @@ public class Login extends AppCompatActivity {
 
     EditText userEditText, passEditText;
     TextInputLayout userInputLayout, passInputLayout;
-    ImageView showHidePass;
 
     FirebaseAuth auth;
 
@@ -36,13 +35,12 @@ public class Login extends AppCompatActivity {
 
         userEditText = findViewById(R.id.et_User);
         passEditText = findViewById(R.id.et_Pass);
-        showHidePass = findViewById(R.id.iv_Show);
 
         Button btn_Login = findViewById(R.id.btn_Login);
         Button btn_Register = findViewById(R.id.btn_Register);
 
         // Kiểm tra xem người dùng đã đăng nhập chưa
-        //checkLoginStatus();
+        checkLoginStatus();
 
         btn_Login.setOnClickListener(view -> LoginToHomepage());
 
@@ -51,21 +49,20 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
-        showHidePass.setOnClickListener(v -> ShowHidePass());
     }
 
     // Hàm kiểm tra trạng thái đăng nhập
-//    private void checkLoginStatus() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        String uid = sharedPreferences.getString("uid", null);
-//        if (uid != null) {
-//            // Người dùng đã đăng nhập - chuyển đến màn hình chính
-//            Intent intent = new Intent(Login.this, Homepage.class);
-//            intent.putExtra("uid", uid);
-//            startActivity(intent);
-//            finish();  // Đóng màn hình đăng nhập để người dùng không quay lại màn hình này nữa
-//        }
-//    }
+    private void checkLoginStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", null);
+        if (uid != null) {
+            // Người dùng đã đăng nhập - chuyển đến màn hình chính
+            Intent intent = new Intent(Login.this, Homepage.class);
+            intent.putExtra("uid", uid);
+            startActivity(intent);
+            finish();  // Đóng màn hình đăng nhập để người dùng không quay lại màn hình này nữa
+        }
+    }
 
     // Hàm đăng nhập
     protected void LoginToHomepage() {
@@ -106,17 +103,6 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    // Hàm hiện/ẩn mật khẩu
-    protected void ShowHidePass() {
-        if (passEditText.getInputType() == 129) {
-            passEditText.setInputType(1);
-            showHidePass.setImageResource(R.drawable.ic_hide);
-        } else {
-            passEditText.setInputType(129);
-            showHidePass.setImageResource(R.drawable.ic_show);
-        }
     }
 
     // Hàm kiểm tra input
