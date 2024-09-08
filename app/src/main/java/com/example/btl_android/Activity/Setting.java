@@ -36,7 +36,10 @@ public class Setting extends AppCompatActivity {
         // Đăng ký sự kiện nhấn
         LoadActivity();
 
-        btnBack.setOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Homepage.class);
+            startActivity(intent);
+        });
         btnDangXuat.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

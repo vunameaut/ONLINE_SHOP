@@ -13,6 +13,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.btl_android.Activity.Setting;
 import com.example.btl_android.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +40,10 @@ public class TKvaBM extends AppCompatActivity {
         btnChange = findViewById(R.id.btnChange);
         btnBack = findViewById(R.id.ivBack);
 
-        btnBack.setOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(TKvaBM.this, Setting.class);
+            startActivity(intent);
+        });
 
         btnProfile.setOnClickListener(v -> {
             Intent intent = new Intent(TKvaBM.this, myProfile.class);
