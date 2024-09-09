@@ -38,7 +38,7 @@ public class Cart extends AppCompatActivity {
         if (uid == null) {
 
             Toast.makeText(this, "UID không hợp lệ, vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
-            finish(); // Kết thúc Activity
+            finish();
             return;
         }
 

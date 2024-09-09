@@ -16,7 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
-            android:name=".Activity.ChiTietDonHang"
+            android:name=".Activity.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.MainAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".SelectBankActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.thanhtoan"
             android:exported="false" />
         <activity
             android:name=".Activity.MuaHang"
@@ -54,6 +63,7 @@
         <activity
             android:name=".Activity.Homepage"
             android:exported="false" />
+        <activity android:name=".Activity.Settings.ChangePass" />
         <activity
             android:name=".Activity.Login"
             android:exported="true">

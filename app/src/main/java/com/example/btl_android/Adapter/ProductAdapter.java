@@ -1,6 +1,7 @@
 package com.example.btl_android.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.example.btl_android.item.ProductItem;
+import com.example.btl_android.Activity.ProductDetailActivity;
 import com.example.btl_android.R;
+import com.example.btl_android.item.ProductItem;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
@@ -24,7 +26,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         this.productList = productList;
     }
 
-    // Khởi tạo ViewHolder và inflate layout cho mỗi item trong RecyclerView
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,28 +33,38 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return new ProductViewHolder(view);
     }
 
-    // Gán dữ liệu cho từng item trong RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         ProductItem product = productList.get(position);
         holder.textViewName.setText(product.getTenSanPham());
         holder.textViewPrice.setText(String.format("%,dđ", product.getGia())); // Định dạng giá
 
-        // Sử dụng Glide để tải ảnh trực tiếp trong onBindViewHolder
+        // Sử dụng Glide để tải ảnh
         Glide.with(context)
                 .load(product.getHinhAnh())
-                .override(400, 400)  // Thiết lập kích thước ảnh
-                .fitCenter()         // Đặt ảnh vào trung tâm, giữ tỷ lệ
+                .override(400, 400)
+                .fitCenter()
                 .into(holder.imageViewProduct);
+
+        // Xử lý khi người dùng nhấn vào sản phẩm
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            // Truyền dữ liệu sản phẩm qua Intent
+            intent.putExtra("ten_san_pham", product.getTenSanPham());
+            intent.putExtra("gia", product.getGia());
+            intent.putExtra("hinh_anh", product.getHinhAnh());
+            intent.putExtra("mo_ta", product.getMoTa());
+            intent.putExtra("so_luong_ton_kho", product.getSoLuongTonKho());
+            intent.putExtra("loai_san_pham", product.getLoai());
+            context.startActivity(intent);
+        });
     }
 
-    // Trả về số lượng item trong danh sách
     @Override
     public int getItemCount() {
         return productList.size();
     }
 
-    // Khởi tạo ViewHolder
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProduct;
         TextView textViewName, textViewPrice;
@@ -63,7 +74,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             imageViewProduct = itemView.findViewById(R.id.iv_product_image);
             textViewName = itemView.findViewById(R.id.tv_product_name);
             textViewPrice = itemView.findViewById(R.id.tv_product_price);
-
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.example.btl_android.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,10 +28,12 @@ import java.util.Locale;
 
 public class MuaHang extends AppCompatActivity {
 
-    private TextView tvCustomerName, tvPhoneNumber, tvAddress, tvTotalAmount,tvOrderDate;
+    private TextView tvCustomerName, tvPhoneNumber, tvAddress, tvTotalAmount, tvOrderDate;
     private RecyclerView rvProducts;
     private MuaHangAdapter adapter;
+    private Button Btn_thanhtoan;
     private List<CartItem> cartItemList = new ArrayList<>();
+    private long totalAmount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,10 @@ public class MuaHang extends AppCompatActivity {
         tvTotalAmount = findViewById(R.id.tv_total_amount);
         rvProducts = findViewById(R.id.rv_products);
         tvOrderDate = findViewById(R.id.tv_order_date);
+        Btn_thanhtoan = findViewById(R.id.btn_thanh_toan);
+
+        ImageView backButton = findViewById(R.id.btn_back);
+        backButton.setOnClickListener(v -> finish());
 
         // Setup RecyclerView
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
@@ -52,7 +61,11 @@ public class MuaHang extends AppCompatActivity {
         loadOrderDate();
         loadCustomerInfo();
         loadCartItems();
+
+        // Xử lý sự kiện nhấn nút thanh toán
+        Btn_thanhtoan.setOnClickListener(v -> navigateToSelectBankActivity());
     }
+
     private void loadOrderDate() {
         // Lấy ngày hiện tại
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -60,6 +73,13 @@ public class MuaHang extends AppCompatActivity {
 
         // Hiển thị ngày đặt hàng lên giao diện
         tvOrderDate.setText("Ngày đặt hàng: " + currentDate);
+    }
+
+    // Chuyển tới Activity thanh toán
+    private void navigateToSelectBankActivity() {
+        Intent intent = new Intent(MuaHang.this, thanhtoan.class);
+        intent.putExtra("TOTAL_AMOUNT", totalAmount); // Truyền totalAmount qua Intent
+        startActivity(intent);
     }
 
 
@@ -99,12 +119,6 @@ public class MuaHang extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
     private void loadCartItems() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
@@ -113,13 +127,10 @@ public class MuaHang extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     cartItemList.clear();
-                    long totalAmount = 0;
+                    totalAmount = 0;
                     for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
                         CartItem item = itemSnapshot.getValue(CartItem.class);
                         if (item != null) {
-                            // Ghi log thông tin sản phẩm trong giỏ hàng
-                            Log.d("MuaHang", "Sản phẩm: " + item.getName() + ", Giá: " + item.getPrice() + ", Số lượng: " + item.getQuantity());
-
                             cartItemList.add(item);
                             totalAmount += item.getPrice() * item.getQuantity();
                         }
@@ -129,10 +140,9 @@ public class MuaHang extends AppCompatActivity {
                     // Hiển thị tổng tiền kèm theo chữ "Tổng tiền: "
                     tvTotalAmount.setText("Tổng tiền: " + totalAmount + " VND");
 
-                    // Ghi log tổng tiền
+                    // Ghi log tổng tiền để kiểm tra
                     Log.d("MuaHang", "Tổng tiền: " + totalAmount);
                 }
-
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -141,4 +151,5 @@ public class MuaHang extends AppCompatActivity {
             });
         }
     }
+
 }

@@ -33,7 +33,6 @@
             android:textSize="14sp"
             android:textColor="@android:color/black" />
 
-        <!-- Container cho các nút tăng/giảm và số lượng -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

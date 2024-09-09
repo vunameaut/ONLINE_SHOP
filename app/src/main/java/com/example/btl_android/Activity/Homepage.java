@@ -1,11 +1,13 @@
 package com.example.btl_android.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,15 +19,28 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.SearchView;
 
+import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
 import com.example.btl_android.Adapter.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ViewPager viewPager;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    ImageView imageViewMenu,imageViewCart;
+    ImageView imageViewMenu, imageViewCart;
+    StorageReference storageRef;  // Declare the storageRef
+    ImageView avatarImageView;
+    TextView txtName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +48,15 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
 
+        // Initialize FirebaseStorage reference
+        storageRef = FirebaseStorage.getInstance().getReference();  // Initialize the storageRef properly
+
         viewPager = findViewById(R.id.view_pager);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         imageViewMenu = findViewById(R.id.imageViewMenu);
         imageViewCart = findViewById(R.id.imageViewCart);
+        loadAvatarImage();
 
         // Gán sự kiện click cho ImageView để mở DrawerLayout
         imageViewMenu.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +73,33 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                 Intent intent = new Intent(Homepage.this, Cart.class);
                 startActivity(intent);
             }
+        });
+
+        // Tìm headerView từ NavigationView và các thành phần avatar, txtName
+        View headerView = navigationView.getHeaderView(0);
+        avatarImageView = headerView.findViewById(R.id.avatar);
+        txtName = headerView.findViewById(R.id.txt_name);
+
+        // Lấy uid từ SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", "");
+
+        // Tải thông tin username từ Firebase Realtime Database
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("taikhoan").child(uid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String username = snapshot.child("username").getValue(String.class);
+                    txtName.setText(username); // Hiển thị tên người dùng
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Homepage.this, "Lỗi tải dữ liệu người dùng", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -92,12 +138,25 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         });
 
         navigationView.bringToFront();
-
-        // Không cần ActionBarDrawerToggle vì không dùng Toolbar
-
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    private void loadAvatarImage() {
+        // Lấy uid từ SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", "");
+        if (uid != null && !uid.isEmpty()) {
+            StorageReference avatarRef = storageRef.child("avatars/" + uid + ".jpg");
 
+            avatarRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                Picasso.get()
+                        .load(uri)
+                        .transform(new CircleTransform())
+                        .into(avatarImageView);
+            }).addOnFailureListener(exception -> {
+                Toast.makeText(Homepage.this, "Lỗi tải ảnh đại diện", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     @Override

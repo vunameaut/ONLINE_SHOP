@@ -1,9 +1,7 @@
 package com.example.btl_android.Fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.btl_android.Adapter.ProductAdapter;
 import com.example.btl_android.Adapter.SliderAdapter;
 import com.example.btl_android.R;
@@ -52,35 +47,33 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Khởi tạo RecyclerView cho danh sách sản phẩm
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
         recyclerViewProducts.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         productAdapter = new ProductAdapter(getContext(), productList);
         recyclerViewProducts.setAdapter(productAdapter);
 
+        // Khởi tạo ViewPager cho slider ảnh
         viewPagerSlider = view.findViewById(R.id.viewPagerSlider);
         sliderAdapter = new SliderAdapter(getContext(), sliderImageUrls);
         viewPagerSlider.setAdapter(sliderAdapter);
 
-
-
-
-
+        // Tải dữ liệu
         fetchProductData();
         fetchSliderImages();
-
-
 
         return view;
     }
 
+    // Tải các hình ảnh cho slider
     private void fetchSliderImages() {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("slider_images");
         storageReference.listAll().addOnSuccessListener(listResult -> {
             for (StorageReference fileRef : listResult.getItems()) {
                 fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     sliderImageUrls.add(uri.toString());
-                    sliderAdapter.notifyDataSetChanged();
+                    sliderAdapter.notifyDataSetChanged(); // Cập nhật slider khi có dữ liệu
                 });
             }
         }).addOnFailureListener(e -> {
@@ -88,6 +81,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    // Tải dữ liệu sản phẩm từ Firebase
     private void fetchProductData() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("san_pham");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -95,19 +89,28 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 productList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Lấy các thông tin của sản phẩm từ Firebase
                     String tenSanPham = snapshot.child("ten_san_pham").getValue(String.class);
                     Long gia = snapshot.child("gia").getValue(Long.class);
                     String hinhAnh = snapshot.child("hinh_anh").getValue(String.class);
+                    String moTa = snapshot.child("mo_ta").getValue(String.class);
+                    int soLuongTonKho = snapshot.child("so_luong_ton_kho").getValue(Integer.class);
+                    String loai = snapshot.child("loai").getValue(String.class);
 
+                    // Tạo đối tượng sản phẩm và set các thuộc tính
                     ProductItem product = new ProductItem();
                     product.setTenSanPham(tenSanPham);
                     product.setGia(gia);
                     product.setHinhAnh(hinhAnh);
+                    product.setMoTa(moTa);
+                    product.setSoLuongTonKho(soLuongTonKho);
+                    product.setLoai(loai);
 
+                    // Thêm sản phẩm vào danh sách
                     productList.add(product);
                 }
+                // Cập nhật adapter sau khi tải xong dữ liệu
                 productAdapter.notifyDataSetChanged();
-                fetchProductImages();
             }
 
             @Override
@@ -115,28 +118,5 @@ public class HomeFragment extends Fragment {
                 // Xử lý lỗi khi không thể lấy dữ liệu
             }
         });
-    }
-
-    private void fetchProductImages() {
-        for (ProductItem product : productList) {
-            String imageUrl = product.getHinhAnh();
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                Glide.with(getContext())
-                        .load(imageUrl)
-                        .override(400, 400)
-                        .fitCenter()
-                        .into(new CustomTarget<Drawable>() {
-                            @Override
-                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                                productAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-                        });
-            }
-        }
     }
 }

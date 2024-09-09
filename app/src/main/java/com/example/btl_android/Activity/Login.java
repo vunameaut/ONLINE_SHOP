@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
         Button btn_Register = findViewById(R.id.btn_Register);
 
         // Kiểm tra xem người dùng đã đăng nhập chưa
-        //checkLoginStatus();
+        checkLoginStatus();
 
         btn_Login.setOnClickListener(view -> LoginToHomepage());
 
@@ -55,17 +55,17 @@ public class Login extends AppCompatActivity {
     }
 
     // Hàm kiểm tra trạng thái đăng nhập
-//    private void checkLoginStatus() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        String uid = sharedPreferences.getString("uid", null);
-//        if (uid != null) {
-//            // Người dùng đã đăng nhập - chuyển đến màn hình chính
-//            Intent intent = new Intent(Login.this, Homepage.class);
-//            intent.putExtra("uid", uid);
-//            startActivity(intent);
-//            finish();  // Đóng màn hình đăng nhập để người dùng không quay lại màn hình này nữa
-//        }
-//    }
+    private void checkLoginStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", null);
+        if (uid != null) {
+            // Người dùng đã đăng nhập - chuyển đến màn hình chính
+            Intent intent = new Intent(Login.this, Homepage.class);
+            intent.putExtra("uid", uid);
+            startActivity(intent);
+            finish();  // Đóng màn hình đăng nhập để người dùng không quay lại màn hình này nữa
+        }
+    }
 
     // Hàm đăng nhập
     protected void LoginToHomepage() {
