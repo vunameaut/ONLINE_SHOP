@@ -25,60 +25,67 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/support"
-            android:textSize="48sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="50dp"
             android:layout_marginEnd="50dp"/>
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_email"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:hint="Email của bạn"
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/et_description"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="Mô tả vấn đề"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            android:gravity="top" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/iv_error_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:contentDescription="Ảnh lỗi"
-            android:scaleType="centerCrop"
-            android:background="@android:color/darker_gray"
-            android:layout_marginTop="16dp" />
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:gravity="top" />
 
-        <Button
-            android:id="@+id/btn_choose_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Chọn ảnh" />
+            <LinearLayout
+                android:id="@+id/ll_selectImage"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:clickable="true">
 
-        <Button
-            android:id="@+id/btn_send_report"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Gửi báo cáo"
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/select_image"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="24sp"/>
 
+                <ImageView
+                    android:id="@+id/iv_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/logo"
+                    android:scaleType="centerInside"
+                    android:background="@android:color/darker_gray" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_send_report"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="@string/send"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -100,7 +100,6 @@ public class myProfile extends AppCompatActivity {
 
         // Sự kiện khi nhấn vào avatar để chọn ảnh
         btnAvatar.setOnClickListener(v -> {
-            // Mở thư viện ảnh để người dùng chọn ảnh
             // Mở thư viện ảnh của điện thoại
             openGallery();
         });

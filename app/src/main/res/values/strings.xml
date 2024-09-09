@@ -61,5 +61,8 @@
     <string name="notUpdate">Chưa cập nhật</string>
     <string name="cancel">Hủy</string>
     <string name="save">Lưu</string>
+    <string name="description">Mô tả</string>
+    <string name="send">Gửi</string>
+    <string name="select_image">Chọn ảnh</string>
 
 </resources>
