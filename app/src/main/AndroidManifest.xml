@@ -16,13 +16,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+            android:name=".Activity.admin.sanpham.add_sanpham"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.sanpham.admin_sanpham"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.AccountDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.add_taikhoan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.admin_taikhoan"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ProductDetailActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.admin.MainAdmin"
-            android:exported="false" />
-        <activity
-            android:name=".SelectBankActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.thanhtoan"

@@ -39,6 +39,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.textViewName.setText(product.getTenSanPham());
         holder.textViewPrice.setText(String.format("%,dđ", product.getGia())); // Định dạng giá
 
+        // Hiển thị số lượng tồn kho
+        holder.textViewQuantity.setText(String.format("Kho: %d", product.getSoLuongTonKho()));
+
         // Sử dụng Glide để tải ảnh
         Glide.with(context)
                 .load(product.getHinhAnh())
@@ -60,6 +63,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         });
     }
 
+
     @Override
     public int getItemCount() {
         return productList.size();
@@ -67,13 +71,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProduct;
-        TextView textViewName, textViewPrice;
+        TextView textViewName, textViewPrice, textViewQuantity;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewProduct = itemView.findViewById(R.id.iv_product_image);
             textViewName = itemView.findViewById(R.id.tv_product_name);
             textViewPrice = itemView.findViewById(R.id.tv_product_price);
+            textViewQuantity = itemView.findViewById(R.id.tv_product_quantity);
         }
     }
+
 }

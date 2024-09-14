@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.btl_android.item.MuaHangAdapter;
+import com.example.btl_android.Adapter.MuaHangAdapter;
 import com.example.btl_android.R;
 import com.example.btl_android.item.CartItem;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +50,13 @@ public class MuaHang extends AppCompatActivity {
         Btn_thanhtoan = findViewById(R.id.btn_thanh_toan);
 
         ImageView backButton = findViewById(R.id.btn_back);
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MuaHang.this, Homepage.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        });
+
 
         // Setup RecyclerView
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
@@ -93,11 +99,8 @@ public class MuaHang extends AppCompatActivity {
                     if (snapshot.exists()) {
                         // Lấy thông tin từ Firebase
                         String name = snapshot.child("username").getValue(String.class);
-                        Long phoneLong = snapshot.child("sdt").getValue(Long.class);
+                        String phone = snapshot.child("sdt").getValue(String.class); // Lấy số điện thoại dưới dạng chuỗi
                         String address = snapshot.child("diachi").getValue(String.class);
-
-                        // Chuyển đổi Long thành String nếu cần
-                        String phone = phoneLong != null ? phoneLong.toString() : "Không có số điện thoại";
 
                         // Hiển thị thông tin lên giao diện
                         tvCustomerName.setText(name != null ? "Tên: " + name : "Tên: N/A");
@@ -119,6 +122,7 @@ public class MuaHang extends AppCompatActivity {
         }
     }
 
+
     private void loadCartItems() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
@@ -126,8 +130,8 @@ public class MuaHang extends AppCompatActivity {
             cartRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    cartItemList.clear();
-                    totalAmount = 0;
+                    cartItemList.clear();  // Xóa dữ liệu cũ trước khi thêm dữ liệu mới
+                    totalAmount = 0;  // Đặt lại tổng tiền về 0
                     for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
                         CartItem item = itemSnapshot.getValue(CartItem.class);
                         if (item != null) {
@@ -135,13 +139,12 @@ public class MuaHang extends AppCompatActivity {
                             totalAmount += item.getPrice() * item.getQuantity();
                         }
                     }
+
+                    // Notify the adapter that the data has changed
                     adapter.notifyDataSetChanged();
 
-                    // Hiển thị tổng tiền kèm theo chữ "Tổng tiền: "
+                    // Hiển thị tổng tiền
                     tvTotalAmount.setText("Tổng tiền: " + totalAmount + " VND");
-
-                    // Ghi log tổng tiền để kiểm tra
-                    Log.d("MuaHang", "Tổng tiền: " + totalAmount);
                 }
 
                 @Override

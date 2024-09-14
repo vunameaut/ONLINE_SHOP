@@ -36,14 +36,20 @@ public class Cart extends AppCompatActivity {
         uid = sharedPreferences.getString("uid", null);
 
         if (uid == null) {
-
             Toast.makeText(this, "UID không hợp lệ, vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
         recyclerView = findViewById(R.id.cartRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Sử dụng try-catch để xử lý các vấn đề về layout
+        try {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         // Cập nhật đường dẫn cơ sở dữ liệu với uid
         DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference().child("cart").child(uid);
@@ -59,24 +65,30 @@ public class Cart extends AppCompatActivity {
         backButton.setOnClickListener(v -> finish());
 
         Button btn_mua = findViewById(R.id.btn_mua);
-        btn_mua.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Cart.this, MuaHang.class);
-                startActivity(intent);
-            }
+        btn_mua.setOnClickListener(view -> {
+            Intent intent = new Intent(Cart.this, MuaHang.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Đảm bảo không còn Activity trước đó
+            startActivity(intent);
+            finish(); // Đóng Cart Activity ngay sau khi mở MuaHang
         });
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        cartAdapter.startListening();
+        if (cartAdapter != null) {
+            cartAdapter.startListening();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        cartAdapter.stopListening();
+        if (cartAdapter != null) {
+            cartAdapter.stopListening();
+        }
     }
+
+
 }

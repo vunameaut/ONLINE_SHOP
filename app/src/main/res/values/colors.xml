@@ -31,4 +31,13 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <!-- Màu chính cho văn bản -->
+    <color name="primary_text_color">#212121</color>
+    <!-- Thêm các màu khác nếu cần -->
+    <color name="button_color">#3F51B5</color>
+    <color name="hint_color">#757575</color>
+
+
+
 </resources>

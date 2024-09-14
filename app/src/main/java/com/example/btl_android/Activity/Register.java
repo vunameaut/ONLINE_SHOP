@@ -74,6 +74,7 @@ public class Register extends AppCompatActivity {
                                             userRef.child("uid").setValue(userId);
                                             userRef.child("username").setValue(inputUser);
                                             userRef.child("email").setValue(inputEmail);
+                                            userRef.child("email").setValue("user");
                                             userRef.child("diachi").setValue(""); // Địa chỉ mặc định
                                             userRef.child("sdt").setValue(""); // Số điện thoại mặc định
 

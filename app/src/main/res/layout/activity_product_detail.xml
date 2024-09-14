@@ -1,9 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
-
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,7 +17,10 @@
         android:id="@+id/productImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerInside"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="16dp" />
+
 
     <!-- Tên sản phẩm -->
     <TextView
@@ -29,6 +30,7 @@
         android:text="Tên sản phẩm"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_below="@id/productImageView"
         android:layout_marginTop="16dp" />
 
     <!-- Giá sản phẩm -->
@@ -38,6 +40,7 @@
         android:layout_height="wrap_content"
         android:text="Giá sản phẩm"
         android:textSize="18sp"
+        android:layout_below="@id/productNameTextView"
         android:layout_marginTop="8dp" />
 
     <!-- Mô tả sản phẩm -->
@@ -46,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mô tả"
+        android:layout_below="@id/productPriceTextView"
         android:layout_marginTop="8dp" />
 
     <!-- Số lượng tồn kho -->
@@ -54,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Số lượng tồn kho"
+        android:layout_below="@id/productDescriptionTextView"
         android:layout_marginTop="8dp" />
 
     <!-- Loại sản phẩm -->
@@ -62,21 +67,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Loại sản phẩm"
+        android:layout_below="@id/productStockTextView"
         android:layout_marginTop="8dp" />
 
-    <!-- Nút Mua -->
-    <Button
-        android:id="@+id/buttonBuy"
+    <!-- Nút Mua và Nút Thêm vào giỏ hàng -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mua ngay"
-        android:layout_marginTop="16dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_border">
 
-    <!-- Nút Thêm vào giỏ hàng -->
-    <Button
-        android:id="@+id/buttonAddToCart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm vào giỏ hàng"
-        android:layout_marginTop="8dp" />
-</LinearLayout>
+        <Button
+            android:id="@+id/buttonAddToCart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Thêm vào giỏ hàng"
+            android:textColor="@android:color/black"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@drawable/ic_cart"
+            android:drawablePadding="8dp"
+            android:padding="10dp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/buttonBuy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mua ngay"
+            android:textColor="@android:color/black"
+            android:background="@drawable/button_border"
+            android:drawableLeft="@drawable/ic_buy"
+            android:padding="10dp" />
+    </LinearLayout>
+</RelativeLayout>
