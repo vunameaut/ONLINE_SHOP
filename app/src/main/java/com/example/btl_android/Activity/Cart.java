@@ -22,9 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Cart extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private CartAdapter cartAdapter;
-    private String uid;
+    RecyclerView recyclerView;
+    CartAdapter cartAdapter;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -14,11 +14,15 @@ import com.bumptech.glide.Glide;
 import com.example.btl_android.Model.SanPham;
 import com.example.btl_android.item.ProductItem;
 import com.example.btl_android.R;
+import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.ItemHolder> {
 
@@ -44,17 +48,24 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.It
         holder.nameSP.setText(sanPham.getTen_san_pham());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.priceSP.setText("Giá: " + decimalFormat.format(sanPham.getGia()) + "đ");
-        Picasso.get().load(sanPham.getHinh_anh())
-                .resize(500, 500)
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        Picasso picasso = new Picasso.Builder(context)
+                .downloader(new OkHttp3Downloader(okHttpClient))
+                .build();
+
+        picasso.load(sanPham.getHinh_anh())
                 .placeholder(R.drawable.ic_imagnot)
                 .error(R.drawable.ic_imageerror)
                 .into(holder.hinhSP);
 
-        Picasso.get().setIndicatorsEnabled(true); // Hiển thị chỉ báo trạng thái
-        Picasso.get().setLoggingEnabled(true);    // Bật chế độ logging
-
-        Log.d("ImageURL", sanPham.getHinh_anh());
-
+//        picasso.setIndicatorsEnabled(true);
+//        picasso.setLoggingEnabled(true);
+//        Log.d("Picasso", "Image URL: " + sanPham.getHinh_anh());
     }
 
     @Override
