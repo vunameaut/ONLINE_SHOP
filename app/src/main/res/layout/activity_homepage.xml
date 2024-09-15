@@ -47,14 +47,15 @@
             <!-- Icon giỏ hàng -->
             <ImageView
                 android:id="@+id/imageViewCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
                 android:src="@drawable/ic_cart" />
 
         </LinearLayout>
 
         <!-- ViewPager cho nội dung bổ sung -->
-        <androidx.viewpager.widget.ViewPager
+        <ViewFlipper
             android:id="@+id/view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -66,12 +67,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/homepage_header"
-        app:menu="@menu/main_menu" />
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:id="@+id/nav_view"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        app:headerLayout="@layout/homepage_header"-->
+<!--        app:menu="@menu/main_menu" />-->
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -164,14 +164,18 @@ public class Login extends AppCompatActivity {
                     } else {
                         // Nếu đăng nhập thất bại
                         String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                        String errorMessage = "";
+                        String errorMessage;
 
                         switch (errorCode) {
                             case "ERROR_INVALID_EMAIL":
                                 mailInputLayout.setError("Email không đúng");
+                                mailEditText.requestFocus();
+                                errorMessage = "Email không đúng";
                                 break;
                             case "ERROR_WRONG_PASSWORD":
                                 passInputLayout.setError("Mật khẩu không đúng");
+                                passEditText.requestFocus();
+                                errorMessage = "Mật khẩu không đúng";
                                 break;
                             case "ERROR_USER_NOT_FOUND":
                                 errorMessage = "Người dùng không tồn tại.";
