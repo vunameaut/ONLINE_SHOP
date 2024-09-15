@@ -17,9 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
-            android:name=".Activity.SentNotification"
-            android:exported="false" />
-        <activity
             android:name=".Activity.Settings.myProfile"
             android:exported="false" />
         <activity

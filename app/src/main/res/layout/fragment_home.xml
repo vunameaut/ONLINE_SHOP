@@ -7,11 +7,9 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Top Menu -->
-
     <!-- Featured Product Slider -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPagerSlider"
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
@@ -22,7 +20,7 @@
         android:id="@+id/textViewFeaturedProducts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sản phẩm nổi bật"
+        android:text="@string/newProducts"
         android:textStyle="bold"
         android:textSize="18sp"
         android:paddingTop="16dp"
@@ -35,6 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        tools:listitem="@layout/item_product" />
+        tools:listitem="@layout/item_newproduct" />
 
 </LinearLayout>

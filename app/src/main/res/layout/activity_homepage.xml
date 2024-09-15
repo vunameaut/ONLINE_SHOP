@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:hint="Tìm kiếm ..."
+                android:hint="@string/search"
                 android:drawableEnd="@drawable/ic_search"
                 android:padding="8dp"
                 android:background="@drawable/search_bar_background" />
@@ -55,7 +55,7 @@
         </LinearLayout>
 
         <!-- ViewPager cho nội dung bổ sung -->
-        <ViewFlipper
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -67,12 +67,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Navigation Drawer -->
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/nav_view"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        app:headerLayout="@layout/homepage_header"-->
-<!--        app:menu="@menu/main_menu" />-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/homepage_header"
+        app:menu="@menu/main_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

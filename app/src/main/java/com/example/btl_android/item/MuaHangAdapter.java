@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
-import com.example.btl_android.item.CartItem;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
     @NonNull
     @Override
     public MuaHangViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_newproduct, parent, false);
         return new MuaHangViewHolder(view);
     }
 
@@ -56,10 +55,10 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
 
         public MuaHangViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvProductName = itemView.findViewById(R.id.tv_product_name);
-            tvProductPrice = itemView.findViewById(R.id.tv_product_price);
-            tvProductQuantity = itemView.findViewById(R.id.tv_product_quantity);
-            ivProductImage = itemView.findViewById(R.id.iv_product_image);
+//            tvProductName = itemView.findViewById(R.id.tv_product_name);
+//            tvProductPrice = itemView.findViewById(R.id.tv_product_price);
+//            tvProductQuantity = itemView.findViewById(R.id.tv_product_quantity);
+//            ivProductImage = itemView.findViewById(R.id.iv_product_image);
         }
     }
 }

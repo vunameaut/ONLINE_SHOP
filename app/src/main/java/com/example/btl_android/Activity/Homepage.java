@@ -2,7 +2,6 @@ package com.example.btl_android.Activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -28,8 +27,6 @@ import androidx.appcompat.widget.SearchView;
 
 import com.example.btl_android.R;
 import com.example.btl_android.Adapter.ViewPagerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -149,19 +146,15 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_homepage) {
-            Toast.makeText(this, "Homepage", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(0);
         }
         if (item.getItemId() == R.id.nav_phone) {
-            Toast.makeText(this, "Phone", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(1);
         }
         if (item.getItemId() == R.id.nav_laptop) {
-            Toast.makeText(this, "Laptop", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(2);
         }
         if (item.getItemId() == R.id.nav_pc) {
-            Toast.makeText(this, "PC", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(3);
         }
         if (item.getItemId() == R.id.nav_order) {
@@ -171,7 +164,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
         }
         if (item.getItemId() == R.id.nav_setting) {
-            Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, Setting.class);
             startActivity(intent);
         }
@@ -201,15 +193,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                 new AlertDialog.Builder(this)
                         .setTitle("Quyền bị từ chối")
                         .setMessage("Để gửi thông báo, bạn cần cấp quyền cho ứng dụng. Vui lòng vào cài đặt để cấp quyền.")
-                        .setPositiveButton("Cài đặt", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Mở cài đặt ứng dụng để người dùng cấp quyền
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                intent.setData(uri);
-                                startActivity(intent);
-                            }
+                        .setPositiveButton("Cài đặt", (dialog, which) -> {
+                            // Mở cài đặt ứng dụng để người dùng cấp quyền
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
                         })
                         .setNegativeButton("Hủy", null)
                         .show();
@@ -219,19 +208,16 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
 
     private void GetTokenDevice() {
         FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("GetTokenDevice", "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-
-                       Log.e("GetTokenDevice", "Token: " + token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("GetTokenDevice", "Fetching FCM registration token failed", task.getException());
+                        return;
                     }
+
+                    // Get new FCM registration token
+                    String token = task.getResult();
+
+                   Log.e("GetTokenDevice", "Token: " + token);
                 });
     }
 }
