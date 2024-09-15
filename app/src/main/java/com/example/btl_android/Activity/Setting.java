@@ -87,6 +87,7 @@ public class Setting extends AppCompatActivity {
         });
         btnDieuKhoan.setOnClickListener(view -> {
             Intent intent = new Intent(this, DieuKhoan.class);
+            intent.putExtra("ACTIVITY", "Setting");
             startActivity(intent);
         });
         btnGioiThieu.setOnClickListener(view -> {

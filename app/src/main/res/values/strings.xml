@@ -64,5 +64,8 @@
     <string name="description">Mô tả</string>
     <string name="send">Gửi</string>
     <string name="select_image">Chọn ảnh</string>
+    <string name="delAcc">Xóa tài khoản</string>
+    <string name="forgotPass">Quên mật khẩu?</string>
+    <string name="rememberMe">Nhớ đăng nhập</string>
 
 </resources>

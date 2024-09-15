@@ -135,6 +135,20 @@
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>
 
+        <Button
+            android:id="@+id/btnDelAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="@string/delAcc"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"/>
+
     </LinearLayout>
 
 
