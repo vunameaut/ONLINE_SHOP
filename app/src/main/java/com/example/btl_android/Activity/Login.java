@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String savedUid = sharedPreferences.getString("uid", null);
 
-        if (currentUser != null && currentUser.isEmailVerified()) {
+        if (currentUser != null) {
             String uid = currentUser.getUid();
 
             // Kiểm tra nếu uid trong FirebaseAuth khác với uid lưu trong SharedPreferences
@@ -77,8 +77,8 @@ public class Login extends AppCompatActivity {
             // Người dùng đã đăng nhập - kiểm tra vai trò trong Firebase
             checkUserRole(uid);
         } else if (savedUid != null) {
-            // Trường hợp đã lưu uid nhưng người dùng chưa xác thực email hoặc chưa có phiên đăng nhập
-            Toast.makeText(Login.this, "Vui lòng đăng nhập lại và xác thực email.", Toast.LENGTH_SHORT).show();
+            // Trường hợp đã lưu uid nhưng người dùng chưa đăng nhập
+            Toast.makeText(Login.this, "Vui lòng đăng nhập lại.", Toast.LENGTH_SHORT).show();
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove("uid");  // Xóa uid không hợp lệ
             editor.apply();
@@ -104,15 +104,10 @@ public class Login extends AppCompatActivity {
                             editor.putString("uid", uid);
                             editor.apply();
 
-                            if (user.isEmailVerified()) {
-                                // Email đã được xác thực - Kiểm tra role trong Firebase Database
-                                checkUserRole(uid);
-                            } else {
-                                Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
-                            }
+                            // Kiểm tra vai trò của người dùng
+                            checkUserRole(uid);
                         }
                     } else {
-                        // Nếu đăng nhập thất bại
                         String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                         String errorMessage = "Lỗi đăng nhập: " + errorCode;
                         Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
@@ -121,33 +116,39 @@ public class Login extends AppCompatActivity {
     }
 
     private void checkUserRole(String uid) {
-        // Truy cập Firebase Realtime Database
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("taikhoan").child(uid);
 
         userRef.child("role").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 String role = task.getResult().getValue(String.class);
-                // In giá trị role ra log để kiểm tra
-                Log.d("Login", "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@User role: " + role);
-                if (role != null && role.equals("admin")) {
-                    Toast.makeText(Login.this, "Đăng nhập thành công! Vai trò: Admin", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, MainAdmin.class);
-                    intent.putExtra("uid", uid);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, Homepage.class);
-                    intent.putExtra("uid", uid);
-                    startActivity(intent);
-                    finish();
+                if (role != null) {
+                    if ("admin".equals(role)) {
+                        // Nếu là admin, không cần kiểm tra xác thực email
+                        Toast.makeText(Login.this, "Đăng nhập thành công! Vai trò: Admin", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Login.this, MainAdmin.class);
+                        intent.putExtra("uid", uid);
+                        startActivity(intent);
+                        finish(); // Kết thúc Login activity
+                    } else {
+                        // Người dùng không phải admin, kiểm tra xác thực email
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null && user.isEmailVerified()) {
+                            Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Login.this, Homepage.class);
+                            intent.putExtra("uid", uid);
+                            startActivity(intent);
+                            finish(); // Kết thúc Login activity
+                        } else {
+                            Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             } else {
                 Toast.makeText(Login.this, "Không thể lấy thông tin role", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
 
     // Hàm hiện/ẩn mật khẩu
     protected void ShowHidePass() {

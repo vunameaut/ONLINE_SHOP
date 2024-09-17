@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.btl_android.Activity.admin.taikhoan.AccountDetailActivity;
+import com.example.btl_android.Activity.admin.taikhoan.AdminAccountDetailActivity;
 import com.example.btl_android.R;
 import com.example.btl_android.item.admin.Admin_taikhoan_item;
 
@@ -50,7 +50,7 @@ public class Admin_taikhoan_adapter extends RecyclerView.Adapter<Admin_taikhoan_
         // Bắt sự kiện click vào item
         holder.itemView.setOnClickListener(v -> {
             // Tạo Intent để mở AccountDetailActivity
-            Intent intent = new Intent(context, AccountDetailActivity.class);
+            Intent intent = new Intent(context, AdminAccountDetailActivity.class);
             // Truyền dữ liệu thông qua intent
             intent.putExtra("username", taiKhoan.getUsername());
             intent.putExtra("email", taiKhoan.getEmail());

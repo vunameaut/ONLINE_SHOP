@@ -10,8 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.example.btl_android.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,10 +28,10 @@ public class add_taikhoan extends AppCompatActivity {
     private MaterialButton buttonAddAccount;
     private DatabaseReference databaseReference;
     private Toolbar toolbar;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_taikhoan);
 
@@ -38,8 +44,9 @@ public class add_taikhoan extends AppCompatActivity {
         spinnerRole = findViewById(R.id.spinnerRole);
         buttonAddAccount = findViewById(R.id.buttonAddAccount);
 
-        // Khởi tạo Firebase Database Reference
+        // Khởi tạo Firebase Database Reference và Firebase Auth
         databaseReference = FirebaseDatabase.getInstance().getReference("taikhoan");
+        auth = FirebaseAuth.getInstance();
 
         // Thiết lập Toolbar
         setSupportActionBar(toolbar);
@@ -67,29 +74,54 @@ public class add_taikhoan extends AppCompatActivity {
             }
         });
     }
-
     private void addNewAccount(String username, String email, String phone, String address, String role) {
-        // Tạo khóa duy nhất cho mỗi tài khoản
-        String userId = databaseReference.push().getKey();
+        // Đặt mật khẩu mặc định dựa trên vai trò
+        String password;
+        if ("admin".equals(role)) {
+            password = "admin123@";
+        } else {
+            password = "12345678";
+        }
 
-        // Tạo một Map để lưu thông tin tài khoản
-        Map<String, Object> account = new HashMap<>();
-        account.put("uid", userId);
-        account.put("username", username);
-        account.put("email", email);
-        account.put("sdt", phone);
-        account.put("diachi", address);
-        account.put("role", role); // Lưu vai trò từ Spinner
-        account.put("dieukhoan", true); // Mặc định đồng ý điều khoản
+        // Tạo tài khoản trong Firebase Authentication
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            String userId = user.getUid();
 
-        // Lưu thông tin tài khoản vào Firebase
-        databaseReference.child(userId).setValue(account).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(add_taikhoan.this, "Thêm tài khoản thành công", Toast.LENGTH_SHORT).show();
-                finish(); // Quay lại màn hình trước đó sau khi thêm thành công
-            } else {
-                Toast.makeText(add_taikhoan.this, "Lỗi khi thêm tài khoản", Toast.LENGTH_SHORT).show();
-            }
-        });
+                            // Tạo một Map để lưu thông tin tài khoản
+                            Map<String, Object> account = new HashMap<>();
+                            account.put("uid", userId);
+                            account.put("username", username);
+                            account.put("email", email);
+                            account.put("sdt", phone);
+                            account.put("diachi", address);
+                            account.put("role", role);
+                            account.put("dieukhoan", true); // Mặc định đồng ý điều khoản
+
+                            // Lưu thông tin tài khoản vào Firebase Database
+                            databaseReference.child(userId).setValue(account)
+                                    .addOnCompleteListener(dbTask -> {
+                                        if (dbTask.isSuccessful()) {
+                                            Toast.makeText(add_taikhoan.this, "Thêm tài khoản thành công", Toast.LENGTH_SHORT).show();
+                                            finish(); // Quay lại màn hình trước đó sau khi thêm thành công
+                                        } else {
+                                            String errorMessage = dbTask.getException() != null ? dbTask.getException().getMessage() : "Lỗi khi lưu thông tin tài khoản";
+                                            Toast.makeText(add_taikhoan.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(add_taikhoan.this, "Lỗi khi lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Lỗi khi tạo tài khoản";
+                        Toast.makeText(add_taikhoan.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+
+
+
 }

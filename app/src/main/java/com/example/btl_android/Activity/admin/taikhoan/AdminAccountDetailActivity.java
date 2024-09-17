@@ -14,7 +14,7 @@ import com.example.btl_android.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AccountDetailActivity extends AppCompatActivity {
+public class AdminAccountDetailActivity extends AppCompatActivity {
 
     private EditText editTextUsername, editTextEmail, editTextPhone, editTextAddress, editTextRole;
     private TextView textViewUid;
@@ -89,10 +89,10 @@ public class AccountDetailActivity extends AppCompatActivity {
         databaseReference.child("role").setValue(updatedRole)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(AccountDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminAccountDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(AccountDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminAccountDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -102,10 +102,10 @@ public class AccountDetailActivity extends AppCompatActivity {
         databaseReference.removeValue()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(AccountDetailActivity.this, "Xóa tài khoản thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminAccountDetailActivity.this, "Xóa tài khoản thành công", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(AccountDetailActivity.this, "Xóa tài khoản thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminAccountDetailActivity.this, "Xóa tài khoản thất bại", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

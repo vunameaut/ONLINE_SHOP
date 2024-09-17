@@ -16,13 +16,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+            android:name=".Activity.admin.sanpham.AdminProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.admin.sanpham.add_sanpham"
             android:exported="false" />
         <activity
             android:name=".Activity.admin.sanpham.admin_sanpham"
             android:exported="false" />
         <activity
-            android:name=".Activity.admin.taikhoan.AccountDetailActivity"
+            android:name=".Activity.admin.taikhoan.AdminAccountDetailActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.admin.taikhoan.add_taikhoan"

@@ -61,25 +61,22 @@ public class Register extends AppCompatActivity {
         auth.createUserWithEmailAndPassword(inputEmail, inputPass)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Đăng ký thành công
                         FirebaseUser user = auth.getCurrentUser();
                         if (user != null) {
                             user.sendEmailVerification()
                                     .addOnCompleteListener(emailTask -> {
                                         if (emailTask.isSuccessful()) {
-                                            // Lưu thông tin người dùng vào Realtime Database, sử dụng UID làm khóa ngoài
-                                            String userId = user.getUid(); // Lấy UID của người dùng
-
-                                            DatabaseReference userRef = dbRef.child(userId); // Sử dụng UID làm khóa ngoài
+                                            // Lưu thông tin người dùng vào Realtime Database
+                                            String userId = user.getUid();
+                                            DatabaseReference userRef = dbRef.child(userId);
                                             userRef.child("uid").setValue(userId);
                                             userRef.child("username").setValue(inputUser);
                                             userRef.child("email").setValue(inputEmail);
-                                            userRef.child("email").setValue("user");
-                                            userRef.child("diachi").setValue(""); // Địa chỉ mặc định
-                                            userRef.child("sdt").setValue(""); // Số điện thoại mặc định
+                                            userRef.child("role").setValue("user"); // Sửa vai trò nếu cần
+                                            userRef.child("diachi").setValue("");
+                                            userRef.child("sdt").setValue("");
 
                                             Toast.makeText(Register.this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
-
                                             Intent intent = new Intent(this, Login.class);
                                             startActivity(intent);
                                         } else {
@@ -88,7 +85,6 @@ public class Register extends AppCompatActivity {
                                     });
                         }
                     } else {
-                        // Nếu đăng ký thất bại
                         Toast.makeText(Register.this, "Lỗi đăng ký", Toast.LENGTH_SHORT).show();
                     }
                 });

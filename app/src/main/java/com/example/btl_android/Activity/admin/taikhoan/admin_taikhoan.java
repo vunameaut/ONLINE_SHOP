@@ -1,9 +1,15 @@
 package com.example.btl_android.Activity.admin.taikhoan;
 
+import static com.example.btl_android.R.id.action_add_taikhoan;
+import static com.example.btl_android.R.id.action_change_password;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,6 +43,7 @@ public class admin_taikhoan extends AppCompatActivity {
     private FloatingActionButton btn_add;
     private EditText editTextSearch;
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +96,7 @@ public class admin_taikhoan extends AppCompatActivity {
                     // Thêm đối tượng vào danh sách
                     taiKhoanList.add(taiKhoan);
                 }
-                Log.d("FirebaseData", "Data changed: " + taiKhoanList.size() + " items");
+
                 taiKhoanAdapter.notifyDataSetChanged(); // Notify adapter about data change
 
                 // Tự động tìm kiếm một khoảng trắng khi dữ liệu được tải
@@ -126,8 +133,31 @@ public class admin_taikhoan extends AppCompatActivity {
 
         btn_add = findViewById(R.id.btn_add);
         btn_add.setOnClickListener(view -> {
-            Intent intent = new Intent(this, add_taikhoan.class);
-            startActivity(intent);
+            // Tạo PopupMenu
+            PopupMenu popupMenu = new PopupMenu(this, view);
+            MenuInflater inflater = popupMenu.getMenuInflater();
+            inflater.inflate(R.menu.menu_admin_taikhoan, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int id = item.getItemId();
+                if (id == R.id.action_add_taikhoan) {
+                    // Chuyển đến màn hình thêm tài khoản
+                    Intent addAccountIntent = new Intent(this, add_taikhoan.class);
+                    startActivity(addAccountIntent);
+                    return true;
+                } else if (id == R.id.action_change_password) {
+                    // Chuyển đến màn hình đổi mật khẩu
+                    Intent changePasswordIntent = new Intent(this, ChangePasswordActivity.class);
+                    startActivity(changePasswordIntent);
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+            // Hiển thị menu
+            popupMenu.show();
         });
+
     }
 }
