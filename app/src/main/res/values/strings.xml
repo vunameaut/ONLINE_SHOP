@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">BTL_Android</string>
+    <string name="app_name">Mobile app</string>
     <string name="logo">Logo</string>
-    <string name="username">Tên tài khoản</string>
+    <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
     <string name="register">Đăng ký</string>
     <string name="login">Đăng nhập</string>
@@ -57,6 +57,18 @@
     <string name="pay">Thanh toán</string>
     <string name="product_image">ảnh sản phẩm\n</string>
     <string name="ChangePass">Đổi mật khẩu</string>
+    <string-array name="role_options">
+        <item>user</item>
+        <item>admin</item>
+    </string-array>
+    <!-- Product type options -->
+    <string-array name="product_type_options">
+        <item>Điện thoại</item>
+        <item>Laptop</item>
+        <item>Máy tính</item>
+    </string-array>
+
+
     <string name="profile">Hồ sơ cá nhân</string>
     <string name="notUpdate">Chưa cập nhật</string>
     <string name="cancel">Hủy</string>
@@ -67,9 +79,12 @@
     <string name="delAcc">Xóa tài khoản</string>
     <string name="forgotPass">Quên mật khẩu?</string>
     <string name="rememberMe">Nhớ đăng nhập</string>
+<<<<<<< HEAD
     <string name="search">Tìm kiếm ...</string>
     <string name="newProducts">Sản phẩm mới</string>
     <string name="ListPC">Danh sách sản phẩm máy tính</string>
     <string name="detail">Chi tiết</string>
 
+=======
+>>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
 </resources>

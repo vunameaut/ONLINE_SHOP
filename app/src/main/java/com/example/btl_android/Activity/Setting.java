@@ -17,6 +17,7 @@ import com.example.btl_android.Activity.Settings.NgonNgu;
 import com.example.btl_android.Activity.Settings.TKvaBM;
 import com.example.btl_android.Activity.Settings.ThongBao;
 import com.example.btl_android.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Setting extends AppCompatActivity {
 
@@ -36,19 +37,27 @@ public class Setting extends AppCompatActivity {
         // Đăng ký sự kiện nhấn
         LoadActivity();
 
-        btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Homepage.class);
-            startActivity(intent);
-        });
+
         btnDangXuat.setOnClickListener(v -> {
+            // Xóa thông tin uid đã lưu trong SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();  // Xóa tất cả dữ liệu
-            editor.apply();
+            editor.remove("uid"); // Xóa uid
+            editor.apply(); // Áp dụng thay đổi
 
+            // Đăng xuất FirebaseAuth nếu sử dụng
+            FirebaseAuth.getInstance().signOut(); // Đăng xuất FirebaseAuth
+
+            // Tạo intent chuyển về màn hình Login và xóa tất cả các Activity khác
             Intent intent = new Intent(this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa hết các Activity trước đó
             startActivity(intent);
+            finish(); // Đóng màn hình hiện tại
         });
+
+
+
+
     }
 
     // Ánh xạ các thành phần giao diện
@@ -65,6 +74,9 @@ public class Setting extends AppCompatActivity {
     }
 
     private void LoadActivity() {
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
         btnThongBao.setOnClickListener(view -> {
             Intent intent = new Intent(this, ThongBao.class);
             startActivity(intent);
@@ -87,7 +99,6 @@ public class Setting extends AppCompatActivity {
         });
         btnDieuKhoan.setOnClickListener(view -> {
             Intent intent = new Intent(this, DieuKhoan.class);
-            intent.putExtra("ACTIVITY", "Setting");
             startActivity(intent);
         });
         btnGioiThieu.setOnClickListener(view -> {

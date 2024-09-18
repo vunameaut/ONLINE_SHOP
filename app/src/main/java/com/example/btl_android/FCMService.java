@@ -1,30 +1,38 @@
 package com.example.btl_android;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.btl_android.Activity.Homepage;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FCMService extends FirebaseMessagingService {
+    private static final String TAG = "FCM Service";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // Lấy thông tin từ thông báo
-        String messageTitle = remoteMessage.getNotification().getTitle();
-        String messageBody = remoteMessage.getNotification().getBody();
+        // Nhận thông báo từ FCM.
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        // Tạo và hiển thị thông báo
-        sendNotification(messageTitle, messageBody);
+        if (remoteMessage.getNotification() != null) {
+            // Lấy thông tin từ thông báo
+            String messageTitle = remoteMessage.getNotification().getTitle();
+            String messageBody = remoteMessage.getNotification().getBody();
+
+            // Tạo và hiển thị thông báo
+            sendNotification(messageTitle, messageBody);
+        }
     }
 
-    public void sendNotification(String messageTitle, String messageBody) {
+    private void sendNotification(String messageTitle, String messageBody) {
         Intent intent = new Intent(this, Homepage.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -40,9 +48,6 @@ public class FCMService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationChannel channel = new NotificationChannel("CHANNEL_ID", "Channel Name", NotificationManager.IMPORTANCE_HIGH);
-        notificationManager.createNotificationChannel(channel);
-
         notificationManager.notify(0, notificationBuilder.build());
     }
 
@@ -50,5 +55,9 @@ public class FCMService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
         // Gửi token mới lên server nếu cần thiết
+
+    }
+
+    private void sendRegistrationToServer(String token) {
     }
 }

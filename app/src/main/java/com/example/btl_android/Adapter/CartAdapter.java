@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,9 @@ import com.example.btl_android.R;
 import com.example.btl_android.item.CartItem;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class CartAdapter extends FirebaseRecyclerAdapter<CartItem, CartAdapter.CartViewHolder> {
 
@@ -24,34 +28,86 @@ public class CartAdapter extends FirebaseRecyclerAdapter<CartItem, CartAdapter.C
     public CartAdapter(@NonNull FirebaseRecyclerOptions<CartItem> options, Context context) {
         super(options);
         this.context = context;
+        setHasStableIds(true);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull CartItem model) {
+        // Hiển thị thông tin sản phẩm trong giỏ hàng
         holder.productName.setText(model.getName());
         holder.productPrice.setText(String.valueOf(model.getPrice()));
         holder.productQuantity.setText(String.valueOf(model.getQuantity()));
-        Glide.with(context)
-                .load(model.getImageUrl())
-                .into(holder.productImage);
 
-        holder.removeButton.setOnClickListener(v -> getRef(position).removeValue());
+        // Hiển thị hình ảnh sản phẩm (sử dụng URL từ Realtime Database)
+        Glide.with(context).load(model.getImageUrl()).into(holder.productImage);
 
-        holder.increaseButton.setOnClickListener(v -> updateQuantity(position, model, model.getQuantity() + 1));
+        // Cập nhật số lượng sản phẩm khi nhấn nút tăng
+        holder.increaseButton.setOnClickListener(v -> {
+            updateQuantity(position, model, model.getQuantity() + 1);
+        });
+
+        // Giảm số lượng sản phẩm nếu số lượng lớn hơn 1
         holder.decreaseButton.setOnClickListener(v -> {
-            if (model.getQuantity() > 1) { // Đảm bảo số lượng không nhỏ hơn 1
+            if (model.getQuantity() > 1) {
                 updateQuantity(position, model, model.getQuantity() - 1);
+            }
+        });
+
+        // Xử lý nút xóa sản phẩm
+        holder.removeButton.setOnClickListener(v -> {
+            // Xóa sản phẩm từ Firebase Realtime Database
+            removeItem(position);
+        });
+    }
+
+    private void removeItem(int position) {
+        // Lấy tham chiếu tới phần tử ở vị trí được chỉ định
+        getRef(position).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Kiểm tra nếu sản phẩm tại vị trí đó có tồn tại
+                if (snapshot.exists()) {
+                    // Xóa sản phẩm từ Firebase Realtime Database
+                    getRef(position).removeValue().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, getItemCount()); // Cập nhật các mục còn lại trong danh sách
+                            Toast.makeText(context, "Sản phẩm đã được xóa khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Lỗi khi xóa sản phẩm", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(context, "Sản phẩm không tồn tại hoặc đã bị xóa", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Lỗi khi truy xuất dữ liệu", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
+
+    // Phương thức cập nhật số lượng sản phẩm trong giỏ hàng
     private void updateQuantity(int position, CartItem model, int newQuantity) {
-        // Cập nhật số lượng trong Firebase
         model.setQuantity(newQuantity);
-        getRef(position).setValue(model);
+        getRef(position).setValue(model).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                notifyItemChanged(position);
+            } else {
+                Toast.makeText(context, "Lỗi khi cập nhật số lượng sản phẩm", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     @NonNull
     @Override
@@ -64,8 +120,7 @@ public class CartAdapter extends FirebaseRecyclerAdapter<CartItem, CartAdapter.C
     public static class CartViewHolder extends RecyclerView.ViewHolder {
         TextView productName, productPrice, productQuantity;
         ImageView productImage;
-        Button removeButton,increaseButton, decreaseButton;
-
+        Button removeButton, increaseButton, decreaseButton;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);

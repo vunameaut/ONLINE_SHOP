@@ -28,9 +28,6 @@
                     android:title="@string/order"
                     android:icon="@drawable/ic_launcher_foreground" />
 
-                <item android:id="@+id/nav_account"
-                    android:title="@string/account"
-                    android:icon="@drawable/ic_launcher_foreground" />
 
                 <item android:id="@+id/nav_setting"
                     android:title="@string/setting"
