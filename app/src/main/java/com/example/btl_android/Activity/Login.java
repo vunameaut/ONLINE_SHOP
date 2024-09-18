@@ -80,6 +80,10 @@ public class Login extends AppCompatActivity {
         setSwitchNotif();
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> main
     // Phương thức ánh xạ các phần tử
     private void Mapping() {
         mailEditText = findViewById(R.id.et_mail);
@@ -248,6 +252,14 @@ public class Login extends AppCompatActivity {
 
     // Phương thức thiết lập chức năng "Remember Me"
     private void setupRememberMe() {
+<<<<<<< HEAD
+=======
+=======
+    // Hàm kiểm tra trạng thái đăng nhập
+    private void checkLoginStatus() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+>>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
+>>>>>>> main
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         boolean isRemembered = sharedPreferences.getBoolean("remember", false);
         rememberMeCheckBox.setChecked(isRemembered); // Cập nhật trạng thái checkbox

@@ -1,7 +1,15 @@
 package com.example.btl_android.Activity;
 
+<<<<<<< HEAD
 import android.Manifest;
 import android.app.AlertDialog;
+=======
+<<<<<<< HEAD
+import android.Manifest;
+import android.app.AlertDialog;
+=======
+>>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
+>>>>>>> main
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -168,6 +176,10 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> main
 
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -217,4 +229,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                    Log.e("GetTokenDevice", "Token: " + token);
                 });
     }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
+>>>>>>> main
 }

@@ -67,11 +67,16 @@
     <string name="delAcc">Xóa tài khoản</string>
     <string name="forgotPass">Quên mật khẩu?</string>
     <string name="rememberMe">Nhớ đăng nhập</string>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> main
     <string name="search">Tìm kiếm ...</string>
     <string name="newProducts">Sản phẩm mới</string>
     <string name="ListPC">Danh sách sản phẩm máy tính</string>
     <string name="detail">Chi tiết</string>
 
+<<<<<<< HEAD
     <string-array name="role_options">
     <item>user</item>
         <item>admin</item>
@@ -82,4 +87,8 @@
         <item>Laptop</item>
         <item>Máy tính</item>
     </string-array>
+=======
+=======
+>>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
+>>>>>>> main
 </resources>
