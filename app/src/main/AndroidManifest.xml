@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+<<<<<<< HEAD
             android:name=".Activity.OrderDetailActivity"
             android:exported="false" />
         <activity
@@ -37,6 +38,8 @@
             android:name=".Activity.admin.taikhoan.add_taikhoan"
             android:exported="false" />
         <activity
+=======
+>>>>>>> main
             android:name=".Activity.Settings.myProfile"
             android:exported="false" />
         <activity

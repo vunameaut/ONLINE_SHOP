@@ -6,7 +6,7 @@ public class CartItem {
     private int quantity;
     private String imageUrl;
 
-    public CartItem() {
+    public void artItem() {
         // Required empty constructor for Firebase
     }
 

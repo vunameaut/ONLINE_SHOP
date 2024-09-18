@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:hint="Tìm kiếm ..."
+                android:hint="@string/search"
                 android:drawableEnd="@drawable/ic_search"
                 android:padding="8dp"
                 android:background="@drawable/search_bar_background" />
@@ -47,8 +47,9 @@
             <!-- Icon giỏ hàng -->
             <ImageView
                 android:id="@+id/imageViewCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
                 android:src="@drawable/ic_cart" />
 
         </LinearLayout>

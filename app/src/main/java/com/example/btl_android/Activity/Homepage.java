@@ -1,5 +1,10 @@
 package com.example.btl_android.Activity;
 
+<<<<<<< HEAD
+=======
+import android.Manifest;
+import android.app.AlertDialog;
+>>>>>>> main
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -203,19 +208,15 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_homepage) {
-            Toast.makeText(this, "Homepage", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(0);
         }
         if (item.getItemId() == R.id.nav_phone) {
-            Toast.makeText(this, "Phone", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(1);
         }
         if (item.getItemId() == R.id.nav_laptop) {
-            Toast.makeText(this, "Laptop", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(2);
         }
         if (item.getItemId() == R.id.nav_pc) {
-            Toast.makeText(this, "PC", Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(3);
         }
         if (item.getItemId() == R.id.nav_order) {
@@ -224,7 +225,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         if (item.getItemId() == R.id.nav_setting) {
-            Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, Setting.class);
             startActivity(intent);
         }
@@ -232,4 +232,56 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+<<<<<<< HEAD
+=======
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                // Quyền bị từ chối
+                // Thông báo cho người dùng và hướng dẫn họ cấp quyền
+                new AlertDialog.Builder(this)
+                        .setTitle("Quyền bị từ chối")
+                        .setMessage("Để gửi thông báo, bạn cần cấp quyền cho ứng dụng. Vui lòng vào cài đặt để cấp quyền.")
+                        .setPositiveButton("Cài đặt", (dialog, which) -> {
+                            // Mở cài đặt ứng dụng để người dùng cấp quyền
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+            }
+        }
+    }
+
+    private void GetTokenDevice() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e("GetTokenDevice", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Get new FCM registration token
+                    String token = task.getResult();
+
+                   Log.e("GetTokenDevice", "Token: " + token);
+                });
+    }
+>>>>>>> main
 }

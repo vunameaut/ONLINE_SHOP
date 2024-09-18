@@ -79,4 +79,12 @@
     <string name="delAcc">Xóa tài khoản</string>
     <string name="forgotPass">Quên mật khẩu?</string>
     <string name="rememberMe">Nhớ đăng nhập</string>
+<<<<<<< HEAD
+=======
+    <string name="search">Tìm kiếm ...</string>
+    <string name="newProducts">Sản phẩm mới</string>
+    <string name="ListPC">Danh sách sản phẩm máy tính</string>
+    <string name="detail">Chi tiết</string>
+
+>>>>>>> main
 </resources>
