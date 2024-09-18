@@ -93,8 +93,7 @@ public class myProfile extends AppCompatActivity {
             if (isDataChanged) {
                 showConfirmBack();
             } else {
-                Intent intent = new Intent(myProfile.this, TKvaBM.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -249,14 +248,12 @@ public class myProfile extends AppCompatActivity {
         builder.setPositiveButton("Lưu", (dialog, which) -> {
             SetData();
             Toast.makeText(myProfile.this, "Đã lưu", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(myProfile.this, TKvaBM.class);
-            startActivity(intent);
+            finish();
         });
 
         // Nút "No"
         builder.setNegativeButton("Không", (dialog, which) -> {
-            Intent intent = new Intent(myProfile.this, TKvaBM.class);
-            startActivity(intent);
+            finish();
         });
 
         // Hiển thị dialog

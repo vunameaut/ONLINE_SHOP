@@ -2,22 +2,18 @@ package com.example.btl_android.Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.btl_android.Adapter.FragmentAdapter;
+import com.example.btl_android.Adapter.ProductAdapter;
 import com.example.btl_android.CheckConn;
-import com.example.btl_android.Model.SanPham;
 import com.example.btl_android.R;
+import com.example.btl_android.item.ProductItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,64 +21,75 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhoneFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    DrawerLayout drawerLayout;
-    ArrayList<SanPham> mangSanPham;
-    FragmentAdapter adapter;
+    private RecyclerView recyclerViewProducts;
+    private ProductAdapter productAdapter;
+    private List<ProductItem> productList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        productList = new ArrayList<>();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_phone, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        drawerLayout = view.findViewById(R.id.drawerLayout);
-        mangSanPham = new ArrayList<>();
-        adapter = new FragmentAdapter(requireContext(), mangSanPham);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        recyclerView.setAdapter(adapter);
 
-        if (CheckConn.haveNetworkConn(requireContext()))
-            getData();
-        else
+        // Khởi tạo RecyclerView cho danh sách sản phẩm
+        recyclerViewProducts = view.findViewById(R.id.recyclerView);
+        recyclerViewProducts.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        productAdapter = new ProductAdapter(getContext(), productList);
+        recyclerViewProducts.setAdapter(productAdapter);
+
+        // Kiểm tra kết nối mạng và lấy dữ liệu
+        if (CheckConn.haveNetworkConn(requireContext())) {
+            fetchProductData();
+        } else {
             CheckConn.showToast(requireContext(), "Không có kết nối mạng");
+        }
 
         return view;
     }
 
-    public void getData() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = database.getReference("san_pham");
+    // Phương thức lấy dữ liệu sản phẩm từ Firebase
+    private void fetchProductData() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("san_pham");
 
-        dbRef.addValueEventListener(new ValueEventListener() {
-
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mangSanPham.clear();
+                productList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    String ten = snapshot.child("ten_san_pham").getValue(String.class);
-                    Integer gia = snapshot.child("gia").getValue(Integer.class);
-                    String anh = snapshot.child("hinh_anh").getValue(String.class);
+                    // Lấy dữ liệu sản phẩm từ Firebase
+                    String tenSanPham = snapshot.child("ten_san_pham").getValue(String.class);
+                    Long gia = snapshot.child("gia").getValue(Long.class);
+                    String hinhAnh = snapshot.child("hinh_anh").getValue(String.class);
+                    String moTa = snapshot.child("mo_ta").getValue(String.class);
+                    int soLuongTonKho = snapshot.child("so_luong_ton_kho").getValue(Integer.class);
                     String loai = snapshot.child("loai").getValue(String.class);
-                    assert loai != null;
-                    if (loai.equals("Điện thoại")) {
-                        mangSanPham.add(new SanPham(ten, gia, anh, loai));
-                        //Log.d("PhoneFragment", "Tên sản phẩm: " + ten);
-                        adapter.notifyDataSetChanged();
+
+                    // Tạo đối tượng sản phẩm và set các thuộc tính
+                    ProductItem product = new ProductItem();
+                    product.setTenSanPham(tenSanPham);
+                    product.setGia(gia);
+                    product.setHinhAnh(hinhAnh);
+                    product.setMoTa(moTa);
+                    product.setSoLuongTonKho(soLuongTonKho);
+                    product.setLoai(loai);
+
+                    // Kiểm tra và thêm sản phẩm nếu loại là "Điện thoại"
+                    if ("Điện thoại".equals(product.getLoai())) {
+                        productList.add(product);
                     }
                 }
+                // Cập nhật adapter sau khi có dữ liệu
+                productAdapter.notifyDataSetChanged();
             }
 
             @Override

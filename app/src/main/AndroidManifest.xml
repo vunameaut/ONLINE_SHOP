@@ -17,10 +17,43 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+            android:name=".Activity.OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DonHang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.sanpham.add_sanpham"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.sanpham.admin_sanpham"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.AdminAccountDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.add_taikhoan"
+            android:exported="false" />
+        <activity
             android:name=".Activity.Settings.myProfile"
             android:exported="false" />
         <activity
             android:name=".Activity.ChiTietDonHang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.taikhoan.admin_taikhoan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ProductDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.MainAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.thanhtoan"
             android:exported="false" />
         <activity
             android:name=".Activity.MuaHang"
@@ -58,6 +91,7 @@
         <activity
             android:name=".Activity.Homepage"
             android:exported="false" />
+        <activity android:name=".Activity.Settings.ChangePass" />
         <activity
             android:name=".Activity.Login"
             android:exported="true">

@@ -1,6 +1,7 @@
-package com.example.btl_android.item;
+package com.example.btl_android.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
+import com.example.btl_android.item.CartItem;
 
 import java.util.List;
 
@@ -35,13 +37,24 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
     @Override
     public void onBindViewHolder(@NonNull MuaHangViewHolder holder, int position) {
         CartItem cartItem = cartItemList.get(position);
-        holder.tvProductName.setText(cartItem.getName());
-        holder.tvProductPrice.setText(String.valueOf(cartItem.getPrice()));
-        holder.tvProductQuantity.setText(String.valueOf(cartItem.getQuantity()));
 
-        // Load ảnh từ imageUrl sử dụng Glide
-        Glide.with(context).load(cartItem.getImageUrl()).into(holder.ivProductImage);
+        // Kiểm tra null
+        if (cartItem != null) {
+            holder.tvProductName.setText(cartItem.getName());
+            holder.tvProductPrice.setText(String.valueOf(cartItem.getPrice()));
+            holder.tvProductQuantity.setText(String.valueOf(cartItem.getQuantity()));
+
+            // Sử dụng Glide để load hình ảnh
+            Glide.with(context)
+                    .load(cartItem.getImageUrl())
+                    .placeholder(R.drawable.avt) // Sử dụng placeholder trong khi tải ảnh
+                    .error(R.drawable.load) // Sử dụng hình ảnh thay thế khi tải thất bại
+                    .into(holder.ivProductImage);
+        } else {
+            Log.e("MuaHangAdapter", "CartItem tại vị trí " + position + " là null.");
+        }
     }
+
 
     @Override
     public int getItemCount() {

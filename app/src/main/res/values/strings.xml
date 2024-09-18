@@ -72,4 +72,14 @@
     <string name="ListPC">Danh sách sản phẩm máy tính</string>
     <string name="detail">Chi tiết</string>
 
+    <string-array name="role_options">
+    <item>user</item>
+        <item>admin</item>
+    </string-array>
+    <!-- Product type options -->
+    <string-array name="product_type_options">
+        <item>Điện thoại</item>
+        <item>Laptop</item>
+        <item>Máy tính</item>
+    </string-array>
 </resources>

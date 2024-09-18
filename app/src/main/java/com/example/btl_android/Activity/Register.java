@@ -101,6 +101,7 @@ public class Register extends AppCompatActivity {
                                             userRef.child("email").setValue(inputEmail);
                                             userRef.child("diachi").setValue(""); // Địa chỉ mặc định
                                             userRef.child("sdt").setValue(""); // Số điện thoại mặc định
+                                            userRef.child("role").setValue("user"); // Sửa vai trò nếu cần
                                             userRef.child("dieukhoan").setValue(false); // Đặt giá trị mặc định là false
 
                                             Toast.makeText(this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();

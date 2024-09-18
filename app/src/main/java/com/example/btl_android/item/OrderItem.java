@@ -1,41 +1,64 @@
 package com.example.btl_android.item;
 
+import java.util.List;
+import java.util.Map;
+
 public class OrderItem {
-    private String productName;
-    private double price;
-    private int quantity;
+    private String maDonHang;
+    private String ngayDatHang;
+    private long tongTien;
+    private String trangThai; // Trạng thái đơn hàng
+    private List<Map<String, Object>> sanPham; // Danh sách sản phẩm
 
+    // Constructor mặc định cho Firebase
     public OrderItem() {
-
     }
 
-    public OrderItem(String productName, double price, int quantity) {
-        this.productName = productName;
-        this.price = price;
-        this.quantity = quantity;
+    public OrderItem(String maDonHang, String ngayDatHang, long tongTien, String trangThai, List<Map<String, Object>> sanPham) {
+        this.maDonHang = maDonHang;
+        this.ngayDatHang = ngayDatHang;
+        this.tongTien = tongTien;
+        this.trangThai = trangThai;
+        this.sanPham = sanPham;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getMaDonHang() {
+        return maDonHang;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setMaDonHang(String maDonHang) {
+        this.maDonHang = maDonHang;
     }
 
-    public double getPrice() {
-        return price;
+    public String getNgayDatHang() {
+        return ngayDatHang;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setNgayDatHang(String ngayDatHang) {
+        this.ngayDatHang = ngayDatHang;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public long getTongTien() {
+        return tongTien;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setTongTien(long tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public List<Map<String, Object>> getSanPham() {
+        return sanPham;
+    }
+
+    public void setSanPham(List<Map<String, Object>> sanPham) {
+        this.sanPham = sanPham;
     }
 }

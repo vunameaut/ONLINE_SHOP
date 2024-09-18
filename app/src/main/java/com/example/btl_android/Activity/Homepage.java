@@ -160,9 +160,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         if (item.getItemId() == R.id.nav_order) {
             Toast.makeText(this, "Order", Toast.LENGTH_SHORT).show();
         }
-        if (item.getItemId() == R.id.nav_account) {
-            Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
-        }
         if (item.getItemId() == R.id.nav_setting) {
             Intent intent = new Intent(this, Setting.class);
             startActivity(intent);

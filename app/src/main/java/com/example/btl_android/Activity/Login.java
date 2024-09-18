@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_android.Activity.Settings.DieuKhoan;
 import com.example.btl_android.Activity.Settings.ThongBao;
+import com.example.btl_android.Activity.admin.MainAdmin;
 import com.example.btl_android.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 
@@ -89,19 +92,6 @@ public class Login extends AppCompatActivity {
         btn_Register = findViewById(R.id.btn_Register);
     }
 
-    // Phương thức kiểm tra trạng thái đăng nhập (nếu đã đăng nhập trước đó)
-//    private void checkLogin() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        String uid = sharedPreferences.getString("uid", null); // Lấy UID từ SharedPreferences
-//        if (uid != null) {
-//            // Nếu người dùng đã đăng nhập, chuyển tới màn hình chính (Homepage)
-//            Intent intent = new Intent(Login.this, Homepage.class);
-//            intent.putExtra("uid", uid);
-//            startActivity(intent);
-//            finish(); // Đóng màn hình đăng nhập để người dùng không quay lại được
-//        }
-//    }
-
     // Phương thức đăng nhập
     protected void LoginToHomepage() {
         String inputEmail = mailEditText.getText().toString(); // Lấy email nhập từ EditText
@@ -128,42 +118,11 @@ public class Login extends AppCompatActivity {
                             editor.putString("password", inputPass);
                             editor.apply();
 
-                            if (user.isEmailVerified()) {
-                                // Nếu email đã được xác thực, chuyển màn hình
-                                dbRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Boolean dieukhoan = snapshot.child(uid).child("dieukhoan").getValue(Boolean.class);
-
-                                        if (dieukhoan) {
-                                            Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(Login.this, Homepage.class);
-                                            intent.putExtra("ACTIVITY", "Login");
-                                            intent.putExtra("intent_uid", uid);
-                                            startActivity(intent);
-                                            finish(); // Đóng màn hình đăng nhập
-                                        }
-                                        else {
-                                            Intent intent = new Intent(Login.this, DieuKhoan.class);
-                                            intent.putExtra("ACTIVITY", "Login");
-                                            startActivity(intent);
-                                            finish(); // Đóng màn hình đăng nhập
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-                            } else {
-                                Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
-                            }
+                            checkUserRole(uid, user);
                         }
                     } else {
                         // Nếu đăng nhập thất bại
-                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                        String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
                         String errorMessage;
 
                         switch (errorCode) {
@@ -198,6 +157,60 @@ public class Login extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void checkUserRole(String uid, FirebaseUser user) {
+        dbRef.child(uid).child("role").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String role = task.getResult().getValue(String.class);
+                if (role != null) {
+                    if ("admin".equals(role)) {
+                        // Nếu là admin, không cần kiểm tra xác thực email
+                        Toast.makeText(Login.this, "Đăng nhập thành công! Vai trò: Admin", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Login.this, MainAdmin.class);
+                        intent.putExtra("uid", uid);
+                        startActivity(intent);
+                        finish(); // Kết thúc Login activity
+                    } else {
+                        // Người dùng không phải admin, kiểm tra xác thực email
+                        if (user.isEmailVerified()) {
+                            // Nếu email đã được xác thực, chuyển màn hình
+                            dbRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Boolean dieukhoan = snapshot.child(uid).child("dieukhoan").getValue(Boolean.class);
+
+                                    if (Boolean.TRUE.equals(dieukhoan)) {
+                                        Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Login.this, Homepage.class);
+                                        intent.putExtra("ACTIVITY", "Login");
+                                        intent.putExtra("intent_uid", uid);
+                                        startActivity(intent);
+                                        finish(); // Đóng màn hình đăng nhập
+                                    }
+                                    else {
+                                        Intent intent = new Intent(Login.this, DieuKhoan.class);
+                                        intent.putExtra("ACTIVITY", "Login");
+                                        startActivity(intent);
+                                        finish(); // Đóng màn hình đăng nhập
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        } else {
+                            Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(Login.this, "Không thể lấy thông tin role", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Phương thức kiểm tra tính hợp lệ của dữ liệu đầu vào
