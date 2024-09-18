@@ -58,7 +58,7 @@ public class MuaHang extends AppCompatActivity {
 
         ImageView backButton = findViewById(R.id.btn_back);
         backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MuaHang.this, Homepage.class);
+            Intent intent = new Intent(MuaHang.this, CartItem.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();

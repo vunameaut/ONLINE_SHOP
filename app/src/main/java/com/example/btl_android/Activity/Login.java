@@ -260,8 +260,12 @@ public class Login extends AppCompatActivity {
             // Đặt giá trị email và mật khẩu vào EditText
             mailEditText.setText(email);
             passEditText.setText(password);
+        } else {
+            mailEditText.setText("");
+            passEditText.setText("");
         }
     }
+
 
     private void RegisterToLogin() {
         Intent in = getIntent();

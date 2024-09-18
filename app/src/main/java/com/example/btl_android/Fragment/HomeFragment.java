@@ -111,7 +111,8 @@ public class HomeFragment extends Fragment {
                     Integer gia = snapshot.child("gia").getValue(Integer.class);
                     String anh = snapshot.child("hinh_anh").getValue(String.class);
                     String loai = snapshot.child("loai").getValue(String.class);
-                    mangSanPham.add(new SanPham(ten, gia, anh, loai));
+                    Integer soLuong = snapshot.child("so_luong_ton_kho").getValue(Integer.class);
+                    mangSanPham.add(new SanPham(ten, gia, anh, loai, soLuong));
                     //Log.d("PhoneFragment", "Tên sản phẩm: " + ten);
                     adapter.notifyDataSetChanged();
                 }

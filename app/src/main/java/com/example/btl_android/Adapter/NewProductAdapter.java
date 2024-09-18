@@ -48,6 +48,9 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.It
         holder.nameSP.setText(sanPham.getTen_san_pham());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.priceSP.setText("Giá: " + decimalFormat.format(sanPham.getGia()) + "đ");
+
+        holder.quantity.setText("Kho: " + sanPham.getSo_luong_ton_kho());
+
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -73,13 +76,14 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.It
 
     public static class ItemHolder extends RecyclerView.ViewHolder {
         public ImageView hinhSP;
-        public TextView nameSP, priceSP;
+        public TextView nameSP, priceSP, quantity;
 
         public ItemHolder(@android.support.annotation.NonNull View itemView) {
             super(itemView);
             hinhSP = itemView.findViewById(R.id.iv_sanpham);
             nameSP = itemView.findViewById(R.id.tv_name);
             priceSP = itemView.findViewById(R.id.tv_price);
+            quantity = itemView.findViewById(R.id.tv_quantity);
         }
     }
 }

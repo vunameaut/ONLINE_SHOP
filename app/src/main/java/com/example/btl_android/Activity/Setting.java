@@ -39,10 +39,13 @@ public class Setting extends AppCompatActivity {
 
 
         btnDangXuat.setOnClickListener(v -> {
-            // Xóa thông tin uid đã lưu trong SharedPreferences
+            // Xóa thông tin uid và thông tin đăng nhập khỏi SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove("uid"); // Xóa uid
+            editor.remove("email"); // Xóa email
+            editor.remove("password"); // Xóa mật khẩu
+            editor.remove("remember"); // Xóa trạng thái "Remember Me"
             editor.apply(); // Áp dụng thay đổi
 
             // Đăng xuất FirebaseAuth nếu sử dụng
@@ -50,14 +53,11 @@ public class Setting extends AppCompatActivity {
 
             // Tạo intent chuyển về màn hình Login và xóa tất cả các Activity khác
             Intent intent = new Intent(this, Login.class);
+            intent.putExtra("REMEMBER", "false"); // Đặt flag "REMEMBER" là false
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa hết các Activity trước đó
             startActivity(intent);
             finish(); // Đóng màn hình hiện tại
         });
-
-
-
-
     }
 
     // Ánh xạ các thành phần giao diện

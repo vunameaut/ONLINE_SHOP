@@ -15,54 +15,36 @@
         android:background="@color/white">
 
         <!-- Menu trên cùng tùy chỉnh -->
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:orientation="horizontal"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center_vertical"
-            app:layout_constraintTop_toTopOf="parent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:menu="@menu/menu_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <!-- Icon Menu Hamburger -->
-            <ImageView
-                android:id="@+id/imageViewMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu" />
-
-            <!-- Thanh tìm kiếm -->
-            <EditText
-                android:id="@+id/editTextSearch"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:hint="@string/search"
-                android:drawableEnd="@drawable/ic_search"
-                android:padding="8dp"
-                android:background="@drawable/search_bar_background" />
-
-            <!-- Icon giỏ hàng -->
-            <ImageView
-                android:id="@+id/imageViewCart"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_cart" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- ViewPager cho nội dung bổ sung -->
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

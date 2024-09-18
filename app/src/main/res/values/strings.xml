@@ -71,6 +71,7 @@
     <string name="newProducts">Sản phẩm mới</string>
     <string name="ListPC">Danh sách sản phẩm máy tính</string>
     <string name="detail">Chi tiết</string>
+    <string name="cart">Giỏ hàng</string>
 
     <string-array name="role_options">
     <item>user</item>

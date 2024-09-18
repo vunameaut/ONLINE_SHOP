@@ -1,10 +1,13 @@
 package com.example.btl_android.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -13,17 +16,21 @@ import com.bumptech.glide.Glide;
 import com.example.btl_android.Activity.ProductDetailActivity;
 import com.example.btl_android.R;
 import com.example.btl_android.item.ProductItem;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> implements Filterable {
 
-    private Context context;
-    private List<ProductItem> productList;
+    Context context;
+    List<ProductItem> productList;
+    List<ProductItem> productListOld;
 
     // Constructor
     public ProductAdapter(Context context, List<ProductItem> productList) {
         this.context = context;
         this.productList = productList;
+        this.productListOld = productList;
     }
 
     @NonNull
@@ -67,6 +74,41 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String searchText = constraint.toString().toLowerCase();
+
+                if (searchText.isEmpty()) {
+                    productList = productListOld;
+                } else {
+                    List<ProductItem> listS = new ArrayList<>();
+                    for (ProductItem product : productListOld) {
+                        if (product.getTenSanPham().toLowerCase().contains(searchText)) {
+                            listS.add(product);
+                        }
+                    }
+
+                    productList = listS;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = productList;
+
+                return filterResults;
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                productList = (List<ProductItem>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

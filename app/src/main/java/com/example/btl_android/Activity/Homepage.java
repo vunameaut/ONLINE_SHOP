@@ -1,6 +1,7 @@
 package com.example.btl_android.Activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,30 +12,47 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.SearchView;
 
+import com.example.btl_android.Adapter.ProductAdapter;
+import com.example.btl_android.CheckConn;
 import com.example.btl_android.R;
 import com.example.btl_android.Adapter.ViewPagerAdapter;
+import com.example.btl_android.item.ProductItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ViewPager viewPager;
+    RecyclerView recyclerView;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    ImageView imageViewMenu,imageViewCart;
+    ProductAdapter productAdapter;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +65,39 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         GetTokenDevice();
 
         viewPager = findViewById(R.id.view_pager);
+        recyclerView = findViewById(R.id.recycler_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        imageViewMenu = findViewById(R.id.imageViewMenu);
-        imageViewCart = findViewById(R.id.imageViewCart);
+        toolbar = findViewById(R.id.toolbar);
 
-        // Gán sự kiện click cho ImageView để mở DrawerLayout
-        imageViewMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        setSupportActionBar(toolbar);
 
-        // Thêm sự kiện click cho giỏ hàng để chuyển đến Cart Activity
-        imageViewCart.setOnClickListener(v -> {
-            Intent intent = new Intent(Homepage.this, Cart.class);
+        ShowViewPager();
+        ShowRecyclerView();
+
+        navigationView.bringToFront();
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
-        });
+            super.onBackPressed();
+        }
+    }
 
+    private void ShowViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(adapter);
 
@@ -95,25 +132,61 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
 
             }
         });
-
-        navigationView.bringToFront();
-
-        // Không cần ActionBarDrawerToggle vì không dùng Toolbar
-
-        navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-            super.onBackPressed();
-        }
+    private void ShowRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        productAdapter = new ProductAdapter(this, GetListProduct());
+        recyclerView.setAdapter(productAdapter);
+
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
+    }
+
+    private List<ProductItem> GetListProduct() {
+        List<ProductItem> list = new ArrayList<>();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("san_pham");
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Lấy dữ liệu sản phẩm từ Firebase
+                    String tenSanPham = snapshot.child("ten_san_pham").getValue(String.class);
+                    Long gia = snapshot.child("gia").getValue(Long.class);
+                    String hinhAnh = snapshot.child("hinh_anh").getValue(String.class);
+                    String moTa = snapshot.child("mo_ta").getValue(String.class);
+                    int soLuongTonKho = snapshot.child("so_luong_ton_kho").getValue(Integer.class);
+                    String loai = snapshot.child("loai").getValue(String.class);
+
+                    // Tạo đối tượng sản phẩm và set các thuộc tính
+                    ProductItem product = new ProductItem();
+                    product.setTenSanPham(tenSanPham);
+                    product.setGia(gia);
+                    product.setHinhAnh(hinhAnh);
+                    product.setMoTa(moTa);
+                    product.setSoLuongTonKho(soLuongTonKho);
+                    product.setLoai(loai);
+
+                    // Thêm sản phẩm vào danh sách
+                    list.add(product);
+                }
+                // Cập nhật adapter sau khi có dữ liệu
+                productAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Xử lý lỗi khi lấy dữ liệu từ Firebase
+                Log.e("FirebaseError", "Lỗi khi lấy dữ liệu sản phẩm", error.toException());
+            }
+        });
+
+        return list;
     }
 
     @Override
@@ -124,11 +197,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         assert searchView != null;
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Xử lý tìm kiếm khi nhấn Enter
-                Toast.makeText(Homepage.this, "Tìm kiếm: " + query, Toast.LENGTH_SHORT).show();
+                productAdapter.getFilter().filter(query);
                 // Bạn có thể thực hiện hành động tìm kiếm thực tế ở đây
                 return true;
             }
@@ -136,8 +210,24 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Xử lý khi người dùng nhập văn bản vào ô tìm kiếm
+                if (newText.isEmpty()) {
+                    viewPager.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    viewPager.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    productAdapter.getFilter().filter(newText);
+                }
                 return true;
             }
+        });
+
+        // Set up Cart
+        MenuItem cartItem = menu.findItem(R.id.action_cart);
+        cartItem.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(Homepage.this, Cart.class);
+            startActivity(intent);
+            return true;
         });
 
         return true;

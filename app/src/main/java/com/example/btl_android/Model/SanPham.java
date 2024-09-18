@@ -8,11 +8,12 @@ public class SanPham {
     private String loai;
     private int so_luong_ton_kho;
 
-    public SanPham(String tensp, int gia, String anh, String loai) {
+    public SanPham(String tensp, int gia, String anh, String loai, int so_luong_ton_kho) {
         this.ten_san_pham = tensp;
         this.gia = gia;
         this.hinh_anh = anh;
         this.loai = loai;
+        this.so_luong_ton_kho = so_luong_ton_kho;
     }
 
     // Getters and setters
