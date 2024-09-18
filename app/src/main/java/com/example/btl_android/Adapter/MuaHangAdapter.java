@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
+import com.example.btl_android.item.CartItem;
 
 import java.util.List;
 

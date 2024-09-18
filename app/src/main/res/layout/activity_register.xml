@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.Register"
     android:orientation="vertical"
     android:padding="25dp">
@@ -45,10 +45,10 @@
 
     <!-- Tên đăng nhập -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_User"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="35dp">
+        android:layout_marginTop="20dp">
 
         <EditText
             android:id="@+id/et_User"
@@ -62,10 +62,10 @@
 
     <!-- Email -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="35dp">
+        android:layout_marginTop="20dp">
 
         <EditText
             android:id="@+id/et_Email"
@@ -78,44 +78,31 @@
 
 
     <!-- Mật khẩu -->
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_Pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        app:passwordToggleEnabled="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <EditText
+            android:id="@+id/et_Pass"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:autofillHints=""
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:importantForAccessibility="yes" />
 
-            <EditText
-                android:id="@+id/et_Pass"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:autofillHints=""
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:importantForAccessibility="yes" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/iv_Show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_show"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/show_pass"/>
-    </LinearLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <!--Xác nhận mật khẩu -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_CPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="35dp">
+        android:layout_marginTop="20dp">
 
         <EditText
             android:id="@+id/et_CPass"
@@ -129,6 +116,7 @@
 
     <!-- Nút Đăng ký và Đăng nhập -->
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

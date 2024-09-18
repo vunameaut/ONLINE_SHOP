@@ -1,51 +1,40 @@
 package com.example.btl_android.Activity;
 
-<<<<<<< HEAD
 import android.Manifest;
 import android.app.AlertDialog;
-=======
->>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.SearchView;
 
-import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
 import com.example.btl_android.Adapter.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ViewPager viewPager;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    ImageView imageViewMenu, imageViewCart;
-    StorageReference storageRef;  // Declare the storageRef
-    ImageView avatarImageView;
-    TextView txtName;
+    ImageView imageViewMenu,imageViewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,58 +42,23 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
 
-        // Initialize FirebaseStorage reference
-        storageRef = FirebaseStorage.getInstance().getReference();
+        requestNotificationPermission();
+
+        GetTokenDevice();
 
         viewPager = findViewById(R.id.view_pager);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         imageViewMenu = findViewById(R.id.imageViewMenu);
         imageViewCart = findViewById(R.id.imageViewCart);
-        loadAvatarImage();
 
         // Gán sự kiện click cho ImageView để mở DrawerLayout
-        imageViewMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        imageViewMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         // Thêm sự kiện click cho giỏ hàng để chuyển đến Cart Activity
-        imageViewCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Homepage.this, Cart.class);
-                startActivity(intent);
-            }
-        });
-
-        // Tìm headerView từ NavigationView và các thành phần avatar, txtName
-        View headerView = navigationView.getHeaderView(0);
-        avatarImageView = headerView.findViewById(R.id.avatar);
-        txtName = headerView.findViewById(R.id.txt_name);
-
-        // Lấy uid từ SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String uid = sharedPreferences.getString("uid", "");
-
-        // Tải thông tin username từ Firebase Realtime Database
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("taikhoan").child(uid);
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String username = snapshot.child("username").getValue(String.class);
-                    txtName.setText(username); // Hiển thị tên người dùng
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(Homepage.this, "Lỗi tải dữ liệu người dùng", Toast.LENGTH_SHORT).show();
-            }
-
+        imageViewCart.setOnClickListener(v -> {
+            Intent intent = new Intent(Homepage.this, Cart.class);
+            startActivity(intent);
         });
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -143,40 +97,24 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         });
 
         navigationView.bringToFront();
+
+        // Không cần ActionBarDrawerToggle vì không dùng Toolbar
+
         navigationView.setNavigationItemSelectedListener(this);
-    }
 
-    private void loadAvatarImage() {
-        // Lấy uid từ SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String uid = sharedPreferences.getString("uid", "");
-        if (uid != null && !uid.isEmpty()) {
-            StorageReference avatarRef = storageRef.child("avatars/" + uid + ".jpg");
 
-            avatarRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                Picasso.get()
-                        .load(uri)
-                        .transform(new CircleTransform())
-                        .into(avatarImageView);
-            }).addOnFailureListener(exception -> {
-
-            });
-        }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            // Đóng ứng dụng thay vì quay lại Login
-            finishAffinity(); // Đóng tất cả các activity và thoát ứng dụng
-            // không gọi super.onBackPressed() vì bạn đã thay thế hành vi mặc định
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+            super.onBackPressed();
         }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -221,8 +159,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         }
         if (item.getItemId() == R.id.nav_order) {
             Toast.makeText(this, "Order", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, DonHang.class);
-            startActivity(intent);
         }
         if (item.getItemId() == R.id.nav_setting) {
             Intent intent = new Intent(this, Setting.class);
@@ -232,7 +168,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-<<<<<<< HEAD
 
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -282,6 +217,4 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                    Log.e("GetTokenDevice", "Token: " + token);
                 });
     }
-=======
->>>>>>> 081b3accdcfdfdb6730bf8cdc415c07185e9a156
 }

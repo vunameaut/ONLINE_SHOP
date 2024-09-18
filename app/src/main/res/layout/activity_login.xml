@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.Login"
     android:orientation="vertical"
     android:padding="25dp">
@@ -46,14 +46,13 @@
 
     <!-- Tên đăng nhập -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_User"
+        android:id="@+id/til_Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="35dp">
+        android:layout_marginTop="20dp">
 
         <EditText
-            android:id="@+id/et_User"
+            android:id="@+id/et_mail"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:autofillHints=""
@@ -71,6 +70,7 @@
             android:id="@+id/til_Pass"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
             android:layout_weight="1">
 
             <EditText
@@ -84,27 +84,35 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/iv_Show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_show"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/show_pass"/>
     </LinearLayout>
 
-
-    <!-- Quên mật khẩu -->
-    <TextView
-        android:id="@+id/tv_FgPass"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="Quên mật khẩu?"
-        android:textSize="18sp"
         android:layout_marginTop="20dp"
-        android:textColor="?attr/colorPrimary"/>
+        android:orientation="horizontal">
+
+        <!-- Nhớ đăng nhập -->
+        <CheckBox
+            android:id="@+id/cb_remember"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/rememberMe"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_weight="1"/>
+
+        <!-- Quên mật khẩu -->
+        <Button
+            android:id="@+id/tv_FgPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/blue"
+            android:text="@string/forgotPass"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
 
 
     <!-- Nút Đăng ký và Đăng nhập -->

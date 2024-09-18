@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class TKvaBM extends AppCompatActivity {
 
     // Khai báo các view
@@ -172,7 +174,7 @@ public class TKvaBM extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             // Xử lý lỗi nếu không thể xóa tài khoản
-                            Toast.makeText(TKvaBM.this, "Không thể xóa tài khoản: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TKvaBM.this, "Không thể xóa tài khoản: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {

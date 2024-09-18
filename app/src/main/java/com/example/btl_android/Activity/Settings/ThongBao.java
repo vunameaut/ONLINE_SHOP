@@ -24,10 +24,10 @@ import com.example.btl_android.R;
 
 public class ThongBao extends AppCompatActivity {
 
-    private static final String CHANNEL_ID = "thong_bao";
-    private static final String PREFS_NAME = "ThongBaoPrefs";
-    private static final String KEY_APP_SWITCH = "app_switch";
-    private static final String KEY_MAIL_SWITCH = "mail_switch";
+    public static final String CHANNEL_ID = "thong_bao";
+    public static final String PREFS_NAME = "ThongBaoPrefs";
+    public static final String KEY_APP_SWITCH = "app_switch";
+    public static final String KEY_MAIL_SWITCH = "mail_switch";
 
     ImageView btnBack;
     SwitchCompat swcApp, swcMail;
