@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -30,8 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.SearchView;
 
+import com.bumptech.glide.Glide;
 import com.example.btl_android.Adapter.ProductAdapter;
-import com.example.btl_android.CheckConn;
 import com.example.btl_android.R;
 import com.example.btl_android.Adapter.ViewPagerAdapter;
 import com.example.btl_android.item.ProductItem;
@@ -54,6 +57,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     ProductAdapter productAdapter;
     Toolbar toolbar;
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference dbRef = database.getReference("taikhoan");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +77,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
+
+        ShowInfor();
 
         ShowViewPager();
         ShowRecyclerView();
@@ -95,6 +103,37 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
             super.onBackPressed();
         }
+    }
+
+    private void ShowInfor() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", "");
+
+        dbRef.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String ten = snapshot.child("username").getValue(String.class);
+                String anh = snapshot.child("avatarUrl").getValue(String.class);
+
+                // Hiển thị thông tin lên giao diện
+                View headerView = navigationView.getHeaderView(0);
+                ImageView avatar = headerView.findViewById(R.id.avatar);
+                TextView txt_name = headerView.findViewById(R.id.txt_name);
+
+                txt_name.setText(ten);
+                if (anh != null) {
+                    Glide.with(Homepage.this)
+                            .load(anh)
+                            .circleCrop()
+                            .into(avatar);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void ShowViewPager() {

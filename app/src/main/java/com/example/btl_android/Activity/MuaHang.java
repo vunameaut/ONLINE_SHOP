@@ -146,17 +146,37 @@ public class MuaHang extends AppCompatActivity {
     private void createOrder() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
-            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang").child(uid);
-
-            // Tạo mã đơn hàng duy nhất
-            String orderId = ordersRef.push().getKey();
-
-            // Lấy thông tin từ EditText
+            // Lấy thông tin khách hàng từ EditText
             String customerName = etCustomerName.getText().toString().trim();
             String phoneNumber = etPhoneNumber.getText().toString().trim();
             String address = etAddress.getText().toString().trim();
 
-            // Tạo đối tượng đơn hàng
+            // Kiểm tra thông tin khách hàng
+            if (customerName.isEmpty()) {
+                Toast.makeText(MuaHang.this, "Tên khách hàng không được để trống.", Toast.LENGTH_SHORT).show();
+                etCustomerName.requestFocus();
+                return;
+            }
+
+            if (phoneNumber.isEmpty()) {
+                Toast.makeText(MuaHang.this, "Số điện thoại không được để trống.", Toast.LENGTH_SHORT).show();
+                etPhoneNumber.requestFocus();
+                return;
+            }
+
+            if (address.isEmpty()) {
+                Toast.makeText(MuaHang.this, "Địa chỉ không được để trống.", Toast.LENGTH_SHORT).show();
+                etAddress.requestFocus();
+                return;
+            }
+
+            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang").child(uid);
+            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
+
+            // Tạo mã đơn hàng duy nhất
+            String orderId = ordersRef.push().getKey();
+
+            // Tạo dữ liệu đơn hàng
             Map<String, Object> orderData = new HashMap<>();
             orderData.put("maDonHang", orderId);
             orderData.put("trangThai", "Đã đặt hàng");
@@ -177,22 +197,32 @@ public class MuaHang extends AppCompatActivity {
             }
             orderData.put("sanPham", products);
 
-            // Lưu thông tin đơn hàng vào Firebase
+            // Lưu dữ liệu đơn hàng vào Firebase
             assert orderId != null;
             ordersRef.child(orderId).setValue(orderData)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Thông báo đặt hàng thành công
-                            Toast.makeText(MuaHang.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                            Log.d("MuaHang", "Đơn hàng đã được lưu thành công!");
+                            // Xóa giỏ hàng sau khi đơn hàng được tạo thành công
+                            cartRef.removeValue()
+                                    .addOnCompleteListener(cartTask -> {
+                                        if (cartTask.isSuccessful()) {
+                                            // Thông báo thành công
+                                            Toast.makeText(MuaHang.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                                            Log.d("MuaHang", "Đơn hàng đã được lưu thành công và giỏ hàng đã được xóa!");
 
-                            // Chuyển về trang chủ
-                            Intent intent = new Intent(MuaHang.this, Homepage.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                                            // Chuyển về trang chủ
+                                            Intent intent = new Intent(MuaHang.this, Homepage.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            // Thông báo thất bại
+                                            Toast.makeText(MuaHang.this, "Xóa giỏ hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                                            Log.e("MuaHang", "Lỗi khi xóa giỏ hàng", cartTask.getException());
+                                        }
+                                    });
                         } else {
-                            // Thông báo đặt hàng thất bại
+                            // Thông báo thất bại
                             Toast.makeText(MuaHang.this, "Đặt hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                             Log.e("MuaHang", "Lỗi khi lưu đơn hàng", task.getException());
                         }
@@ -201,7 +231,6 @@ public class MuaHang extends AppCompatActivity {
             Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
         }
     }
-
 
     @SuppressLint("SetTextI18n")
     private void loadOrderDate() {

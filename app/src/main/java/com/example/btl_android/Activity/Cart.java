@@ -1,5 +1,6 @@
 package com.example.btl_android.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class Cart extends AppCompatActivity {
     CartAdapter cartAdapter;
     String uid;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,15 @@ public class Cart extends AppCompatActivity {
         cartAdapter = new CartAdapter(options, this);
         recyclerView.setAdapter(cartAdapter);
 
+        // Đăng ký observer cho adapter để xử lý các thay đổi
+        cartAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                recyclerView.getRecycledViewPool().clear();
+                cartAdapter.notifyDataSetChanged();
+            }
+        });
+
         ImageView backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish());
 
@@ -71,12 +82,15 @@ public class Cart extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
+
+                        recyclerView.getRecycledViewPool().clear();
+                        cartAdapter.notifyDataSetChanged();
+
                         Intent intent = new Intent(Cart.this, MuaHang.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         // Đánh dấu rằng hoạt động này đến từ giỏ hàng
                         intent.putExtra("from_cart", true);
-
                         startActivity(intent);
                         finish();
                     } else {
@@ -90,8 +104,6 @@ public class Cart extends AppCompatActivity {
                 }
             });
         });
-
-
     }
 
     @Override
@@ -109,5 +121,4 @@ public class Cart extends AppCompatActivity {
             cartAdapter.stopListening();
         }
     }
-
 }

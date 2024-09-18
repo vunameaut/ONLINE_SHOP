@@ -55,41 +55,21 @@ public class CartAdapter extends FirebaseRecyclerAdapter<CartItem, CartAdapter.C
 
         // Xử lý nút xóa sản phẩm
         holder.removeButton.setOnClickListener(v -> {
-            // Xóa sản phẩm từ Firebase Realtime Database
+            // Gọi hàm xóa sản phẩm
             removeItem(position);
         });
     }
 
     private void removeItem(int position) {
-        // Lấy tham chiếu tới phần tử ở vị trí được chỉ định
-        getRef(position).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Kiểm tra nếu sản phẩm tại vị trí đó có tồn tại
-                if (snapshot.exists()) {
-                    // Xóa sản phẩm từ Firebase Realtime Database
-                    getRef(position).removeValue().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, getItemCount()); // Cập nhật các mục còn lại trong danh sách
-                            Toast.makeText(context, "Sản phẩm đã được xóa khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Lỗi khi xóa sản phẩm", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(context, "Sản phẩm không tồn tại hoặc đã bị xóa", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context, "Lỗi khi truy xuất dữ liệu", Toast.LENGTH_SHORT).show();
+        // Lấy tham chiếu tới phần tử ở vị trí được chỉ định và xóa nó
+        getSnapshots().getSnapshot(position).getRef().removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(context, "Sản phẩm đã được xóa khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Lỗi khi xóa sản phẩm", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 
     // Phương thức cập nhật số lượng sản phẩm trong giỏ hàng
     private void updateQuantity(int position, CartItem model, int newQuantity) {
