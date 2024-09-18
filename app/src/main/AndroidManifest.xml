@@ -16,7 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
-            android:name=".Activity.admin.sanpham.AdminProductDetailActivity"
+            android:name=".Activity.OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DonHang"
             android:exported="false" />
         <activity
             android:name=".Activity.admin.taikhoan.ChangePasswordActivity"
@@ -32,6 +35,9 @@
             android:exported="false" />
         <activity
             android:name=".Activity.admin.taikhoan.add_taikhoan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Settings.myProfile"
             android:exported="false" />
         <activity
             android:name=".Activity.admin.taikhoan.admin_taikhoan"

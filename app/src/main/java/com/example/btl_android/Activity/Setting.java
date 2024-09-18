@@ -37,6 +37,7 @@ public class Setting extends AppCompatActivity {
         // Đăng ký sự kiện nhấn
         LoadActivity();
 
+
         btnDangXuat.setOnClickListener(v -> {
             // Xóa thông tin uid đã lưu trong SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -56,6 +57,7 @@ public class Setting extends AppCompatActivity {
 
 
 
+
     }
 
     // Ánh xạ các thành phần giao diện
@@ -72,6 +74,9 @@ public class Setting extends AppCompatActivity {
     }
 
     private void LoadActivity() {
+        btnBack.setOnClickListener(view -> {
+            finish();
+        });
         btnThongBao.setOnClickListener(view -> {
             Intent intent = new Intent(this, ThongBao.class);
             startActivity(intent);

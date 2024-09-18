@@ -11,7 +11,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <ImageView
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
@@ -20,7 +19,6 @@
             android:layout_marginBottom="16dp"
             android:contentDescription="Back"
             android:src="@drawable/ic_back" />
-
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
@@ -33,30 +31,27 @@
     </RelativeLayout>
 
     <!-- Phần thông tin khách hàng -->
-    <TextView
-        android:id="@+id/tv_customer_name"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/et_customer_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Tên khách hàng"
+        android:hint="Tên khách hàng"
         android:textColor="#000000"
         android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/tv_phone_number"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/et_phone_number"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Số điện thoại"
+        android:hint="Số điện thoại"
         android:textColor="#000000"
         android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/et_address"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Địa chỉ"
+        android:hint="Địa chỉ"
         android:textColor="#000000"
         android:textSize="18sp" />
 
@@ -97,7 +92,7 @@
         android:backgroundTint="@color/black"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Thanh Toán"
+        android:text="Đặt hàng"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 </LinearLayout>

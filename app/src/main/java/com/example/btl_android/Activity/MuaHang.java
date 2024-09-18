@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,12 +26,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MuaHang extends AppCompatActivity {
 
-    private TextView tvCustomerName, tvPhoneNumber, tvAddress, tvTotalAmount, tvOrderDate;
+    private EditText etCustomerName, etPhoneNumber, etAddress;
+    private TextView tvTotalAmount, tvOrderDate;
     private RecyclerView rvProducts;
     private MuaHangAdapter adapter;
     private Button Btn_thanhtoan;
@@ -41,9 +47,9 @@ public class MuaHang extends AppCompatActivity {
         setContentView(R.layout.activity_mua_hang);
 
         // Ánh xạ view
-        tvCustomerName = findViewById(R.id.tv_customer_name);
-        tvPhoneNumber = findViewById(R.id.tv_phone_number);
-        tvAddress = findViewById(R.id.tv_address);
+        etCustomerName = findViewById(R.id.et_customer_name);
+        etPhoneNumber = findViewById(R.id.et_phone_number);
+        etAddress = findViewById(R.id.et_address);
         tvTotalAmount = findViewById(R.id.tv_total_amount);
         rvProducts = findViewById(R.id.rv_products);
         tvOrderDate = findViewById(R.id.tv_order_date);
@@ -57,72 +63,51 @@ public class MuaHang extends AppCompatActivity {
             finish();
         });
 
-
         // Setup RecyclerView
         rvProducts.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MuaHangAdapter(this, cartItemList);
         rvProducts.setAdapter(adapter);
 
-        // Load thông tin người dùng và giỏ hàng
-        loadOrderDate();
-        loadCustomerInfo();
-        loadCartItems();
+        // Kiểm tra nguồn dữ liệu (Cart hoặc ProductDetailActivity)
+        if (getIntent().hasExtra("from_cart") && getIntent().getBooleanExtra("from_cart", false)) {
+            // Trường hợp từ giỏ hàng
+            loadCartItems();
+        } else {
+            // Trường hợp từ ProductDetailActivity
+            loadSingleProduct();
+            // Tải thông tin khách hàng
+            loadCustomerInfo();
+        }
 
         // Xử lý sự kiện nhấn nút thanh toán
-        Btn_thanhtoan.setOnClickListener(v -> navigateToSelectBankActivity());
-    }
-
-    private void loadOrderDate() {
-        // Lấy ngày hiện tại
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String currentDate = sdf.format(new Date());
-
-        // Hiển thị ngày đặt hàng lên giao diện
-        tvOrderDate.setText("Ngày đặt hàng: " + currentDate);
-    }
-
-    // Chuyển tới Activity thanh toán
-    private void navigateToSelectBankActivity() {
-        Intent intent = new Intent(MuaHang.this, thanhtoan.class);
-        intent.putExtra("TOTAL_AMOUNT", totalAmount); // Truyền totalAmount qua Intent
-        startActivity(intent);
+        Btn_thanhtoan.setOnClickListener(v -> createOrder());
     }
 
 
-    private void loadCustomerInfo() {
-        String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
-        if (uid != null) {
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("taikhoan").child(uid);
-            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        // Lấy thông tin từ Firebase
-                        String name = snapshot.child("username").getValue(String.class);
-                        String phone = snapshot.child("sdt").getValue(String.class); // Lấy số điện thoại dưới dạng chuỗi
-                        String address = snapshot.child("diachi").getValue(String.class);
+    private void loadSingleProduct() {
+        // Nhận dữ liệu từ Intent
+        Intent intent = getIntent();
+        String productName = intent.getStringExtra("ten_san_pham");
+        long productPrice = intent.getLongExtra("gia", 0);
+        String productImage = intent.getStringExtra("hinh_anh");
 
-                        // Hiển thị thông tin lên giao diện
-                        tvCustomerName.setText(name != null ? "Tên: " + name : "Tên: N/A");
-                        tvPhoneNumber.setText("Số điện thoại: " + (phone != null ? phone : "Không có số điện thoại"));
-                        tvAddress.setText("Địa chỉ: " + (address != null ? address : "Không có địa chỉ"));
+        // Tạo một CartItem từ dữ liệu nhận được
+        CartItem singleItem = new CartItem(productName, productPrice, 1, productImage);
 
-                    } else {
-                        Log.e("MuaHang", "Không tìm thấy thông tin người dùng với UID: " + uid);
-                    }
-                }
+        // Thêm vào danh sách sản phẩm
+        cartItemList.clear();
+        cartItemList.add(singleItem);
+        adapter.notifyDataSetChanged();
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("MuaHang", "Error loading user info", error.toException());
-                }
-            });
-        } else {
-            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
-        }
+        // Cập nhật tổng tiền
+        totalAmount = productPrice;
+        tvTotalAmount.setText("Tổng tiền: " + totalAmount + " VND");
+
+        // Hiển thị ngày đặt hàng
+        loadOrderDate();
     }
 
-
+    // Phương thức hiện tại để tải danh sách sản phẩm từ giỏ hàng
     private void loadCartItems() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
@@ -140,7 +125,7 @@ public class MuaHang extends AppCompatActivity {
                         }
                     }
 
-                    // Notify the adapter that the data has changed
+                    // Thông báo adapter rằng dữ liệu đã thay đổi
                     adapter.notifyDataSetChanged();
 
                     // Hiển thị tổng tiền
@@ -154,5 +139,108 @@ public class MuaHang extends AppCompatActivity {
             });
         }
     }
+
+    private void createOrder() {
+        String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
+        if (uid != null) {
+            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang").child(uid);
+
+            // Tạo mã đơn hàng duy nhất
+            String orderId = ordersRef.push().getKey();
+
+            // Lấy thông tin từ EditText
+            String customerName = etCustomerName.getText().toString().trim();
+            String phoneNumber = etPhoneNumber.getText().toString().trim();
+            String address = etAddress.getText().toString().trim();
+
+            // Tạo đối tượng đơn hàng
+            Map<String, Object> orderData = new HashMap<>();
+            orderData.put("maDonHang", orderId);
+            orderData.put("trangThai", "Đã đặt hàng");
+            orderData.put("ngayDatHang", new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
+            orderData.put("tongTien", totalAmount);
+            orderData.put("tenKhachHang", customerName);
+            orderData.put("soDienThoai", phoneNumber);
+            orderData.put("diaChi", address);
+
+            // Thêm danh sách sản phẩm vào đơn hàng
+            List<Map<String, Object>> products = new ArrayList<>();
+            for (CartItem item : cartItemList) {
+                Map<String, Object> productData = new HashMap<>();
+                productData.put("tenSanPham", item.getName());
+                productData.put("gia", item.getPrice());
+                productData.put("soLuong", item.getQuantity());
+                products.add(productData);
+            }
+            orderData.put("sanPham", products);
+
+            // Lưu thông tin đơn hàng vào Firebase
+            ordersRef.child(orderId).setValue(orderData)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Thông báo đặt hàng thành công
+                            Toast.makeText(MuaHang.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                            Log.d("MuaHang", "Đơn hàng đã được lưu thành công!");
+
+                            // Chuyển về trang chủ
+                            Intent intent = new Intent(MuaHang.this, Homepage.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // Thông báo đặt hàng thất bại
+                            Toast.makeText(MuaHang.this, "Đặt hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                            Log.e("MuaHang", "Lỗi khi lưu đơn hàng", task.getException());
+                        }
+                    });
+        } else {
+            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
+        }
+    }
+
+
+    private void loadOrderDate() {
+        // Lấy ngày hiện tại
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String currentDate = sdf.format(new Date());
+
+        // Hiển thị ngày đặt hàng lên giao diện
+        tvOrderDate.setText("Ngày đặt hàng: " + currentDate);
+    }
+
+    private void loadCustomerInfo() {
+        String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
+        if (uid != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("taikhoan").child(uid);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // Lấy thông tin từ Firebase
+                        String name = snapshot.child("username").getValue(String.class);
+                        String phone = snapshot.child("sdt").getValue(String.class);
+                        String address = snapshot.child("diachi").getValue(String.class);
+
+                        // Hiển thị thông tin lên EditText với định dạng "Tên: ...", "Số điện thoại: ...", "Địa chỉ: ..."
+                        etCustomerName.setText(name != null ? "Tên: " + name : "Tên: ");
+                        etPhoneNumber.setText(phone != null ? "Số điện thoại: " + phone : "Số điện thoại: ");
+                        etAddress.setText(address != null ? "Địa chỉ: " + address : "Địa chỉ: ");
+                    } else {
+                        Log.e("MuaHang", "Không tìm thấy thông tin người dùng với UID: " + uid);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("MuaHang", "Error loading user info", error.toException());
+                }
+            });
+        } else {
+            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
+        }
+    }
+
+
+
 
 }

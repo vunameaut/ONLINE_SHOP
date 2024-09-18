@@ -77,13 +77,33 @@ public class ProductDetailActivity extends AppCompatActivity {
         Glide.with(this).load(productImage).into(productImageView);
 
         // Xử lý sự kiện khi nhấn nút "Mua"
-        buttonBuy.setOnClickListener(v -> {
-            // Logic mua hàng
-        });
+        buttonBuy.setOnClickListener(v -> handleBuyProduct());
+
 
         // Xử lý sự kiện khi nhấn nút "Thêm vào giỏ hàng"
         buttonAddToCart.setOnClickListener(v -> addToCart());
     }
+
+    // Hàm riêng để xử lý sự kiện mua sản phẩm
+    private void handleBuyProduct() {
+        Intent intent = new Intent(ProductDetailActivity.this, MuaHang.class);
+
+        // Truyền dữ liệu sản phẩm qua Intent
+        intent.putExtra("ten_san_pham", productNameTextView.getText().toString());
+        intent.putExtra("gia", getIntent().getLongExtra("gia", 0));
+        intent.putExtra("hinh_anh", getIntent().getStringExtra("hinh_anh"));
+        intent.putExtra("mo_ta", getIntent().getStringExtra("mo_ta"));
+        intent.putExtra("so_luong_ton_kho", getIntent().getIntExtra("so_luong_ton_kho", 0));
+        intent.putExtra("loai_san_pham", getIntent().getStringExtra("loai_san_pham"));
+
+        // Đánh dấu rằng hoạt động này đến từ ProductDetailActivity
+        intent.putExtra("from_cart", false);
+
+        // Chuyển tới màn hình MuaHang
+        startActivity(intent);
+    }
+
+
 
     // Hàm thêm sản phẩm vào giỏ hàng
     private void addToCart() {
@@ -100,11 +120,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         databaseReference.child("cart").child(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 boolean productExists = false;
-                int itemCount = 0;
 
                 // Kiểm tra từng sản phẩm trong giỏ hàng
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                    itemCount++;
                     CartItem existingCartItem = snapshot.getValue(CartItem.class);
 
                     if (existingCartItem != null && existingCartItem.getName().equals(productName)) {
@@ -119,9 +137,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 if (!productExists) {
                     // Nếu sản phẩm chưa có trong giỏ, thêm sản phẩm mới
-                    String cartItemId = "item " + (itemCount + 1); // Tạo ID cho sản phẩm
+                    // Sử dụng push() để tạo ID tự động và duy nhất cho mỗi sản phẩm
+                    DatabaseReference newCartItemRef = databaseReference.child("cart").child(userId).push();
                     CartItem newCartItem = new CartItem(productName, productPrice, 1, productImage);
-                    databaseReference.child("cart").child(userId).child(cartItemId).setValue(newCartItem)
+                    newCartItemRef.setValue(newCartItem)
                             .addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
                                     Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
@@ -135,6 +154,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     // Class đại diện cho một sản phẩm trong giỏ hàng
     public static class CartItem {

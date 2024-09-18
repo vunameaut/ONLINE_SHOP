@@ -39,5 +39,8 @@
     <color name="hint_color">#757575</color>
 
 
+    <color name="lightgray">#BCBABA</color>
+    <color name="secondary_text_color">#666666</color>
+    <color name="status_text_color">#FF5722</color>
 
 </resources>

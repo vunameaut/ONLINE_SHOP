@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/accountsecurity"
-            android:textSize="48sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="50dp"
@@ -37,6 +37,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="@string/profile"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,6 +98,29 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:clickable="false">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:text="@string/phone_number"
+                android:gravity="start|center" />
+
+            <TextView
+                android:id="@+id/tv_numPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:gravity="end|center" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnChange"
             android:layout_width="match_parent"
@@ -92,7 +129,22 @@
             android:padding="10dp"
             android:background="@android:color/transparent"
             android:textColor="@color/black"
+            android:textStyle="bold"
             android:text="@string/ChangePass"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"/>
+
+        <Button
+            android:id="@+id/btnDelAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="@string/delAcc"
             android:textSize="16sp"
             android:gravity="center_vertical"
             android:drawablePadding="8dp"/>

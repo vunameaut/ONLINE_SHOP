@@ -49,7 +49,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         setContentView(R.layout.activity_homepage);
 
         // Initialize FirebaseStorage reference
-        storageRef = FirebaseStorage.getInstance().getReference();  // Initialize the storageRef properly
+        storageRef = FirebaseStorage.getInstance().getReference();
 
         viewPager = findViewById(R.id.view_pager);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -154,21 +154,24 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                         .transform(new CircleTransform())
                         .into(avatarImageView);
             }).addOnFailureListener(exception -> {
-                Toast.makeText(Homepage.this, "Lỗi tải ảnh đại diện", Toast.LENGTH_SHORT).show();
+
             });
         }
     }
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-            super.onBackPressed();
+            // Đóng ứng dụng thay vì quay lại Login
+            finishAffinity(); // Đóng tất cả các activity và thoát ứng dụng
+            // không gọi super.onBackPressed() vì bạn đã thay thế hành vi mặc định
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -217,9 +220,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         }
         if (item.getItemId() == R.id.nav_order) {
             Toast.makeText(this, "Order", Toast.LENGTH_SHORT).show();
-        }
-        if (item.getItemId() == R.id.nav_account) {
-            Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, DonHang.class);
+            startActivity(intent);
         }
         if (item.getItemId() == R.id.nav_setting) {
             Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show();
