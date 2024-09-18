@@ -158,7 +158,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             viewPager.setCurrentItem(3);
         }
         if (item.getItemId() == R.id.nav_order) {
-            Toast.makeText(this, "Order", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, DonHang.class);
+            startActivity(intent);
         }
         if (item.getItemId() == R.id.nav_setting) {
             Intent intent = new Intent(this, Setting.class);

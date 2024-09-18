@@ -20,9 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ProductDetailActivity extends AppCompatActivity {
 
     // Các thành phần giao diện
-    private ImageView productImageView;
-    private TextView productNameTextView, productPriceTextView, productDescriptionTextView, productStockTextView, productCategoryTextView;
-    private Button buttonBuy, buttonAddToCart;
+    ImageView productImageView;
+    TextView productNameTextView, productPriceTextView, productDescriptionTextView, productStockTextView, productCategoryTextView;
+    Button buttonBuy, buttonAddToCart;
 
     // Firebase
     private FirebaseAuth firebaseAuth;

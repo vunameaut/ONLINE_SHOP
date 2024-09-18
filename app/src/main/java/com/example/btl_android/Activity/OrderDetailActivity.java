@@ -20,9 +20,9 @@ import java.util.Map;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
-    private TextView tvOrderNumber, tvOrderDate, tvTotalAmount, tvOrderStatus, tvOrderItems;
-    private String orderId;
-    private ImageView btn_back;
+    TextView tvOrderNumber, tvOrderDate, tvTotalAmount, tvOrderStatus, tvOrderItems;
+    String orderId;
+    ImageView btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,14 +2,15 @@ package com.example.btl_android.item;
 
 public class CartItem {
     private String name;
-    private long price; // Thay đổi từ String thành long
+    private long price; // Đã thay đổi từ String thành long
     private int quantity;
     private String imageUrl;
 
-    public void artItem() {
-        // Required empty constructor for Firebase
+    // Constructor mặc định (cần thiết cho Firebase)
+    public CartItem() {
     }
 
+    // Constructor với các tham số
     public CartItem(String name, long price, int quantity, String imageUrl) {
         this.name = name;
         this.price = price;
@@ -17,6 +18,7 @@ public class CartItem {
         this.imageUrl = imageUrl;
     }
 
+    // Getter và Setter
     public String getName() {
         return name;
     }

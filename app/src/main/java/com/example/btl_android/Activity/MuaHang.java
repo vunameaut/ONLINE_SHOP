@@ -1,5 +1,6 @@
 package com.example.btl_android.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,13 +34,13 @@ import java.util.Map;
 
 public class MuaHang extends AppCompatActivity {
 
-    private EditText etCustomerName, etPhoneNumber, etAddress;
-    private TextView tvTotalAmount, tvOrderDate;
-    private RecyclerView rvProducts;
-    private MuaHangAdapter adapter;
-    private Button Btn_thanhtoan;
-    private List<CartItem> cartItemList = new ArrayList<>();
-    private long totalAmount = 0;
+    EditText etCustomerName, etPhoneNumber, etAddress;
+    TextView tvTotalAmount, tvOrderDate;
+    RecyclerView rvProducts;
+    MuaHangAdapter adapter;
+    Button Btn_thanhtoan;
+    List<CartItem> cartItemList = new ArrayList<>();
+    long totalAmount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class MuaHang extends AppCompatActivity {
     }
 
 
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     private void loadSingleProduct() {
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
@@ -113,6 +115,7 @@ public class MuaHang extends AppCompatActivity {
         if (uid != null) {
             DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
             cartRef.addValueEventListener(new ValueEventListener() {
+                @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     cartItemList.clear();  // Xóa dữ liệu cũ trước khi thêm dữ liệu mới
@@ -175,6 +178,7 @@ public class MuaHang extends AppCompatActivity {
             orderData.put("sanPham", products);
 
             // Lưu thông tin đơn hàng vào Firebase
+            assert orderId != null;
             ordersRef.child(orderId).setValue(orderData)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -199,6 +203,7 @@ public class MuaHang extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void loadOrderDate() {
         // Lấy ngày hiện tại
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());

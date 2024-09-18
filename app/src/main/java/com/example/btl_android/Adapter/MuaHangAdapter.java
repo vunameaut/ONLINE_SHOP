@@ -30,7 +30,7 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
     @NonNull
     @Override
     public MuaHangViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_newproduct, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
         return new MuaHangViewHolder(view);
     }
 
@@ -40,16 +40,22 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
 
         // Kiểm tra null
         if (cartItem != null) {
-            holder.tvProductName.setText(cartItem.getName());
-            holder.tvProductPrice.setText(String.valueOf(cartItem.getPrice()));
-            holder.tvProductQuantity.setText(String.valueOf(cartItem.getQuantity()));
-
-            // Sử dụng Glide để load hình ảnh
-            Glide.with(context)
-                    .load(cartItem.getImageUrl())
-                    .placeholder(R.drawable.avt) // Sử dụng placeholder trong khi tải ảnh
-                    .error(R.drawable.load) // Sử dụng hình ảnh thay thế khi tải thất bại
-                    .into(holder.ivProductImage);
+            if (holder.tvProductName != null) {
+                holder.tvProductName.setText(cartItem.getName());
+            }
+            if (holder.tvProductPrice != null) {
+                holder.tvProductPrice.setText(String.valueOf(cartItem.getPrice()));
+            }
+            if (holder.tvProductQuantity != null) {
+                holder.tvProductQuantity.setText(String.valueOf(cartItem.getQuantity()));
+            }
+            if (holder.ivProductImage != null) {
+                Glide.with(context)
+                        .load(cartItem.getImageUrl())
+                        .placeholder(R.drawable.avt)
+                        .error(R.drawable.load)
+                        .into(holder.ivProductImage);
+            }
         } else {
             Log.e("MuaHangAdapter", "CartItem tại vị trí " + position + " là null.");
         }
@@ -68,10 +74,15 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
 
         public MuaHangViewHolder(@NonNull View itemView) {
             super(itemView);
-//            tvProductName = itemView.findViewById(R.id.tv_product_name);
-//            tvProductPrice = itemView.findViewById(R.id.tv_product_price);
-//            tvProductQuantity = itemView.findViewById(R.id.tv_product_quantity);
-//            ivProductImage = itemView.findViewById(R.id.iv_product_image);
+            tvProductName = itemView.findViewById(R.id.tv_product_name);
+            tvProductPrice = itemView.findViewById(R.id.tv_product_price);
+            tvProductQuantity = itemView.findViewById(R.id.tv_product_quantity);
+            ivProductImage = itemView.findViewById(R.id.iv_product_image);
+
+            // Kiểm tra các view có được ánh xạ không
+            if (tvProductName == null || tvProductPrice == null || tvProductQuantity == null || ivProductImage == null) {
+                Log.e("MuaHangAdapter", "Một hoặc nhiều view không được ánh xạ chính xác.");
+            }
         }
     }
 }
