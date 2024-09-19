@@ -22,6 +22,8 @@
         <activity
             android:name=".Activity.DonHang"
             android:exported="false" />
+        <activity android:name=".Activity.admin.sanpham.AdminSanphamDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.admin.taikhoan.ChangePasswordActivity"
             android:exported="false" />
@@ -51,9 +53,6 @@
             android:exported="false" />
         <activity
             android:name=".Activity.admin.MainAdmin"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.thanhtoan"
             android:exported="false" />
         <activity
             android:name=".Activity.MuaHang"
