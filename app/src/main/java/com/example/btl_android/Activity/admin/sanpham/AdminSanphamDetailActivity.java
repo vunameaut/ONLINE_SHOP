@@ -2,6 +2,8 @@ package com.example.btl_android.Activity.admin.sanpham;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -30,6 +32,13 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
     private String productId;
 
     private static final String TAG = "AdminSanphamDetailActivity";
+
+    // Chuỗi cố định cho các trường
+    private static final String NAME_PREFIX = "Tên sản phẩm: ";
+    private static final String PRICE_PREFIX = "Giá: ";
+    private static final String DESCRIPTION_PREFIX = "Mô tả: ";
+    private static final String STOCK_PREFIX = "Số lượng tồn kho: ";
+    private static final String CATEGORY_PREFIX = "Loại: ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,22 +72,20 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Hiển thị dữ liệu trong các EditText và ImageView
-        productNameEditText.setText(sanPham.getTenSanPham());
-        productPriceEditText.setText(String.valueOf(sanPham.getGia()));
-        productDescriptionEditText.setText(sanPham.getMoTa());
-        productStockEditText.setText(String.valueOf(sanPham.getSoLuongTonKho()));
-        productCategoryEditText.setText(sanPham.getLoai());
+        // Hiển thị dữ liệu trong các EditText và ImageView với tiền tố cố định
+        productNameEditText.setText(NAME_PREFIX + sanPham.getTenSanPham());
+        productPriceEditText.setText(PRICE_PREFIX + sanPham.getGia());
+        productDescriptionEditText.setText(DESCRIPTION_PREFIX + sanPham.getMoTa());
+        productStockEditText.setText(STOCK_PREFIX + sanPham.getSoLuongTonKho());
+        productCategoryEditText.setText(CATEGORY_PREFIX + sanPham.getLoai());
 
-        // Log thông tin sản phẩm
-        Log.d(TAG, "Sản phẩm thông tin:");
-        Log.d(TAG, "Tên sản phẩm: " + sanPham.getTenSanPham());
-        Log.d(TAG, "Giá: " + sanPham.getGia());
-        Log.d(TAG, "Mô tả: " + sanPham.getMoTa());
-        Log.d(TAG, "Số lượng tồn kho: " + sanPham.getSoLuongTonKho());
-        Log.d(TAG, "Loại: " + sanPham.getLoai());
-        Log.d(TAG, "UID: " + sanPham.getUid());
-        Log.d(TAG, "URL ảnh: " + sanPham.getHinhAnh());
+        // Khóa phần trước dấu hai chấm trong EditText
+        lockPrefixInEditText(productNameEditText, NAME_PREFIX);
+        lockPrefixInEditText(productPriceEditText, PRICE_PREFIX);
+        lockPrefixInEditText(productDescriptionEditText, DESCRIPTION_PREFIX);
+        lockPrefixInEditText(productStockEditText, STOCK_PREFIX);
+        lockPrefixInEditText(productCategoryEditText, CATEGORY_PREFIX);
+
 
         // Lưu productId để sử dụng cho các thao tác cập nhật và xóa
         productId = sanPham.getUid();  // Sử dụng UID của sản phẩm từ Firebase
@@ -103,27 +110,50 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
         btnDeleteProduct.setOnClickListener(v -> deleteProduct());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed(); // Xử lý nút back trên Toolbar
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    // Phương thức khóa phần trước dấu hai chấm
+    private void lockPrefixInEditText(EditText editText, String prefix) {
+        editText.addTextChangedListener(new TextWatcher() {
+            boolean isEditing;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isEditing) return;
+                isEditing = true;
+
+                // Kiểm tra nếu phần đầu không khớp với prefix thì đặt lại
+                if (!s.toString().startsWith(prefix)) {
+                    editText.setText(prefix);
+                    editText.setSelection(prefix.length());  // Di chuyển con trỏ sau prefix
+                } else {
+                    // Ngăn người dùng chỉnh sửa phần prefix
+                    if (s.length() < prefix.length()) {
+                        editText.setText(prefix);
+                        editText.setSelection(prefix.length());
+                    }
+                }
+
+                isEditing = false;
+            }
+        });
     }
 
+    // Phương thức để chỉ cập nhật phần sau dấu hai chấm
     private void updateProduct() {
-        String updatedName = productNameEditText.getText().toString().trim();
+        String updatedName = extractValueAfterColon(productNameEditText.getText().toString().trim());
         int updatedPrice;
-        String updatedDescription = productDescriptionEditText.getText().toString().trim();
-        String updatedCategory = productCategoryEditText.getText().toString().trim();
+        String updatedDescription = extractValueAfterColon(productDescriptionEditText.getText().toString().trim());
+        String updatedCategory = extractValueAfterColon(productCategoryEditText.getText().toString().trim());
         int updatedStock;
 
         try {
-            updatedPrice = Integer.parseInt(productPriceEditText.getText().toString().trim());
-            updatedStock = Integer.parseInt(productStockEditText.getText().toString().trim());
+            updatedPrice = Integer.parseInt(extractValueAfterColon(productPriceEditText.getText().toString().trim()));
+            updatedStock = Integer.parseInt(extractValueAfterColon(productStockEditText.getText().toString().trim()));
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Giá và số lượng tồn kho không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
@@ -149,6 +179,16 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
         });
     }
 
+    // Hàm phụ để trích xuất giá trị sau dấu hai chấm
+    private String extractValueAfterColon(String text) {
+        int colonIndex = text.indexOf(":");
+        if (colonIndex != -1) {
+            return text.substring(colonIndex + 1).trim();
+        } else {
+            return text;  // Nếu không có dấu hai chấm, trả về toàn bộ text
+        }
+    }
+
     private void deleteProduct() {
         databaseReference.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -160,4 +200,14 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
+

@@ -65,6 +65,17 @@
         android:text="Quản lý sản phẩm"
         android:textSize="18sp" />
 
+
+
+    <Button
+        android:id="@+id/btnQuanLyDonHang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button_background"
+        android:text="Quản lý đơn hàng"
+        android:textSize="18sp" />
+
     <Button
         android:id="@+id/btnThongKeBaoCao"
         android:layout_width="match_parent"
@@ -73,6 +84,7 @@
         android:background="@drawable/rounded_button_background"
         android:text="Thống kê báo cáo"
         android:textSize="18sp" />
+
 
     <Button
         android:id="@+id/btnDangXuat"

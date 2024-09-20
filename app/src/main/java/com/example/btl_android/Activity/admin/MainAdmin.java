@@ -19,7 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainAdmin extends AppCompatActivity {
 
-    Button btnDangXuat ,btnTaiKhoan, btnNhaCungCap, btnSanPham,btnThongKe;
+    Button btnDangXuat, btnTaiKhoan, btnNhaCungCap, btnSanPham, btnThongKe, btnDonHang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +45,19 @@ public class MainAdmin extends AppCompatActivity {
             startActivity(intent);
 
         });
-        // sự kiện tài khoản
+        // sự kiện sản phẩm
         btnSanPham.setOnClickListener(v -> {
             Intent intent = new Intent(this, admin_sanpham.class);
             startActivity(intent);
 
         });
+
+        btnDonHang.setOnClickListener(v -> {
+//            Intent intent = new Intent(this, admin_donhang.class);
+//            startActivity(intent);
+            
+        });
+
     }
 
     // Ánh xạ các thành phần giao diện
@@ -60,6 +68,8 @@ public class MainAdmin extends AppCompatActivity {
         btnNhaCungCap= findViewById(R.id.btnQuanLyNhaCungCap);
         btnSanPham = findViewById(R.id.btnQuanLySanPham);
         btnThongKe= findViewById(R.id.btnThongKeBaoCao);
+        btnDonHang = findViewById(R.id.btnQuanLyDonHang);
+
     }
 
     private void dangxuat(){
