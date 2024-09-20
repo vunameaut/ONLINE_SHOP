@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+            android:name=".Activity.admin.ThongKe.ThongKe"
+            android:exported="false" />
+        <activity
             android:name=".Activity.OrderDetailActivity"
             android:exported="false" />
         <activity

@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.btl_android.Activity.Login;
+import com.example.btl_android.Activity.admin.ThongKe.ThongKe;
 import com.example.btl_android.Activity.admin.sanpham.admin_sanpham;
 import com.example.btl_android.Activity.admin.taikhoan.admin_taikhoan;
 import com.example.btl_android.R;
@@ -49,6 +50,11 @@ public class MainAdmin extends AppCompatActivity {
             Intent intent = new Intent(this, admin_sanpham.class);
             startActivity(intent);
 
+        });
+
+        btnThongKe.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ThongKe.class);
+            startActivity(intent);
         });
     }
 

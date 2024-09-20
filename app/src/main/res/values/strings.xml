@@ -74,7 +74,7 @@
     <string name="cart">Giỏ hàng</string>
 
     <string-array name="role_options">
-    <item>user</item>
+        <item>user</item>
         <item>admin</item>
     </string-array>
     <!-- Product type options -->
@@ -83,4 +83,5 @@
         <item>Laptop</item>
         <item>Máy tính</item>
     </string-array>
+
 </resources>
