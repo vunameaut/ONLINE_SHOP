@@ -65,39 +65,42 @@ public class admin_taikhoan extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 taiKhoanList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Admin_taikhoan_item taiKhoan = new Admin_taikhoan_item();
-
-                    // Try to get the 'sdt' field as a Long or String
-                    Object sdtObject = dataSnapshot.child("sdt").getValue();
-                    String sdt;
-                    if (sdtObject instanceof Long) {
-                        sdt = sdtObject.toString();
-                    } else if (sdtObject instanceof String) {
-                        sdt = (String) sdtObject;
-                    } else {
-                        sdt = "";
-                    }
-
-                    // Gán các giá trị khác
-                    String username = dataSnapshot.child("username").getValue(String.class);
-                    String email = dataSnapshot.child("email").getValue(String.class);
-                    String diachi = dataSnapshot.child("diachi").getValue(String.class);
-                    String uid = dataSnapshot.child("uid").getValue(String.class);
                     String role = dataSnapshot.child("role").getValue(String.class);
+                    // Chỉ thêm vào danh sách nếu role là "user"
+                    if ("user".equals(role)) {
+                        Admin_taikhoan_item taiKhoan = new Admin_taikhoan_item();
 
-                    // Đặt giá trị vào đối tượng taiKhoan
-                    taiKhoan.setSdt(sdt);
-                    taiKhoan.setUsername(username);
-                    taiKhoan.setEmail(email);
-                    taiKhoan.setDiachi(diachi);
-                    taiKhoan.setUid(uid);
-                    taiKhoan.setRole(role);
+                        // Thử lấy trường 'sdt' dưới dạng Long hoặc String
+                        Object sdtObject = dataSnapshot.child("sdt").getValue();
+                        String sdt;
+                        if (sdtObject instanceof Long) {
+                            sdt = sdtObject.toString();
+                        } else if (sdtObject instanceof String) {
+                            sdt = (String) sdtObject;
+                        } else {
+                            sdt = "";
+                        }
 
-                    // Thêm đối tượng vào danh sách
-                    taiKhoanList.add(taiKhoan);
+                        // Gán các giá trị khác
+                        String username = dataSnapshot.child("username").getValue(String.class);
+                        String email = dataSnapshot.child("email").getValue(String.class);
+                        String diachi = dataSnapshot.child("diachi").getValue(String.class);
+                        String uid = dataSnapshot.child("uid").getValue(String.class);
+
+                        // Đặt giá trị vào đối tượng taiKhoan
+                        taiKhoan.setSdt(sdt);
+                        taiKhoan.setUsername(username);
+                        taiKhoan.setEmail(email);
+                        taiKhoan.setDiachi(diachi);
+                        taiKhoan.setUid(uid);
+                        taiKhoan.setRole(role);
+
+                        // Thêm đối tượng vào danh sách
+                        taiKhoanList.add(taiKhoan);
+                    }
                 }
 
-                taiKhoanAdapter.notifyDataSetChanged(); // Notify adapter about data change
+                taiKhoanAdapter.notifyDataSetChanged(); // Thông báo adapter về thay đổi dữ liệu
 
                 // Tự động tìm kiếm một khoảng trắng khi dữ liệu được tải
                 editTextSearch.setText(" ");
@@ -111,7 +114,7 @@ public class admin_taikhoan extends AppCompatActivity {
             }
         });
 
-        // Set up search functionality
+        // Thiết lập chức năng tìm kiếm
         editTextSearch.addTextChangedListener(new android.text.TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
