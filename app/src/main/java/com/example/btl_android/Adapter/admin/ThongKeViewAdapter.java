@@ -1,10 +1,14 @@
-package com.example.btl_android.Activity.admin.ThongKe;
+package com.example.btl_android.Adapter.admin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.example.btl_android.Fragment.admin.DanhThuFragment;
+import com.example.btl_android.Fragment.admin.DonHangFragment;
+import com.example.btl_android.Fragment.admin.TonKhoFragment;
 
 public class ThongKeViewAdapter extends FragmentStatePagerAdapter {
     public ThongKeViewAdapter(@NonNull FragmentManager fm, int behavior) {
@@ -16,11 +20,11 @@ public class ThongKeViewAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new Thongke1Fragment();
+                return new DanhThuFragment();
             case 1:
-                return new Thongke2Fragment();
+                return new TonKhoFragment();
             case 2:
-                return new Thongke3Fragment();
+                return new DonHangFragment();
         }
         return null;
     }
@@ -36,13 +40,13 @@ public class ThongKeViewAdapter extends FragmentStatePagerAdapter {
         String title = "";
         switch (position) {
             case 0:
-                title = "Thống kê 1";
+                title = "Báo cáo danh thu";
                 break;
             case 1:
-                title = "Thống kê 2";
+                title = "Tồn kho";
                 break;
             case 2:
-                title = "Thống kê 3";
+                title = "Đơn hàng";
                 break;
         }
         return title;
