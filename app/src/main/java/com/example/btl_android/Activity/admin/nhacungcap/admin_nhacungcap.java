@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.btl_android.Adapter.admin.Admin_nhacungcap_adapter;
 import com.example.btl_android.R;
 import com.example.btl_android.item.admin.Admin_nhacungcap_item;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +32,8 @@ public class admin_nhacungcap extends AppCompatActivity {
     private List<Admin_nhacungcap_item> nhacungcapList;
     private DatabaseReference databaseReference;
     private EditText editTextSearchSupplier;
+    private FloatingActionButton btn_add;
+
     private ValueEventListener valueEventListener;
 
     private static final int REQUEST_CODE_UPDATE_DELETE = 1;
@@ -49,6 +51,12 @@ public class admin_nhacungcap extends AppCompatActivity {
         recyclerView.setAdapter(nhacungcapAdapter);
 
         editTextSearchSupplier = findViewById(R.id.editTextSearchSupplier);
+        btn_add = findViewById(R.id.btn_add_supplier);
+        btn_add.setOnClickListener(nhacungcap -> {
+            Intent intent = new Intent(this, add_nhacungcap.class);
+            startActivityForResult(intent, REQUEST_CODE_UPDATE_DELETE);
+        });
+
 
         // Khởi tạo DatabaseReference
         databaseReference = FirebaseDatabase.getInstance().getReference("nha_cung_cap");
@@ -65,7 +73,7 @@ public class admin_nhacungcap extends AppCompatActivity {
                     }
                 }
                 nhacungcapAdapter.notifyDataSetChanged();
-                // Tìm kiếm với ký tự rỗng để hiện tất cả nhà cung cấp
+                // Tìm kiếm với ký tự rỗng để hiện tất cả nhà cung cấp khi dữ liệu được tải
                 editTextSearchSupplier.setText("");
             }
 
@@ -91,12 +99,36 @@ public class admin_nhacungcap extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+
+        // Xử lý sự kiện click item nhà cung cấp
+        nhacungcapAdapter.setOnItemClickListener(nhacungcap -> {
+            Intent intent = new Intent(admin_nhacungcap.this, AdminNhacungcapDetailActivity.class);
+            intent.putExtra("supplierItem", nhacungcap);
+            startActivityForResult(intent, REQUEST_CODE_UPDATE_DELETE);
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener); // Gỡ bỏ ValueEventListener
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_UPDATE_DELETE && resultCode == RESULT_OK) {
+            // Làm mới dữ liệu khi có kết quả trả về
+            loadNhaCungCapData();
+        }
     }
 
     private void loadNhaCungCapData() {
         if (valueEventListener != null) {
-            databaseReference.removeEventListener(valueEventListener);
+            databaseReference.removeEventListener(valueEventListener); // Gỡ bỏ ValueEventListener cũ
         }
-        databaseReference.addValueEventListener(valueEventListener);
+        databaseReference.addValueEventListener(valueEventListener); // Thêm ValueEventListener mới
     }
 }

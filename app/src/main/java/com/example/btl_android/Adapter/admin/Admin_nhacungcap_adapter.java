@@ -51,7 +51,7 @@ public class Admin_nhacungcap_adapter extends RecyclerView.Adapter<Admin_nhacung
 
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(nhaCungCap);
+                onItemClickListener.onItemClick(nhaCungCap); // Đảm bảo truyền đúng đối tượng
             }
         });
     }

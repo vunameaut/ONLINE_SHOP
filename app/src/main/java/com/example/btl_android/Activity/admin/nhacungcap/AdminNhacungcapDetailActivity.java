@@ -72,7 +72,7 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
 
         Admin_nhacungcap_item updatedSupplier = new Admin_nhacungcap_item(supplierId, updatedName, updatedAddress, updatedEmail, updatedPhone);
 
-        // Cập nhật thông tin lên Firebase
+        // Cập nhật thông tin lên Firebase dựa trên supplierId
         databaseReference.setValue(updatedSupplier).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(AdminNhacungcapDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
     }
 
     private void deleteSupplier() {
-        // Xóa nhà cung cấp từ Firebase
+        // Xóa nhà cung cấp từ Firebase dựa trên supplierId
         databaseReference.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(AdminNhacungcapDetailActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
