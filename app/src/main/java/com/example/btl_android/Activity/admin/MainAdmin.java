@@ -12,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.btl_android.Activity.Login;
+import com.example.btl_android.Activity.admin.ThongKe.ThongKe;
+import com.example.btl_android.Activity.admin.nhacungcap.admin_nhacungcap;
 import com.example.btl_android.Activity.admin.sanpham.admin_sanpham;
 import com.example.btl_android.Activity.admin.taikhoan.admin_taikhoan;
 import com.example.btl_android.R;
@@ -45,17 +47,28 @@ public class MainAdmin extends AppCompatActivity {
             startActivity(intent);
 
         });
-        // sự kiện sản phẩm
+        // sự kiện tài khoản
         btnSanPham.setOnClickListener(v -> {
             Intent intent = new Intent(this, admin_sanpham.class);
             startActivity(intent);
 
         });
 
+        btnThongKe.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ThongKe.class);
+            startActivity(intent);
+        });
+
+
+        btnNhaCungCap.setOnClickListener(v -> {
+            Intent intent = new Intent(this, admin_nhacungcap.class);
+            startActivity(intent);
+        });
+
         btnDonHang.setOnClickListener(v -> {
 //            Intent intent = new Intent(this, admin_donhang.class);
 //            startActivity(intent);
-            
+
         });
 
     }

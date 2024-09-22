@@ -72,6 +72,18 @@
     <string name="ListPC">Danh sách sản phẩm máy tính</string>
     <string name="detail">Chi tiết</string>
     <string name="cart">Giỏ hàng</string>
+    <string name="StatisticReport">Thống kê</string>
+    <string name="date">Ngày</string>
+    <string name="revenue">Danh thu</string>
+    <string name="nameProduct">Tên</string>
+    <string name="codeProduct">MaSP</string>
+    <string name="price">Giá</string>
+    <string name="quantity">Số lượng</string>
+    <string name="supplier">Nhà cung cấp</string>
+    <string name="codeOrder">MaDH</string>
+    <string name="nameCustomer">Tên KH</string>
+    <string name="dateOrder">Ngày đặt hàng</string>
+    <string name="status">Trạng thái</string>
 
     <string-array name="role_options">
         <item>user</item>
@@ -83,4 +95,5 @@
         <item>Laptop</item>
         <item>Máy tính</item>
     </string-array>
+
 </resources>

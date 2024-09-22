@@ -1,10 +1,8 @@
 package com.example.btl_android.Activity.admin.sanpham;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,7 +41,7 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity_product_detail);
+        setContentView(R.layout.admin_sanpham_detail);
 
         // Liên kết các view
         productNameEditText = findViewById(R.id.productNameEditText);
