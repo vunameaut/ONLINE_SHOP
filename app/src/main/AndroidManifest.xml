@@ -17,12 +17,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+            android:name=".Activity.admin.nhacungcap.AdminNhacungcapDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.nhacungcap.add_nhacungcap"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.nhacungcap.admin_nhacungcap"
+            android:exported="false" />
+        <activity
             android:name=".Activity.OrderDetailActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.DonHang"
             android:exported="false" />
-        <activity android:name=".Activity.admin.sanpham.AdminSanphamDetailActivity"
+        <activity
+            android:name=".Activity.admin.sanpham.AdminSanphamDetailActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.admin.taikhoan.ChangePasswordActivity"

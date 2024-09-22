@@ -94,23 +94,20 @@ public class Login extends AppCompatActivity {
 
     // Phương thức đăng nhập
     protected void LoginToHomepage() {
-        String inputEmail = mailEditText.getText().toString(); // Lấy email nhập từ EditText
-        String inputPass = passEditText.getText().toString(); // Lấy mật khẩu nhập từ EditText
+        String inputEmail = mailEditText.getText().toString();
+        String inputPass = passEditText.getText().toString();
 
-        // Kiểm tra tính hợp lệ của dữ liệu nhập
         if (!checkInput(inputEmail, inputPass)) {
-            return; // Dừng nếu dữ liệu không hợp lệ
+            return;
         }
 
-        // Đăng nhập với FirebaseAuth
         auth.signInWithEmailAndPassword(inputEmail, inputPass)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = auth.getCurrentUser(); // Lấy người dùng hiện tại từ Firebase
+                        FirebaseUser user = auth.getCurrentUser();
                         if (user != null) {
-                            String uid = user.getUid(); // Lấy UID của người dùng
+                            String uid = user.getUid();
 
-                            // Lưu UID và thông tin đăng nhập vào SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("uid", uid);
@@ -122,42 +119,47 @@ public class Login extends AppCompatActivity {
                         }
                     } else {
                         // Nếu đăng nhập thất bại
-                        String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
+                        Exception e = task.getException();
                         String errorMessage;
 
-                        switch (errorCode) {
-                            case "ERROR_INVALID_EMAIL":
-                                mailInputLayout.setError("Email không đúng");
-                                mailEditText.requestFocus();
-                                errorMessage = "Email không đúng";
-                                break;
-                            case "ERROR_WRONG_PASSWORD":
-                                passInputLayout.setError("Mật khẩu không đúng");
-                                passEditText.requestFocus();
-                                errorMessage = "Mật khẩu không đúng";
-                                break;
-                            case "ERROR_USER_NOT_FOUND":
-                                errorMessage = "Người dùng không tồn tại.";
-                                break;
-                            case "ERROR_USER_DISABLED":
-                                errorMessage = "Tài khoản đã bị vô hiệu hóa.";
-                                break;
-                            case "ERROR_TOO_MANY_REQUESTS":
-                                errorMessage = "Quá nhiều yêu cầu. Vui lòng thử lại sau.";
-                                break;
-                            case "ERROR_NETWORK_REQUEST_FAILED":
-                                errorMessage = "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.";
-                                break;
-                            default:
-                                errorMessage = "Lỗi đăng nhập: " + errorCode;
-                                break;
+                        if (e instanceof FirebaseAuthException) {
+                            String errorCode = ((FirebaseAuthException) e).getErrorCode();
+                            switch (errorCode) {
+                                case "ERROR_INVALID_EMAIL":
+                                    mailInputLayout.setError("Email không đúng");
+                                    mailEditText.requestFocus();
+                                    errorMessage = "Email không đúng";
+                                    break;
+                                case "ERROR_WRONG_PASSWORD":
+                                    passInputLayout.setError("Mật khẩu không đúng");
+                                    passEditText.requestFocus();
+                                    errorMessage = "Mật khẩu không đúng";
+                                    break;
+                                case "ERROR_USER_NOT_FOUND":
+                                    errorMessage = "Người dùng không tồn tại.";
+                                    break;
+                                case "ERROR_USER_DISABLED":
+                                    errorMessage = "Tài khoản đã bị vô hiệu hóa.";
+                                    break;
+                                case "ERROR_TOO_MANY_REQUESTS":
+                                    errorMessage = "Quá nhiều yêu cầu. Vui lòng thử lại sau.";
+                                    break;
+                                case "ERROR_NETWORK_REQUEST_FAILED":
+                                    errorMessage = "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.";
+                                    break;
+                                default:
+                                    errorMessage = "Lỗi đăng nhập: " + errorCode;
+                                    break;
+                            }
+                        } else {
+                            errorMessage = "Lỗi đăng nhập: " + e.getMessage();
                         }
 
                         Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
-                }
-        );
+                });
     }
+
 
     private void checkUserRole(String uid, FirebaseUser user) {
         dbRef.child(uid).child("role").get().addOnCompleteListener(task -> {

@@ -47,7 +47,7 @@ public class DonHang extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(); // Quay lại màn hình trước đó
+                finish();
             }
         });
 
