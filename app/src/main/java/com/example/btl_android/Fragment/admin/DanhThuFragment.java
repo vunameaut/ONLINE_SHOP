@@ -14,21 +14,25 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.app.DatePickerDialog;
+
 import com.example.btl_android.R;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DanhThuFragment extends Fragment {
@@ -159,7 +163,13 @@ public class DanhThuFragment extends Fragment {
         List<Entry> chartEntries = new ArrayList<>();
         revenueListLayout.removeAllViews();  // Xóa các view cũ
 
+        Date today = new Date();
         int index = 0;
+
+        // Sắp xếp lại revenueEntries từ trước đến nay
+        revenueEntries.sort((entry1, entry2) -> entry1.getDate().compareTo(entry2.getDate()));
+
+        // Duyệt qua các mục doanh thu
         for (RevenueEntry revenueEntry : revenueEntries) {
             String formattedRevenue = new DecimalFormat("#,###").format(revenueEntry.getRevenue()) + " VNĐ";
             String dateStr = dateFormat.format(revenueEntry.getDate());
@@ -167,39 +177,62 @@ public class DanhThuFragment extends Fragment {
             // Thêm dữ liệu vào biểu đồ
             chartEntries.add(new Entry(index++, revenueEntry.getRevenue()));
 
-            // Tạo một hàng cho mỗi mục trong ScrollView
-            LinearLayout rowLayout = new LinearLayout(getContext());
-            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-            rowLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
+            // Chỉ thêm mục vào ScrollView nếu ngày <= ngày hiện tại
+            if (revenueEntry.getDate().compareTo(today) <= 0) {
+                // Tạo một hàng cho mỗi mục trong ScrollView
+                LinearLayout rowLayout = new LinearLayout(getContext());
+                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+                rowLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
 
-            // TextView hiển thị ngày
-            TextView dateTextView = new TextView(getContext());
-            dateTextView.setText(dateStr);
-            dateTextView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-            dateTextView.setGravity(Gravity.CENTER);
+                // TextView hiển thị ngày
+                TextView dateTextView = new TextView(getContext());
+                dateTextView.setText(dateStr);
+                dateTextView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                dateTextView.setGravity(Gravity.CENTER);
 
-            // TextView hiển thị doanh thu
-            TextView revenueTextView = new TextView(getContext());
-            revenueTextView.setText(formattedRevenue);
-            revenueTextView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-            revenueTextView.setGravity(Gravity.CENTER);
+                // TextView hiển thị doanh thu
+                TextView revenueTextView = new TextView(getContext());
+                revenueTextView.setText(formattedRevenue);
+                revenueTextView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                revenueTextView.setGravity(Gravity.CENTER);
 
-            // Thêm TextView vào rowLayout
-            rowLayout.addView(dateTextView);
-            rowLayout.addView(revenueTextView);
+                // Thêm TextView vào rowLayout
+                rowLayout.addView(dateTextView);
+                rowLayout.addView(revenueTextView);
 
-            // Thêm rowLayout vào revenueListLayout
-            revenueListLayout.addView(rowLayout);
+                // Thêm rowLayout vào revenueListLayout
+                revenueListLayout.addView(rowLayout);
+            }
         }
 
         // Cập nhật biểu đồ
         LineDataSet dataSet = new LineDataSet(chartEntries, "Doanh thu");
         dataSet.setColor(Color.BLUE);
         dataSet.setValueTextColor(Color.BLACK);
+
+        // Tạo lớp ValueFormatter tùy chỉnh cho trục X
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int intValue = (int) value; // Ép kiểu float thành int
+                if (intValue >= 0 && intValue < revenueEntries.size()) {
+                    return dateFormat.format(revenueEntries.get(intValue).getDate());
+                }
+                return "";
+            }
+        });
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        // Đảm bảo trục X không bị đảo ngược
+        xAxis.setGranularity(1f); // Đảm bảo các giá trị trên trục X được cách đều
+        xAxis.setGranularityEnabled(true);
+
         lineChart.setData(new LineData(dataSet));
         lineChart.invalidate();
     }
+
 }
