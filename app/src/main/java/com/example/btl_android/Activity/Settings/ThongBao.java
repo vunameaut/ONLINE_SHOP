@@ -81,9 +81,9 @@ public class ThongBao extends AppCompatActivity {
             sharedPreferences.edit().putBoolean(KEY_MAIL_SWITCH, isChecked).apply();
 
             if (isChecked)
-                Toast.makeText(this, "Bật thông báo về mail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(this, "Tắt thông báo về mail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show();
         });
     }
 
