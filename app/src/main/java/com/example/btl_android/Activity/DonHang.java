@@ -2,7 +2,6 @@ package com.example.btl_android.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -99,7 +98,7 @@ public class DonHang extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.e("DonHang", "Lỗi khi tải đơn hàng", databaseError.toException());
+
                 }
             });
         }

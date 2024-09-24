@@ -3,7 +3,6 @@ package com.example.btl_android.Activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -130,7 +129,7 @@ public class MuaHang extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("MuaHang", "Error loading cart items", error.toException());
+
                 }
             });
         }
@@ -197,17 +196,17 @@ public class MuaHang extends AppCompatActivity {
                                 finish();
                             } else {
                                 Toast.makeText(MuaHang.this, "Xóa giỏ hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-                                Log.e("MuaHang", "Lỗi khi xóa giỏ hàng", cartTask.getException());
+
                             }
                         });
                     } else {
                         Toast.makeText(MuaHang.this, "Đặt hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-                        Log.e("MuaHang", "Lỗi khi lưu đơn hàng", task.getException());
+
                     }
                 });
             }
         } else {
-            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
+
         }
     }
 
@@ -234,17 +233,17 @@ public class MuaHang extends AppCompatActivity {
                         etPhoneNumber.setText(phone != null ? phone : "");
                         etAddress.setText(address != null ? address : "");
                     } else {
-                        Log.e("MuaHang", "Không tìm thấy thông tin người dùng với UID: " + uid);
+
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("MuaHang", "Error loading user info", error.toException());
+
                 }
             });
         } else {
-            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
+
         }
     }
 }

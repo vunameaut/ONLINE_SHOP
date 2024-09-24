@@ -6,7 +6,6 @@ import static com.example.btl_android.R.id.action_change_password;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.widget.EditText;
 import android.widget.PopupMenu;

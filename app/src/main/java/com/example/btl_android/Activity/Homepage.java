@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -220,8 +219,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý lỗi khi lấy dữ liệu từ Firebase
-                Log.e("FirebaseError", "Lỗi khi lấy dữ liệu sản phẩm", error.toException());
+
             }
         });
 
@@ -337,14 +335,14 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        Log.e("GetTokenDevice", "Fetching FCM registration token failed", task.getException());
+
                         return;
                     }
 
                     // Get new FCM registration token
                     String token = task.getResult();
 
-                   Log.e("GetTokenDevice", "Token: " + token);
+
                 });
     }
 }
