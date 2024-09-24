@@ -16,8 +16,11 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
+        <activity
+            android:name=".Activity.ForgotPass"
+            android:exported="false"
+            android:theme="@style/Theme.BTL_Android" />
         <activity android:name=".Activity.admin.sanpham.AdminSanphamDetailActivity" />
-
         <activity
             android:name=".Activity.admin.donhang.AdminDonHangDetailActivity"
             android:exported="false" />

@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,6 +47,9 @@ public class myProfile extends AppCompatActivity {
 
     // Firebase Storage để lưu ảnh
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+    // Firebase Authentication
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     // Biến kiểm tra dữ liệu thay đổi
     boolean isDataChanged = false;
@@ -168,10 +172,34 @@ public class myProfile extends AppCompatActivity {
             return;
         }
 
-        dbRef.child(uid).child("username").setValue(editUser.getText().toString());
-        dbRef.child(uid).child("email").setValue(editEmail.getText().toString());
-        dbRef.child(uid).child("sdt").setValue(editPhone.getText().toString());
-        dbRef.child(uid).child("diachi").setValue(editAddress.getText().toString());
+        String newEmail = editEmail.getText().toString().trim();
+        String newUsername = editUser.getText().toString().trim();
+        String newPhone = editPhone.getText().toString().trim();
+        String newAddress = editAddress.getText().toString().trim();
+
+        // Cập nhật email trong Firebase Authentication
+        firebaseAuth.getCurrentUser().updateEmail(newEmail).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Cập nhật email thành công
+                dbRef.child(uid).child("username").setValue(newUsername);
+                dbRef.child(uid).child("email").setValue(newEmail);
+                dbRef.child(uid).child("sdt").setValue(newPhone);
+                dbRef.child(uid).child("diachi").setValue(newAddress);
+
+                // Nếu người dùng đã chọn ảnh mới thì upload ảnh lên Firebase
+                if (isAvatarChanged && imageUri != null) {
+                    uploadImageToFirebase(imageUri, uid);
+                }
+
+                Toast.makeText(myProfile.this, "Thông tin đã được cập nhật!", Toast.LENGTH_SHORT).show();
+                isDataChanged = false;
+                linearLayout.setVisibility(View.GONE); // Ẩn LinearLayout sau khi lưu
+                GetData();
+            } else {
+                // Thất bại khi cập nhật email
+                Toast.makeText(myProfile.this, "Lỗi khi cập nhật email!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Nếu người dùng đã chọn ảnh mới thì upload ảnh lên Firebase
         if (isAvatarChanged && imageUri != null) {

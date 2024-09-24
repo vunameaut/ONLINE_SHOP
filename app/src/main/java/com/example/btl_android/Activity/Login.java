@@ -76,6 +76,12 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Xử lý sự kiện khi nhấn nút ForgotPass
+        btn_FgPass.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ForgotPass.class);
+            startActivity(intent);
+        });
+
         // Thiết lập trạng thái thông báo
         setSwitchNotif();
     }
@@ -159,7 +165,6 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
-
 
     private void checkUserRole(String uid, FirebaseUser user) {
         dbRef.child(uid).child("role").get().addOnCompleteListener(task -> {
@@ -271,7 +276,6 @@ public class Login extends AppCompatActivity {
             passEditText.setText("");
         }
     }
-
 
     private void RegisterToLogin() {
         Intent in = getIntent();
