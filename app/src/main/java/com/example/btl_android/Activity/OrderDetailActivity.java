@@ -56,13 +56,15 @@ public class OrderDetailActivity extends AppCompatActivity {
     }
 
     private void loadOrderDetails(String orderId) {
-        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("don_hang").child(getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null)).child(orderId);
+        // Truy cập trực tiếp vào đơn hàng trong node 'don_hang' dựa trên orderId
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("don_hang").child(orderId);
 
         orderRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 OrderItem order = dataSnapshot.getValue(OrderItem.class);
                 if (order != null) {
+                    // Hiển thị các thông tin đơn hàng
                     tvOrderNumber.setText("Mã Đơn Hàng: " + order.getMaDonHang());
                     tvOrderDate.setText("• Ngày đặt hàng: " + order.getNgayDatHang());
                     tvTotalAmount.setText("• Tổng tiền: " + order.getTongTien() + " VND");
@@ -71,13 +73,15 @@ public class OrderDetailActivity extends AppCompatActivity {
                     // Hiển thị danh sách sản phẩm
                     StringBuilder itemsBuilder = new StringBuilder();
 
+                    // Đảm bảo rằng 'sanPham' tồn tại và không null
                     if (order.getSanPham() != null) {
                         for (Map<String, Object> item : order.getSanPham()) {
-                            // Đảm bảo rằng các khóa bạn đang sử dụng là chính xác
+                            // Lấy thông tin sản phẩm từ HashMap
                             String tenSanPham = (String) item.get("tenSanPham");
                             Long soLuong = (Long) item.get("soLuong");
                             Long gia = (Long) item.get("gia");
 
+                            // Kiểm tra và định dạng thông tin sản phẩm
                             if (tenSanPham != null && soLuong != null && gia != null) {
                                 itemsBuilder.append("• ")
                                         .append(tenSanPham)
@@ -89,15 +93,17 @@ public class OrderDetailActivity extends AppCompatActivity {
                             }
                         }
                     }
+
+                    // Đặt chuỗi đã xây dựng vào TextView
                     tvOrderItems.setText(itemsBuilder.toString());
                 }
             }
 
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // Xử lý lỗi khi truy cập Firebase
             }
         });
     }
+
 }

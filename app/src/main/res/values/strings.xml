@@ -84,6 +84,28 @@
     <string name="nameCustomer">Tên KH</string>
     <string name="dateOrder">Ngày đặt hàng</string>
     <string name="status">Trạng thái</string>
+    <string name="Back">Back</string>
+    <string name="Username">Username</string>
+    <string name="Address">Địa chỉ</string>
+    <string name="Email">Email</string>
+    <string name="Role">Vai trò</string>
+    <string name="PhoneNumber">Số điện thoại</string>
+    <string name="UID">UID</string>
+    <string name="Edit">Sửa</string>
+    <string name="Delete">Xóa</string>
+    <string name="CustomerName">Tên khách hàng</string>
+    <string name="OrderDate">Ngày đặt hàng</string>
+    <string name="TotalAmount">Tổng tiền</string>
+    <string name="AddOrder">Thêm đơn hàng</string>
+    <string name="SupplierCode">Mã nhà cung cấp</string>
+    <string name="SupplierName">Tên nhà cung cấp</string>
+    <string name="AddSupplier">Thêm nhà cung cấp</string>
+    <string name="AddProducts">Thêm Sản Phẩm</string>
+    <string name="AddNewProducts">Thêm Sản Phẩm Mới</string>
+    <string name="ProductName">Tên sản phẩm</string>
+    <string name="ProductCode">Mã sản phẩm</string>
+    <string name="ProductPrice">Giá sản phẩm</string>
+    <string name="ProductImageURL">URL ảnh sản phẩm</string>
 
     <string-array name="role_options">
         <item>user</item>
