@@ -13,6 +13,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.btl_android.Activity.Login;
 import com.example.btl_android.Activity.admin.ThongKe.ThongKe;
+import com.example.btl_android.Activity.admin.donhang.admin_donhang;
+import com.example.btl_android.Activity.admin.nhacungcap.admin_nhacungcap;
 import com.example.btl_android.Activity.admin.sanpham.admin_sanpham;
 import com.example.btl_android.Activity.admin.taikhoan.admin_taikhoan;
 import com.example.btl_android.R;
@@ -20,7 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainAdmin extends AppCompatActivity {
 
-    Button btnDangXuat ,btnTaiKhoan, btnNhaCungCap, btnSanPham,btnThongKe;
+    Button btnDangXuat, btnTaiKhoan, btnNhaCungCap, btnSanPham, btnThongKe, btnDonHang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,19 @@ public class MainAdmin extends AppCompatActivity {
             Intent intent = new Intent(this, ThongKe.class);
             startActivity(intent);
         });
+
+
+        btnNhaCungCap.setOnClickListener(v -> {
+            Intent intent = new Intent(this, admin_nhacungcap.class);
+            startActivity(intent);
+        });
+
+        btnDonHang.setOnClickListener(v -> {
+           Intent intent = new Intent(this, admin_donhang.class);
+           startActivity(intent);
+
+        });
+
     }
 
     // Ánh xạ các thành phần giao diện
@@ -66,6 +82,8 @@ public class MainAdmin extends AppCompatActivity {
         btnNhaCungCap= findViewById(R.id.btnQuanLyNhaCungCap);
         btnSanPham = findViewById(R.id.btnQuanLySanPham);
         btnThongKe= findViewById(R.id.btnThongKeBaoCao);
+        btnDonHang = findViewById(R.id.btnQuanLyDonHang);
+
     }
 
     private void dangxuat(){

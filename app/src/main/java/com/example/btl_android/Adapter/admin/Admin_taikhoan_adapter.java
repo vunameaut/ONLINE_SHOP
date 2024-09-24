@@ -2,7 +2,6 @@ package com.example.btl_android.Adapter.admin;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ public class Admin_taikhoan_adapter extends RecyclerView.Adapter<Admin_taikhoan_
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Admin_taikhoan_item taiKhoan = taiKhoanListFiltered.get(position);
-        Log.d("Adapter", "Binding view holder for item " + taiKhoan.getUsername());
         holder.tvName.setText("name: " + taiKhoan.getUsername());
         holder.tvEmail.setText("email: " + taiKhoan.getEmail());
         holder.tvRole.setText("role: " + taiKhoan.getRole());
@@ -99,7 +97,6 @@ public class Admin_taikhoan_adapter extends RecyclerView.Adapter<Admin_taikhoan_
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 taiKhoanListFiltered = (List<Admin_taikhoan_item>) results.values;
-                Log.d("Adapter", "Filtered list size: " + taiKhoanListFiltered.size());
                 notifyDataSetChanged();
             }
         };

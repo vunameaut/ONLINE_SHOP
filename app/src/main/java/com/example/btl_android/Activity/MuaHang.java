@@ -3,7 +3,6 @@ package com.example.btl_android.Activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,9 +55,10 @@ public class MuaHang extends AppCompatActivity {
         tvOrderDate = findViewById(R.id.tv_order_date);
         Btn_thanhtoan = findViewById(R.id.btn_thanh_toan);
 
+        // Nút quay lại
         ImageView backButton = findViewById(R.id.btn_back);
         backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MuaHang.this, CartItem.class);
+            Intent intent = new Intent(MuaHang.this, Homepage.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
@@ -71,19 +71,15 @@ public class MuaHang extends AppCompatActivity {
 
         // Kiểm tra nguồn dữ liệu (Cart hoặc ProductDetailActivity)
         if (getIntent().hasExtra("from_cart") && getIntent().getBooleanExtra("from_cart", false)) {
-            // Trường hợp từ giỏ hàng
-            loadCartItems();
+            loadCartItems();  // Từ giỏ hàng
         } else {
-            // Trường hợp từ ProductDetailActivity
-            loadSingleProduct();
-            // Tải thông tin khách hàng
-            loadCustomerInfo();
+            loadSingleProduct();  // Từ ProductDetailActivity
+            loadCustomerInfo();   // Tải thông tin khách hàng
         }
 
         // Xử lý sự kiện nhấn nút thanh toán
         Btn_thanhtoan.setOnClickListener(v -> createOrder());
     }
-
 
     @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     private void loadSingleProduct() {
@@ -109,7 +105,7 @@ public class MuaHang extends AppCompatActivity {
         loadOrderDate();
     }
 
-    // Phương thức hiện tại để tải danh sách sản phẩm từ giỏ hàng
+    // Tải danh sách sản phẩm từ giỏ hàng
     private void loadCartItems() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
@@ -118,8 +114,8 @@ public class MuaHang extends AppCompatActivity {
                 @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    cartItemList.clear();  // Xóa dữ liệu cũ trước khi thêm dữ liệu mới
-                    totalAmount = 0;  // Đặt lại tổng tiền về 0
+                    cartItemList.clear();
+                    totalAmount = 0;
                     for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
                         CartItem item = itemSnapshot.getValue(CartItem.class);
                         if (item != null) {
@@ -127,17 +123,13 @@ public class MuaHang extends AppCompatActivity {
                             totalAmount += item.getPrice() * item.getQuantity();
                         }
                     }
-
-                    // Thông báo adapter rằng dữ liệu đã thay đổi
                     adapter.notifyDataSetChanged();
-
-                    // Hiển thị tổng tiền
                     tvTotalAmount.setText("Tổng tiền: " + totalAmount + " VND");
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("MuaHang", "Error loading cart items", error.toException());
+
                 }
             });
         }
@@ -146,31 +138,27 @@ public class MuaHang extends AppCompatActivity {
     private void createOrder() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
-            // Lấy thông tin khách hàng từ EditText
             String customerName = etCustomerName.getText().toString().trim();
             String phoneNumber = etPhoneNumber.getText().toString().trim();
             String address = etAddress.getText().toString().trim();
 
-            // Kiểm tra thông tin khách hàng
             if (customerName.isEmpty()) {
                 Toast.makeText(MuaHang.this, "Tên khách hàng không được để trống.", Toast.LENGTH_SHORT).show();
                 etCustomerName.requestFocus();
                 return;
             }
-
             if (phoneNumber.isEmpty()) {
                 Toast.makeText(MuaHang.this, "Số điện thoại không được để trống.", Toast.LENGTH_SHORT).show();
                 etPhoneNumber.requestFocus();
                 return;
             }
-
             if (address.isEmpty()) {
                 Toast.makeText(MuaHang.this, "Địa chỉ không được để trống.", Toast.LENGTH_SHORT).show();
                 etAddress.requestFocus();
                 return;
             }
 
-            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang").child(uid);
+            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang");
             DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
 
             // Tạo mã đơn hàng duy nhất
@@ -186,7 +174,6 @@ public class MuaHang extends AppCompatActivity {
             orderData.put("soDienThoai", phoneNumber);
             orderData.put("diaChi", address);
 
-            // Thêm danh sách sản phẩm vào đơn hàng
             List<Map<String, Object>> products = new ArrayList<>();
             for (CartItem item : cartItemList) {
                 Map<String, Object> productData = new HashMap<>();
@@ -197,48 +184,36 @@ public class MuaHang extends AppCompatActivity {
             }
             orderData.put("sanPham", products);
 
-            // Lưu dữ liệu đơn hàng vào Firebase
-            assert orderId != null;
-            ordersRef.child(orderId).setValue(orderData)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Xóa giỏ hàng sau khi đơn hàng được tạo thành công
-                            cartRef.removeValue()
-                                    .addOnCompleteListener(cartTask -> {
-                                        if (cartTask.isSuccessful()) {
-                                            // Thông báo thành công
-                                            Toast.makeText(MuaHang.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                                            Log.d("MuaHang", "Đơn hàng đã được lưu thành công và giỏ hàng đã được xóa!");
+            if (orderId != null) {
+                ordersRef.child(orderId).setValue(orderData).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        cartRef.removeValue().addOnCompleteListener(cartTask -> {
+                            if (cartTask.isSuccessful()) {
+                                Toast.makeText(MuaHang.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MuaHang.this, Homepage.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(MuaHang.this, "Xóa giỏ hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
 
-                                            // Chuyển về trang chủ
-                                            Intent intent = new Intent(MuaHang.this, Homepage.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            // Thông báo thất bại
-                                            Toast.makeText(MuaHang.this, "Xóa giỏ hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-                                            Log.e("MuaHang", "Lỗi khi xóa giỏ hàng", cartTask.getException());
-                                        }
-                                    });
-                        } else {
-                            // Thông báo thất bại
-                            Toast.makeText(MuaHang.this, "Đặt hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-                            Log.e("MuaHang", "Lỗi khi lưu đơn hàng", task.getException());
-                        }
-                    });
+                            }
+                        });
+                    } else {
+                        Toast.makeText(MuaHang.this, "Đặt hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
         } else {
-            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
+
         }
     }
 
     @SuppressLint("SetTextI18n")
     private void loadOrderDate() {
-        // Lấy ngày hiện tại
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = sdf.format(new Date());
-
-        // Hiển thị ngày đặt hàng lên giao diện
         tvOrderDate.setText("Ngày đặt hàng: " + currentDate);
     }
 
@@ -250,31 +225,25 @@ public class MuaHang extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        // Lấy thông tin từ Firebase
                         String name = snapshot.child("username").getValue(String.class);
                         String phone = snapshot.child("sdt").getValue(String.class);
                         String address = snapshot.child("diachi").getValue(String.class);
 
-                        // Hiển thị thông tin lên EditText với định dạng "Tên: ...", "Số điện thoại: ...", "Địa chỉ: ..."
-                        etCustomerName.setText(name != null ? "Tên: " + name : "Tên: ");
-                        etPhoneNumber.setText(phone != null ? "Số điện thoại: " + phone : "Số điện thoại: ");
-                        etAddress.setText(address != null ? "Địa chỉ: " + address : "Địa chỉ: ");
+                        etCustomerName.setText(name != null ? name : "");
+                        etPhoneNumber.setText(phone != null ? phone : "");
+                        etAddress.setText(address != null ? address : "");
                     } else {
-                        Log.e("MuaHang", "Không tìm thấy thông tin người dùng với UID: " + uid);
+
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("MuaHang", "Error loading user info", error.toException());
+
                 }
             });
         } else {
-            Log.e("MuaHang", "UID không tồn tại trong SharedPreferences");
+
         }
     }
-
-
-
-
 }

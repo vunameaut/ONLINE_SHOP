@@ -3,17 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.admin.sanpham.admin_sanpham">
+    tools:context=".Activity.admin.nhacungcap.admin_nhacungcap">
 
-    <!-- Search Bar -->
+    <!-- Thanh tìm kiếm nhà cung cấp -->
     <EditText
-        android:id="@+id/editTextSearchProduct"
+        android:id="@+id/editTextSearchSupplier"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:hint="Tìm kiếm sản phẩm..."
+        android:hint="Tìm kiếm nhà cung cấp..."
         android:drawableEnd="@drawable/ic_search"
         android:padding="8dp"
         android:background="@drawable/search_bar_background"
@@ -25,27 +24,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- List of Products -->
-
-    <!-- Floating Action Button -->
+    <!-- Danh sách nhà cung cấp -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/product_list_recyclerview"
+        android:id="@+id/supplier_list_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_add_product"
+        app:layout_constraintBottom_toTopOf="@id/btn_add_supplier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextSearchProduct"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/editTextSearchSupplier" />
 
+    <!-- Nút thêm nhà cung cấp -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_add_product"
+        android:id="@+id/btn_add_supplier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        android:contentDescription="Thêm sản phẩm"
+        android:contentDescription="Thêm nhà cung cấp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

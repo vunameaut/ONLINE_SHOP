@@ -1,7 +1,6 @@
 package com.example.btl_android.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
                         .into(holder.ivProductImage);
             }
         } else {
-            Log.e("MuaHangAdapter", "CartItem tại vị trí " + position + " là null.");
+
         }
     }
 
@@ -81,7 +80,7 @@ public class MuaHangAdapter extends RecyclerView.Adapter<MuaHangAdapter.MuaHangV
 
             // Kiểm tra các view có được ánh xạ không
             if (tvProductName == null || tvProductPrice == null || tvProductQuantity == null || ivProductImage == null) {
-                Log.e("MuaHangAdapter", "Một hoặc nhiều view không được ánh xạ chính xác.");
+
             }
         }
     }

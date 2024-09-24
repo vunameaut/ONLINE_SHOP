@@ -1,79 +1,109 @@
 package com.example.btl_android.item.admin;
+import java.io.Serializable;
 
-public class Admin_sanpham_item {
-    private String tenSanPham;
+import com.google.firebase.database.PropertyName;
+
+public class Admin_sanpham_item implements Serializable {
+    private String uid;
     private String maSanPham;
+    private String tenSanPham;
+    private int gia;
+    private String moTa;
+    private String nhaCungCap;
     private int soLuongTonKho;
-    private String hinhAnhSanPham;
-    private String moTaSanPham;
-    private int giaSanPham;
+    private String hinhAnh;
+    private String loai;
 
-    // Constructor mặc định
+
     public Admin_sanpham_item() {
     }
 
-    // Constructor có tham số
-    public Admin_sanpham_item(String tenSanPham, String maSanPham, int soLuongTonKho, String hinhAnhSanPham, String moTaSanPham, int giaSanPham) {
-        this.tenSanPham = tenSanPham;
-        this.maSanPham = maSanPham;
-        this.soLuongTonKho = soLuongTonKho;
-        this.hinhAnhSanPham = hinhAnhSanPham;
-        this.moTaSanPham = moTaSanPham;
-        this.giaSanPham = giaSanPham;
+    // Getter và Setter cho UID
+    public String getUid() {
+        return uid;
     }
 
-    // Getter và Setter cho từng thuộc tính
-    public String getTenSanPham() {
-        return tenSanPham;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
-    public void setTenSanPham(String tenSanPham) {
-        this.tenSanPham = tenSanPham;
-    }
-
+    @PropertyName("ma_san_pham")
     public String getMaSanPham() {
         return maSanPham;
     }
 
+    @PropertyName("ma_san_pham")
     public void setMaSanPham(String maSanPham) {
         this.maSanPham = maSanPham;
     }
 
+    @PropertyName("ten_san_pham")
+    public String getTenSanPham() {
+        return tenSanPham;
+    }
+
+    @PropertyName("ten_san_pham")
+    public void setTenSanPham(String tenSanPham) {
+        this.tenSanPham = tenSanPham;
+    }
+
+    @PropertyName("gia")
+    public int getGia() {
+        return gia;
+    }
+
+    @PropertyName("gia")
+    public void setGia(int gia) {
+        this.gia = gia;
+    }
+
+    @PropertyName("mo_ta")
+    public String getMoTa() {
+        return moTa;
+    }
+
+    @PropertyName("mo_ta")
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+
+    @PropertyName("nha_cung_cap")
+    public String getNhaCungCap() {
+        return nhaCungCap;
+    }
+
+    @PropertyName("nha_cung_cap")
+    public void setNhaCungCap(String nhaCungCap) {
+        this.nhaCungCap = nhaCungCap;
+    }
+
+    @PropertyName("so_luong_ton_kho")
     public int getSoLuongTonKho() {
         return soLuongTonKho;
     }
 
+    @PropertyName("so_luong_ton_kho")
     public void setSoLuongTonKho(int soLuongTonKho) {
         this.soLuongTonKho = soLuongTonKho;
     }
 
-    public String getHinhAnhSanPham() {
-        return hinhAnhSanPham;
+    @PropertyName("hinh_anh")
+    public String getHinhAnh() {
+        return hinhAnh;
     }
 
-    public void setHinhAnhSanPham(String hinhAnhSanPham) {
-        this.hinhAnhSanPham = hinhAnhSanPham;
+    @PropertyName("hinh_anh")
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
     }
 
-    public String getMoTaSanPham() {
-        return moTaSanPham;
+    @PropertyName("loai")
+    public String getLoai() {
+        return loai;
     }
 
-    public void setMoTaSanPham(String moTaSanPham) {
-        this.moTaSanPham = moTaSanPham;
-    }
-
-    public int getGiaSanPham() {
-        return giaSanPham;
-    }
-
-    // Cập nhật setter để nhận chuỗi và chuyển sang kiểu int
-    public void setGiaSanPham(String giaSanPham) {
-        try {
-            this.giaSanPham = Integer.parseInt(giaSanPham);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            this.giaSanPham = 0; // Gán giá trị mặc định nếu có lỗi
-        }
+    @PropertyName("loai")
+    public void setLoai(String loai) {
+        this.loai = loai;
     }
 }

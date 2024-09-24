@@ -11,11 +11,31 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
+        <activity android:name=".Activity.admin.sanpham.AdminSanphamDetailActivity" />
+
+        <activity
+            android:name=".Activity.admin.donhang.AdminDonHangDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.donhang.add_donhang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.donhang.admin_donhang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.nhacungcap.AdminNhacungcapDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.nhacungcap.add_nhacungcap"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.nhacungcap.admin_nhacungcap"
+            android:exported="false" />
         <activity
             android:name=".Activity.admin.ThongKe.ThongKe"
             android:exported="false" />
@@ -44,9 +64,6 @@
             android:name=".Activity.Settings.myProfile"
             android:exported="false" />
         <activity
-            android:name=".Activity.ChiTietDonHang"
-            android:exported="false" />
-        <activity
             android:name=".Activity.admin.taikhoan.admin_taikhoan"
             android:exported="false" />
         <activity
@@ -54,9 +71,6 @@
             android:exported="false" />
         <activity
             android:name=".Activity.admin.MainAdmin"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.thanhtoan"
             android:exported="false" />
         <activity
             android:name=".Activity.MuaHang"

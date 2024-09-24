@@ -1,4 +1,4 @@
-package com.example.btl_android.Activity.admin.sanpham;
+package com.example.btl_android.Activity.admin.donhang;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.btl_android.Adapter.admin.Admin_sanpham_adapter;
+import com.example.btl_android.Adapter.admin.Admin_donhang_adapter;
 import com.example.btl_android.R;
-import com.example.btl_android.item.admin.Admin_sanpham_item;
+import com.example.btl_android.item.admin.Admin_donhang_item;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,78 +25,83 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class admin_sanpham extends AppCompatActivity {
+public class admin_donhang extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private Admin_sanpham_adapter sanPhamAdapter;
-    private List<Admin_sanpham_item> sanPhamList;
+    private Admin_donhang_adapter donhangAdapter;
+    private List<Admin_donhang_item> donhangList;
     private DatabaseReference databaseReference;
-    private EditText editTextSearchProduct;
-    private ValueEventListener valueEventListener;
+    private EditText editTextSearchOrder;
+    private FloatingActionButton btnAddOrder;
 
+    private ValueEventListener valueEventListener;
     private static final int REQUEST_CODE_UPDATE_DELETE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_sanpham);
+        setContentView(R.layout.activity_admin_donhang);
 
         // Ánh xạ các View
-        recyclerView = findViewById(R.id.product_list_recyclerview);
+        recyclerView = findViewById(R.id.order_list_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        sanPhamList = new ArrayList<>();
-        sanPhamAdapter = new Admin_sanpham_adapter(sanPhamList, this);
-        recyclerView.setAdapter(sanPhamAdapter);
+        donhangList = new ArrayList<>();
+        donhangAdapter = new Admin_donhang_adapter(donhangList, this);
+        recyclerView.setAdapter(donhangAdapter);
 
-        editTextSearchProduct = findViewById(R.id.editTextSearchProduct);
+        editTextSearchOrder = findViewById(R.id.editTextSearchOrder);
+        btnAddOrder = findViewById(R.id.btn_add_order);
+        btnAddOrder.setOnClickListener(v -> {
+            Intent intent = new Intent(this, add_donhang.class);
+            startActivityForResult(intent, REQUEST_CODE_UPDATE_DELETE);
+        });
 
         // Khởi tạo DatabaseReference
-        databaseReference = FirebaseDatabase.getInstance().getReference("san_pham");
+        databaseReference = FirebaseDatabase.getInstance().getReference("don_hang");
 
         // Thiết lập giá trị ValueEventListener
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                sanPhamList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Admin_sanpham_item sanPham = dataSnapshot.getValue(Admin_sanpham_item.class);
-                    if (sanPham != null) {
-                        sanPham.setUid(dataSnapshot.getKey());  // Gán UID từ Firebase
-                        sanPhamList.add(sanPham);
+                donhangList.clear();
+                for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
+                    Admin_donhang_item donHang = orderSnapshot.getValue(Admin_donhang_item.class);
+                    if (donHang != null) {
+                        donhangList.add(donHang);
                     }
                 }
-                sanPhamAdapter.notifyDataSetChanged();
-                // Tìm kiếm một ký tự rỗng để hiện tất cả sản phẩm khi dữ liệu được tải
-                editTextSearchProduct.setText("");
+                donhangAdapter.notifyDataSetChanged();
+                // Tìm kiếm với ký tự trống để hiện tất cả đơn hàng khi dữ liệu được tải
+                editTextSearchOrder.setText("");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(admin_sanpham.this, "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(admin_donhang.this, "Lỗi: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
 
-        // Bắt đầu việc tải dữ liệu
-        loadSanPhamData();
+        // Tải dữ liệu đơn hàng
+        loadDonhangData();
 
-        // Thiết lập chức năng tìm kiếm
-        editTextSearchProduct.addTextChangedListener(new TextWatcher() {
+        // Thiết lập tìm kiếm đơn hàng
+        editTextSearchOrder.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                sanPhamAdapter.getFilter().filter(s);
+                donhangAdapter.getFilter().filter(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
         });
 
-        // Sử dụng Intent để truyền dữ liệu giữa các Activity
-        sanPhamAdapter.setOnItemClickListener(sanPham -> {
-            Intent intent = new Intent(admin_sanpham.this, AdminSanphamDetailActivity.class);
-            intent.putExtra("productItem", sanPham); // Truyền đối tượng Admin_sanpham_item qua Intent
+        // Xử lý sự kiện click item đơn hàng
+        donhangAdapter.setOnItemClickListener(donHang -> {
+            Intent intent = new Intent(admin_donhang.this, AdminDonHangDetailActivity.class);
+            intent.putExtra("orderItem", donHang);
             startActivityForResult(intent, REQUEST_CODE_UPDATE_DELETE);
         });
     }
@@ -113,11 +119,11 @@ public class admin_sanpham extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_UPDATE_DELETE && resultCode == RESULT_OK) {
             // Làm mới dữ liệu khi có kết quả trả về
-            loadSanPhamData();
+            loadDonhangData();
         }
     }
 
-    private void loadSanPhamData() {
+    private void loadDonhangData() {
         if (valueEventListener != null) {
             databaseReference.removeEventListener(valueEventListener); // Gỡ bỏ ValueEventListener cũ
         }
