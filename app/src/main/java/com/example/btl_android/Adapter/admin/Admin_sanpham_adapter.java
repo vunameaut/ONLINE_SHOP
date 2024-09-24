@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.R;
-import com.example.btl_android.item.admin.Admin_sanpham_item;
+import com.example.btl_android.Model.admin.Admin_sanpham_item;
 
 import java.util.ArrayList;
 import java.util.List;

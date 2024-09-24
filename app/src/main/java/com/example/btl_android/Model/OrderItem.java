@@ -1,4 +1,4 @@
-package com.example.btl_android.item;
+package com.example.btl_android.Model;
 
 import java.util.List;
 import java.util.Map;

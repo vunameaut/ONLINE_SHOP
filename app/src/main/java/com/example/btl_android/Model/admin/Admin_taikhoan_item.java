@@ -1,4 +1,4 @@
-package com.example.btl_android.item.admin;
+package com.example.btl_android.Model.admin;
 
 public class Admin_taikhoan_item {
     private String username;

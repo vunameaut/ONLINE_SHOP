@@ -1,4 +1,4 @@
-package com.example.btl_android.item;
+package com.example.btl_android.Model;
 
 public class ProductItem {
     private String tenSanPham;

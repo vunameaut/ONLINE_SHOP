@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Adapter.admin.Admin_sanpham_adapter;
 import com.example.btl_android.R;
-import com.example.btl_android.item.admin.Admin_sanpham_item;
+import com.example.btl_android.Model.admin.Admin_sanpham_item;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

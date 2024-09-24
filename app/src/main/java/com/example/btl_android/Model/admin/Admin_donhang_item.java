@@ -1,5 +1,5 @@
 // admin_donhang_item.java
-package com.example.btl_android.item.admin;
+package com.example.btl_android.Model.admin;
 
 // Import thư viện cần thiết
 import java.io.Serializable;

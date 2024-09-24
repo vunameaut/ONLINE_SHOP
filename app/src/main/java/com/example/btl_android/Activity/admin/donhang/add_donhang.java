@@ -8,14 +8,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_android.R;
-import com.example.btl_android.item.admin.Admin_donhang_item;
+import com.example.btl_android.Model.admin.Admin_donhang_item;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class add_donhang extends AppCompatActivity {
 

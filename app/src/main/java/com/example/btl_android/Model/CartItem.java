@@ -1,4 +1,4 @@
-package com.example.btl_android.item;
+package com.example.btl_android.Model;
 
 public class CartItem {
     private String name;

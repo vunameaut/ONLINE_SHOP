@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.btl_android.Activity.ProductDetailActivity;
 import com.example.btl_android.R;
-import com.example.btl_android.item.ProductItem;
+import com.example.btl_android.Model.ProductItem;
 
 import java.util.ArrayList;
 import java.util.List;

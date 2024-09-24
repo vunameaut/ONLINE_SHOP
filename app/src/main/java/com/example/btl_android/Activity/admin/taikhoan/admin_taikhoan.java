@@ -1,8 +1,5 @@
 package com.example.btl_android.Activity.admin.taikhoan;
 
-import static com.example.btl_android.R.id.action_add_taikhoan;
-import static com.example.btl_android.R.id.action_change_password;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Adapter.admin.Admin_taikhoan_adapter;
 import com.example.btl_android.R;
-import com.example.btl_android.item.admin.Admin_taikhoan_item;
+import com.example.btl_android.Model.admin.Admin_taikhoan_item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

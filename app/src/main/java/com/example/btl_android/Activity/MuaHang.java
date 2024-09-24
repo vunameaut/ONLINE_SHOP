@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Adapter.MuaHangAdapter;
 import com.example.btl_android.R;
-import com.example.btl_android.item.CartItem;
+import com.example.btl_android.Model.CartItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

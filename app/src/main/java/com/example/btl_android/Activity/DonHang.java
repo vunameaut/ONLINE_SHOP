@@ -1,6 +1,5 @@
 package com.example.btl_android.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Adapter.OrderAdapter;
 import com.example.btl_android.R;
-import com.example.btl_android.item.OrderItem;
+import com.example.btl_android.Model.OrderItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

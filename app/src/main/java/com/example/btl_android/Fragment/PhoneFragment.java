@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.example.btl_android.Adapter.ProductAdapter;
 import com.example.btl_android.CheckConn;
 import com.example.btl_android.R;
-import com.example.btl_android.item.ProductItem;
+import com.example.btl_android.Model.ProductItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

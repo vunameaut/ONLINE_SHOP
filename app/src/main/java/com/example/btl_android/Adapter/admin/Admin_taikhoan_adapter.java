@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Activity.admin.taikhoan.AdminAccountDetailActivity;
 import com.example.btl_android.R;
-import com.example.btl_android.item.admin.Admin_taikhoan_item;
+import com.example.btl_android.Model.admin.Admin_taikhoan_item;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.btl_android.item.admin;
+package com.example.btl_android.Model.admin;
 
 import java.io.Serializable;
 import com.google.firebase.database.PropertyName;

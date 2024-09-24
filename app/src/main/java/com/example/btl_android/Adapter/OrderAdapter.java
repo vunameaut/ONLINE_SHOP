@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.btl_android.Activity.OrderDetailActivity;
 import com.example.btl_android.R;
-import com.example.btl_android.item.OrderItem;
+import com.example.btl_android.Model.OrderItem;
 
 import java.util.List;
 

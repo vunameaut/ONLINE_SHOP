@@ -36,7 +36,7 @@ import com.bumptech.glide.Glide;
 import com.example.btl_android.Adapter.ProductAdapter;
 import com.example.btl_android.R;
 import com.example.btl_android.Adapter.ViewPagerAdapter;
-import com.example.btl_android.item.ProductItem;
+import com.example.btl_android.Model.ProductItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -1,5 +1,6 @@
 package com.example.btl_android.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.btl_android.R;
+import com.example.btl_android.Model.CartItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +30,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,61 +156,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 Toast.makeText(ProductDetailActivity.this, "Không thể truy cập giỏ hàng.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-
-
-    // Class đại diện cho một sản phẩm trong giỏ hàng
-    public static class CartItem {
-        private String name;
-        private long price;
-        private int quantity;
-        private String imageUrl;
-
-        // Constructor mặc định (cần thiết cho Firebase)
-        public CartItem() {
-        }
-
-        // Constructor có tham số
-        public CartItem(String name, long price, int quantity, String imageUrl) {
-            this.name = name;
-            this.price = price;
-            this.quantity = quantity;
-            this.imageUrl = imageUrl;
-        }
-
-        // Getter và Setter cho các thuộc tính
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public long getPrice() {
-            return price;
-        }
-
-        public void setPrice(long price) {
-            this.price = price;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-
-        public String getImageUrl() {
-            return imageUrl;
-        }
-
-        public void setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-        }
     }
 
     // Xử lý khi người dùng nhấn nút "Back" trên Toolbar
