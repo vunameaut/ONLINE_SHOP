@@ -10,9 +10,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,10 +57,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     NavigationView navigationView;
     ProductAdapter productAdapter;
     Toolbar toolbar;
+    FrameLayout cartContainer;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = database.getReference("taikhoan");
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +78,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        cartContainer = findViewById(R.id.cart_container);
 
         setSupportActionBar(toolbar);
 
@@ -90,7 +95,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        CheckCart();
 
+        cartContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Cart.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -233,6 +243,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         // Set up SearchView
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+
         assert searchView != null;
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -259,15 +270,34 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
 
-        // Set up Cart
-        MenuItem cartItem = menu.findItem(R.id.action_cart);
-        cartItem.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(Homepage.this, Cart.class);
-            startActivity(intent);
-            return true;
-        });
-
         return true;
+    }
+
+    private void CheckCart() {
+        // Kiểm tra số lượng sản phẩm trong giỏ hàng
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", "");
+        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(uid);
+
+        cartRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int cartItemCount = (int) snapshot.getChildrenCount();
+
+                TextView cartBadge = findViewById(R.id.cart_badge);
+
+                if (cartItemCount > 0) {
+                    cartBadge.setText(String.valueOf(cartItemCount));
+                    cartBadge.setVisibility(View.VISIBLE);
+                } else {
+                    cartBadge.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     @Override
@@ -342,7 +372,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                     // Get new FCM registration token
                     String token = task.getResult();
 
-
+                    Log.d("TokenDevice", "GetTokenDevice: " + token);
                 });
     }
+
+
 }
