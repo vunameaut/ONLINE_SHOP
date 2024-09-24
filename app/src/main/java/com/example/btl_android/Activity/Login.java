@@ -1,5 +1,6 @@
 package com.example.btl_android.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.btl_android.Activity.Settings.DieuKhoan;
 import com.example.btl_android.Activity.Settings.ThongBao;
 import com.example.btl_android.Activity.admin.MainAdmin;
+import com.example.btl_android.LanguageHelper;
 import com.example.btl_android.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,17 +37,21 @@ public class Login extends AppCompatActivity {
     EditText mailEditText, passEditText;
     TextInputLayout mailInputLayout, passInputLayout;
     CheckBox rememberMeCheckBox;
-    Button btn_Login, btn_Register, btn_FgPass;
+    Button btn_Login, btn_Register, btn_FgPass, btn_Language;
 
     FirebaseAuth auth;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = database.getReference("taikhoan");
 
+    String languageCode;
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        LanguageHelper.loadLocale(this);
         setContentView(R.layout.activity_login); // Liên kết layout với Activity
 
         auth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
@@ -53,6 +59,15 @@ public class Login extends AppCompatActivity {
         Mapping(); // Gọi hàm ánh xạ
 
         RegisterToLogin();
+
+        // Cập nhật văn bản nút theo ngôn ngữ đã lưu
+        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        languageCode = prefs.getString("language", "vi"); // Mặc định là "vi"
+        if (languageCode.equals("vi")) {
+            btn_Language.setText(getString(R.string.VI)); // VN
+        } else {
+            btn_Language.setText(getString(R.string.EN)); // EN
+        }
 
         // Lưu trạng thái khi checkbox "Remember Me" được chọn hoặc bỏ chọn
         rememberMeCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -82,6 +97,29 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Xử lý sự kiện khi nhấn nút Language
+        btn_Language.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            if (languageCode.equals("vi")) {
+                languageCode = "en"; // Đổi sang tiếng Anh
+                btn_Language.setText(getString(R.string.EN)); // Cập nhật văn bản nút
+            } else {
+                languageCode = "vi"; // Đổi sang tiếng Việt
+                btn_Language.setText(getString(R.string.VI)); // Cập nhật văn bản nút
+            }
+
+            // Lưu ngôn ngữ đã chọn vào SharedPreferences
+            editor.putString("language", languageCode);
+            editor.apply();
+
+            // Thay đổi ngôn ngữ
+            LanguageHelper.changeLocale(this, languageCode);
+
+            recreate(); // Khởi động lại Activity
+        });
+
+
+
         // Thiết lập trạng thái thông báo
         setSwitchNotif();
     }
@@ -96,6 +134,7 @@ public class Login extends AppCompatActivity {
         btn_FgPass = findViewById(R.id.tv_FgPass);
         btn_Login = findViewById(R.id.btn_Login);
         btn_Register = findViewById(R.id.btn_Register);
+        btn_Language = findViewById(R.id.btn_Language);
     }
 
     // Phương thức đăng nhập

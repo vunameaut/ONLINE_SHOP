@@ -21,14 +21,14 @@
             android:id="@+id/btn_Language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/VN"/>
+            android:text="@string/VI"/>
     </LinearLayout>
 
     <!-- Logo -->
     <ImageView
         android:id="@+id/img_Logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/logo"
         android:src="@drawable/logo" />

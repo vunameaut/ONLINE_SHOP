@@ -75,7 +75,8 @@ public class Setting extends AppCompatActivity {
 
     private void LoadActivity() {
         btnBack.setOnClickListener(view -> {
-            finish();
+            Intent intent = new Intent(this, Homepage.class);
+            startActivity(intent);
         });
         btnThongBao.setOnClickListener(view -> {
             Intent intent = new Intent(this, ThongBao.class);

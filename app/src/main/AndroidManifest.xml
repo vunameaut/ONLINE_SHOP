@@ -86,6 +86,7 @@
             android:exported="false" />
         <activity
             android:name=".Activity.Settings.NgonNgu"
+            android:configChanges="locale"
             android:exported="false" />
         <activity
             android:name=".Activity.Settings.TKvaBM"
