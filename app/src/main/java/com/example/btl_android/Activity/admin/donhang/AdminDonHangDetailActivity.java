@@ -3,6 +3,7 @@ package com.example.btl_android.Activity.admin.donhang;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
     private Button btnUpdateOrder, btnDeleteOrder;
     private DatabaseReference databaseReference;
     private String orderCode;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
         editTextTotal = findViewById(R.id.editTextTotal);
         btnUpdateOrder = findViewById(R.id.btn_update_order);
         btnDeleteOrder = findViewById(R.id.btn_delete_order);
+        btnBack = findViewById(R.id.btnBack); // Ánh xạ nút Back
 
         // Nhận đối tượng AdminDonhangItem từ Intent
         Admin_donhang_item order = (Admin_donhang_item) getIntent().getSerializableExtra("orderItem");
@@ -62,6 +65,9 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
 
         // Xử lý sự kiện nhấn nút Xóa
         btnDeleteOrder.setOnClickListener(v -> deleteOrder());
+
+        // Xử lý sự kiện nhấn nút Back
+        btnBack.setOnClickListener(v -> finish()); // Quay lại hoạt động trước
     }
 
     private void updateOrder() {

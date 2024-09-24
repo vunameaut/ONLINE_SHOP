@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.admin.nhacungcap.AdminNhacungcapDetailActivity"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F9F9F9"
+    tools:context=".Activity.admin.nhacungcap.AdminNhacungcapDetailActivity">
+
+    <!-- Hình ảnh nhà cung cấp -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:src="@drawable/ic_back" />
 
     <!-- Tên nhà cung cấp -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputSupplierName"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:hintTextColor="@color/black"
         app:boxStrokeColor="@color/primary_color"
         android:layout_marginTop="16dp"
@@ -29,17 +35,14 @@
             android:hint="Tên nhà cung cấp"
             android:textColor="@color/black"
             android:singleLine="true"
-            android:ellipsize="end" />
+            android:ellipsize="end"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Địa chỉ nhà cung cấp -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputSupplierAddress"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textInputSupplierName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:hintTextColor="@color/black"
         app:boxStrokeColor="@color/primary_color"
         android:layout_marginTop="8dp"
@@ -58,11 +61,8 @@
     <!-- Email nhà cung cấp -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputSupplierEmail"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textInputSupplierAddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:hintTextColor="@color/black"
         app:boxStrokeColor="@color/primary_color"
         android:layout_marginTop="8dp"
@@ -81,11 +81,8 @@
     <!-- Số điện thoại nhà cung cấp -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputSupplierPhone"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textInputSupplierEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:hintTextColor="@color/black"
         app:boxStrokeColor="@color/primary_color"
         android:layout_marginTop="8dp"
@@ -104,23 +101,19 @@
     <!-- Nút cập nhật -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_update_supplier"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cập nhật"
-        app:layout_constraintTop_toBottomOf="@id/textInputSupplierPhone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_background" />
 
     <!-- Nút xóa -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_delete_supplier"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Xóa"
-        app:layout_constraintTop_toBottomOf="@id/btn_update_supplier"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_background" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

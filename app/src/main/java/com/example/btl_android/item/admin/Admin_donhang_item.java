@@ -1,5 +1,7 @@
+// admin_donhang_item.java
 package com.example.btl_android.item.admin;
 
+// Import thư viện cần thiết
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,14 +12,14 @@ public class Admin_donhang_item implements Serializable {
     private String soDienThoai;
     private String ngayDatHang;
     private String trangThai;
-    private int tongTien;
-    private List<SanPham> sanPham;
+    private long tongTien;
+    private List<SanPham> sanPham;  // Thêm danh sách sản phẩm
 
     // Constructor mặc định cho Firebase
     public Admin_donhang_item() {}
 
-    // Constructor đầy đủ
-    public Admin_donhang_item(String maDonHang, String tenKhachHang, String diaChi, String soDienThoai, String ngayDatHang, String trangThai, int tongTien, List<SanPham> sanPham) {
+    // Constructor đầy đủ có danh sách sản phẩm
+    public Admin_donhang_item(String maDonHang, String tenKhachHang, String diaChi, String soDienThoai, String ngayDatHang, String trangThai, long tongTien, List<SanPham> sanPham) {
         this.maDonHang = maDonHang;
         this.tenKhachHang = tenKhachHang;
         this.diaChi = diaChi;
@@ -25,7 +27,7 @@ public class Admin_donhang_item implements Serializable {
         this.ngayDatHang = ngayDatHang;
         this.trangThai = trangThai;
         this.tongTien = tongTien;
-        this.sanPham = sanPham;
+        this.sanPham = sanPham;  // Gán giá trị cho biến sanPham
     }
 
     // Getter và Setter
@@ -77,14 +79,15 @@ public class Admin_donhang_item implements Serializable {
         this.trangThai = trangThai;
     }
 
-    public int getTongTien() {
+    public long getTongTien() {
         return tongTien;
     }
 
-    public void setTongTien(int tongTien) {
+    public void setTongTien(long tongTien) {
         this.tongTien = tongTien;
     }
 
+    // Getter và Setter cho danh sách sản phẩm
     public List<SanPham> getSanPham() {
         return sanPham;
     }
@@ -99,14 +102,17 @@ public class Admin_donhang_item implements Serializable {
         private int gia;
         private int soLuong;
 
+        // Constructor mặc định
         public SanPham() {}
 
+        // Constructor đầy đủ
         public SanPham(String tenSanPham, int gia, int soLuong) {
             this.tenSanPham = tenSanPham;
             this.gia = gia;
             this.soLuong = soLuong;
         }
 
+        // Getter và Setter
         public String getTenSanPham() {
             return tenSanPham;
         }

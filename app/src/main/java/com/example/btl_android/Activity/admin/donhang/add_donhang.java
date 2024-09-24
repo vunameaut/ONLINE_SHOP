@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class add_donhang extends AppCompatActivity {
 
-    private EditText editTextOrderCode, editTextCustomerName, editTextAddress, editTextPhone, editTextOrderDate, editTextOrderStatus, editTextTotal;
+    private EditText editTextCustomerName, editTextAddress, editTextPhone, editTextOrderDate, editTextOrderStatus, editTextTotal;
     private Button btnAddOrder;
     private DatabaseReference databaseReference;
 
@@ -29,7 +29,6 @@ public class add_donhang extends AppCompatActivity {
         setContentView(R.layout.activity_add_donhang);
 
         // Ánh xạ các View
-        editTextOrderCode = findViewById(R.id.editTextOrderCode);
         editTextCustomerName = findViewById(R.id.editTextCustomerName);
         editTextAddress = findViewById(R.id.editTextAddress);
         editTextPhone = findViewById(R.id.editTextPhone);
@@ -46,7 +45,6 @@ public class add_donhang extends AppCompatActivity {
     }
 
     private void checkAndAddOrder() {
-        String orderCode = editTextOrderCode.getText().toString().trim();
         String customerName = editTextCustomerName.getText().toString().trim();
         String address = editTextAddress.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
@@ -55,15 +53,19 @@ public class add_donhang extends AppCompatActivity {
         int total = Integer.parseInt(editTextTotal.getText().toString().trim());
 
         // Kiểm tra các trường không được để trống
-        if (orderCode.isEmpty() || customerName.isEmpty() || address.isEmpty() || phone.isEmpty() || orderDate.isEmpty() || orderStatus.isEmpty()) {
+        if (customerName.isEmpty() || address.isEmpty() || phone.isEmpty() || orderDate.isEmpty() || orderStatus.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Tự động tạo mã đơn hàng bằng cách sử dụng push().getKey()
+        String orderCode = databaseReference.push().getKey();
 
         // Tạo đối tượng sản phẩm mẫu cho đơn hàng (có thể mở rộng để người dùng thêm nhiều sản phẩm)
         List<Admin_donhang_item.SanPham> sanPhamList = new ArrayList<>();
         sanPhamList.add(new Admin_donhang_item.SanPham("Sản phẩm mẫu", 1000000, 2));
 
+        // Sử dụng constructor với danh sách sản phẩm
         Admin_donhang_item newOrder = new Admin_donhang_item(orderCode, customerName, address, phone, orderDate, orderStatus, total, sanPhamList);
 
         // Thêm dữ liệu vào Firebase với mã đơn hàng làm key

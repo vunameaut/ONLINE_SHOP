@@ -166,48 +166,52 @@ public class Login extends AppCompatActivity {
             if (task.isSuccessful()) {
                 String role = task.getResult().getValue(String.class);
                 if (role != null) {
+                    // Nếu là admin
                     if ("admin".equals(role)) {
-                        // Nếu là admin, không cần kiểm tra xác thực email
                         Toast.makeText(Login.this, "Đăng nhập thành công! Vai trò: Admin", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Login.this, MainAdmin.class);
                         intent.putExtra("uid", uid);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish(); // Kết thúc Login activity
                     } else {
                         // Người dùng không phải admin, kiểm tra xác thực email
                         if (user.isEmailVerified()) {
                             // Nếu email đã được xác thực, chuyển màn hình
-                            dbRef.addValueEventListener(new ValueEventListener() {
+                            dbRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Boolean dieukhoan = snapshot.child(uid).child("dieukhoan").getValue(Boolean.class);
+                                    Boolean dieukhoan = snapshot.child("dieukhoan").getValue(Boolean.class);
 
                                     if (Boolean.TRUE.equals(dieukhoan)) {
                                         Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Login.this, Homepage.class);
                                         intent.putExtra("ACTIVITY", "Login");
                                         intent.putExtra("intent_uid", uid);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
-                                        finish(); // Đóng màn hình đăng nhập
-                                    }
-                                    else {
+                                        finish();
+                                        finish();
+                                        // Đóng màn hình đăng nhập
+                                    } else {
                                         Intent intent = new Intent(Login.this, DieuKhoan.class);
                                         intent.putExtra("ACTIVITY", "Login");
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent);
                                         finish(); // Đóng màn hình đăng nhập
                                     }
-
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-
+                                    // Xử lý lỗi nếu cần
                                 }
                             });
                         } else {
                             Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
                         }
                     }
+
                 }
             } else {
                 Toast.makeText(Login.this, "Không thể lấy thông tin role", Toast.LENGTH_SHORT).show();

@@ -1,3 +1,4 @@
+// Admin_donhang_adapter.java
 package com.example.btl_android.Adapter.admin;
 
 import android.content.Context;
@@ -28,7 +29,6 @@ public class Admin_donhang_adapter extends RecyclerView.Adapter<Admin_donhang_ad
         void onItemClick(Admin_donhang_item donHang);
     }
 
-    // Constructor
     public Admin_donhang_adapter(List<Admin_donhang_item> donHangList, Context context) {
         this.donHangList = donHangList != null ? donHangList : new ArrayList<>();
         this.donHangListFiltered = new ArrayList<>(this.donHangList);
@@ -51,7 +51,6 @@ public class Admin_donhang_adapter extends RecyclerView.Adapter<Admin_donhang_ad
         holder.tvOrderTotal.setText("Tổng tiền: " + donHang.getTongTien() + " VND");
         holder.tvOrderDate.setText("Ngày đặt: " + donHang.getNgayDatHang());
 
-        // Xử lý sự kiện click để gọi chi tiết đơn hàng
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(donHang);

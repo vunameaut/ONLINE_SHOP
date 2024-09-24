@@ -59,20 +59,19 @@ public class admin_donhang extends AppCompatActivity {
         // Khởi tạo DatabaseReference
         databaseReference = FirebaseDatabase.getInstance().getReference("don_hang");
 
-        // Lắng nghe sự kiện thay đổi dữ liệu
+        // Thiết lập giá trị ValueEventListener
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 donhangList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
-                        Admin_donhang_item donHang = orderSnapshot.getValue(Admin_donhang_item.class);
-                        if (donHang != null) {
-                            donhangList.add(donHang);
-                        }
+                for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
+                    Admin_donhang_item donHang = orderSnapshot.getValue(Admin_donhang_item.class);
+                    if (donHang != null) {
+                        donhangList.add(donHang);
                     }
                 }
                 donhangAdapter.notifyDataSetChanged();
+                // Tìm kiếm với ký tự trống để hiện tất cả đơn hàng khi dữ liệu được tải
                 editTextSearchOrder.setText("");
             }
 
@@ -85,7 +84,7 @@ public class admin_donhang extends AppCompatActivity {
         // Tải dữ liệu đơn hàng
         loadDonhangData();
 
-        // Thiết lập tìm kiếm
+        // Thiết lập tìm kiếm đơn hàng
         editTextSearchOrder.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -99,7 +98,7 @@ public class admin_donhang extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Xử lý sự kiện click item đơn hàng để mở chi tiết
+        // Xử lý sự kiện click item đơn hàng
         donhangAdapter.setOnItemClickListener(donHang -> {
             Intent intent = new Intent(admin_donhang.this, AdminDonHangDetailActivity.class);
             intent.putExtra("orderItem", donHang);
@@ -107,18 +106,11 @@ public class admin_donhang extends AppCompatActivity {
         });
     }
 
-    private void loadDonhangData() {
-        if (valueEventListener != null) {
-            databaseReference.removeEventListener(valueEventListener);
-        }
-        databaseReference.addValueEventListener(valueEventListener);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (valueEventListener != null) {
-            databaseReference.removeEventListener(valueEventListener);
+            databaseReference.removeEventListener(valueEventListener); // Gỡ bỏ ValueEventListener
         }
     }
 
@@ -126,7 +118,15 @@ public class admin_donhang extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_UPDATE_DELETE && resultCode == RESULT_OK) {
+            // Làm mới dữ liệu khi có kết quả trả về
             loadDonhangData();
         }
+    }
+
+    private void loadDonhangData() {
+        if (valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener); // Gỡ bỏ ValueEventListener cũ
+        }
+        databaseReference.addValueEventListener(valueEventListener); // Thêm ValueEventListener mới
     }
 }

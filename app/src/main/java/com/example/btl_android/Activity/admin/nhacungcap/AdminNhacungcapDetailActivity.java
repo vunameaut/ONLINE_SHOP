@@ -3,9 +3,11 @@ package com.example.btl_android.Activity.admin.nhacungcap;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.btl_android.R;
 import com.example.btl_android.item.admin.Admin_nhacungcap_item;
@@ -18,6 +20,7 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
     private Button btnUpdateSupplier, btnDeleteSupplier;
     private DatabaseReference databaseReference;
     private String supplierId;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,8 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
         editTextSupplierPhone = findViewById(R.id.editTextSupplierPhone);
         btnUpdateSupplier = findViewById(R.id.btn_update_supplier);
         btnDeleteSupplier = findViewById(R.id.btn_delete_supplier);
+        btnBack = findViewById(R.id.btnBack);
+
 
         // Nhận đối tượng Admin_nhacungcap_item từ Intent
         Admin_nhacungcap_item supplier = (Admin_nhacungcap_item) getIntent().getSerializableExtra("supplierItem");
@@ -56,6 +61,9 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
 
         // Xử lý sự kiện nhấn nút Xóa
         btnDeleteSupplier.setOnClickListener(v -> deleteSupplier());
+
+        // Xử lý sự kiện nhấn nút Back
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void updateSupplier() {
@@ -81,6 +89,11 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
                 Toast.makeText(AdminNhacungcapDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 
     private void deleteSupplier() {
