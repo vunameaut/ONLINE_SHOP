@@ -20,7 +20,7 @@
             android:id="@+id/tv_order_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mã đơn hàng: "
+            android:text="@string/OrderCode"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/black"
@@ -31,7 +31,7 @@
             android:id="@+id/tv_customer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Khách hàng: "
+            android:text="@string/Client"
             android:textSize="16sp"
             android:textColor="@color/gray"
             android:paddingBottom="6dp" />
@@ -41,7 +41,7 @@
             android:id="@+id/tv_order_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng tiền: "
+            android:text="@string/TotalAmount"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:paddingBottom="4dp" />
@@ -51,7 +51,7 @@
             android:id="@+id/tv_order_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ngày đặt hàng: "
+            android:text="@string/OrderDate"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:paddingBottom="4dp" />

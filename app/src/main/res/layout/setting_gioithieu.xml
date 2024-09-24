@@ -42,7 +42,6 @@
             android:id="@+id/tvTerms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nội dung giới thiệu sẽ được hiển thị tại đây..."
             android:textSize="16sp"
             android:padding="10dp"/>
     </ScrollView>

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:text="Admin"
+            android:text="@string/Admin"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/rounded_button_background"
-        android:text="Quản lý tài khoản"
+        android:text="@string/AccountManagement"
         android:textSize="18sp" />
 
     <Button
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button_background"
-        android:text="Quản lý nhà cung cấp"
+        android:text="@string/SupplierManagement"
         android:textSize="18sp" />
 
     <Button
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button_background"
-        android:text="Quản lý sản phẩm"
+        android:text="@string/ProductManagement"
         android:textSize="18sp" />
 
 
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button_background"
-        android:text="Quản lý đơn hàng"
+        android:text="@string/OrderManagement"
         android:textSize="18sp" />
 
     <Button
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_button_background"
-        android:text="Thống kê báo cáo"
+        android:text="@string/ReportStatistics"
         android:textSize="18sp" />
 
 
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/rounded_button_background"
-        android:text="Đăng xuất"
+        android:text="@string/LogOut"
         android:textSize="18sp" />
 
 </LinearLayout>

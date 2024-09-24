@@ -41,7 +41,6 @@
             android:id="@+id/tvTerms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nội dung điều khoản sẽ được hiển thị tại đây..."
             android:textSize="16sp"
             android:padding="10dp"/>
     </ScrollView>
@@ -56,7 +55,7 @@
             android:id="@+id/cbAgree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tôi đồng ý với các điều khoản"
+            android:text="@string/AgreeToTheTerms"
             android:textSize="16sp"/>
 
     </LinearLayout>
@@ -65,7 +64,7 @@
         android:id="@+id/btnContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tiếp tục"
+        android:text="@string/Continue"
         android:layout_gravity="center"
         android:layout_marginBottom="50dp"/>
 

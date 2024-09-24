@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
+        android:contentDescription="@string/back"
         android:src="@drawable/ic_back" />
 
     <!-- Mã đơn hàng -->
@@ -34,7 +34,7 @@
             android:id="@+id/editTextOrderCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mã đơn hàng"
+            android:hint="@string/OrderCode"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -57,7 +57,7 @@
             android:id="@+id/editTextCustomerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên khách hàng"
+            android:hint="@string/OrderName"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -80,7 +80,7 @@
             android:id="@+id/editTextAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Địa chỉ"
+            android:hint="@string/Address"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -103,7 +103,7 @@
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Số điện thoại"
+            android:hint="@string/PhoneNumber"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -126,7 +126,7 @@
             android:id="@+id/editTextOrderDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ngày đặt hàng"
+            android:hint="@string/OrderDate"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -149,7 +149,7 @@
             android:id="@+id/editTextOrderStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Trạng thái"
+            android:hint="@string/status"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -172,7 +172,7 @@
             android:id="@+id/editTextTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tổng tiền"
+            android:hint="@string/TotalAmount"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -183,7 +183,7 @@
         android:id="@+id/btn_update_order"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cập nhật"
+        android:text="@string/Update"
         app:layout_constraintTop_toBottomOf="@id/textInputTotal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -194,7 +194,7 @@
         android:id="@+id/btn_delete_order"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Xóa"
+        android:text="@string/Delete"
         app:layout_constraintTop_toBottomOf="@id/btn_update_order"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

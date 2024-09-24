@@ -9,7 +9,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         android:elevation="4dp"
-        android:title="Chi tiết sản phẩm"
+        android:title="@string/order_details"
         android:navigationIcon="@drawable/ic_back" />
 
     <!-- Hình ảnh sản phẩm -->
@@ -27,7 +27,7 @@
         android:id="@+id/productNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tên sản phẩm"
+        android:text="@string/ProductName"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_below="@id/productImageView"
@@ -38,7 +38,7 @@
         android:id="@+id/productPriceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Giá sản phẩm"
+        android:text="@string/ProductPrice"
         android:textSize="18sp"
         android:layout_below="@id/productNameTextView"
         android:layout_marginTop="8dp" />
@@ -48,7 +48,7 @@
         android:id="@+id/productDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mô tả"
+        android:text="@string/Describe"
         android:layout_below="@id/productPriceTextView"
         android:layout_marginTop="8dp" />
 
@@ -57,7 +57,7 @@
         android:id="@+id/productStockTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Số lượng tồn kho"
+        android:text="@string/InventoryQuantity"
         android:layout_below="@id/productDescriptionTextView"
         android:layout_marginTop="8dp" />
 
@@ -66,7 +66,7 @@
         android:id="@+id/productCategoryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loại sản phẩm"
+        android:text="@string/ProductType"
         android:layout_below="@id/productStockTextView"
         android:layout_marginTop="8dp" />
 
@@ -85,7 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Thêm vào giỏ hàng"
+            android:text="@string/AddToCart"
             android:textColor="@android:color/black"
             android:background="@drawable/button_border"
             android:drawableLeft="@drawable/ic_cart"
@@ -101,7 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Mua ngay"
+            android:text="@string/BuyNow"
             android:textColor="@android:color/black"
             android:background="@drawable/button_border"
             android:drawableLeft="@drawable/ic_buy"
