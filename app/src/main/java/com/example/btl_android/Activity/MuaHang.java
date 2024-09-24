@@ -173,7 +173,9 @@ public class MuaHang extends AppCompatActivity {
             orderData.put("tenKhachHang", customerName);
             orderData.put("soDienThoai", phoneNumber);
             orderData.put("diaChi", address);
+            orderData.put("uid", uid); // Thêm uid vào đơn hàng
 
+            // Thêm sản phẩm vào đơn hàng
             List<Map<String, Object>> products = new ArrayList<>();
             for (CartItem item : cartItemList) {
                 Map<String, Object> productData = new HashMap<>();
@@ -187,6 +189,7 @@ public class MuaHang extends AppCompatActivity {
             if (orderId != null) {
                 ordersRef.child(orderId).setValue(orderData).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        // Xóa giỏ hàng sau khi đặt hàng thành công
                         cartRef.removeValue().addOnCompleteListener(cartTask -> {
                             if (cartTask.isSuccessful()) {
                                 Toast.makeText(MuaHang.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
@@ -196,19 +199,16 @@ public class MuaHang extends AppCompatActivity {
                                 finish();
                             } else {
                                 Toast.makeText(MuaHang.this, "Xóa giỏ hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-
                             }
                         });
                     } else {
                         Toast.makeText(MuaHang.this, "Đặt hàng thất bại, vui lòng thử lại.", Toast.LENGTH_SHORT).show();
-
                     }
                 });
             }
-        } else {
-
         }
     }
+
 
     @SuppressLint("SetTextI18n")
     private void loadOrderDate() {

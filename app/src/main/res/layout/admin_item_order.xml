@@ -17,7 +17,7 @@
             android:id="@+id/tvTenKhachHang"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên khách hàng"
+            android:text="@string/CustomerName"
             android:textStyle="bold"
             android:textSize="18sp"
             android:paddingBottom="8dp" />
@@ -26,7 +26,7 @@
             android:id="@+id/tvDiaChi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Địa chỉ"
+            android:text="@string/Address"
             android:textSize="16sp"
             android:paddingBottom="6dp" />
 
@@ -34,7 +34,7 @@
             android:id="@+id/tvTongTien"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng tiền"
+            android:text="@string/TotalAmount"
             android:textSize="16sp"
             android:paddingBottom="4dp" />
     </LinearLayout>

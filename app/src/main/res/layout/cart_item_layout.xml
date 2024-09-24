@@ -42,7 +42,7 @@
                 android:id="@+id/decreaseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-" />
+                android:text="@string/Decrease" />
 
             <TextView
                 android:id="@+id/productQuantity"
@@ -56,7 +56,7 @@
                 android:id="@+id/increaseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+" />
+                android:text="@string/Increase" />
         </LinearLayout>
     </LinearLayout>
 
@@ -66,5 +66,5 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="Xóa" />
+        android:text="@string/Delete" />
 </LinearLayout>

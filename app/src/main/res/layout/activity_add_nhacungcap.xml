@@ -24,7 +24,7 @@
             android:id="@+id/editTextSupplierCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mã nhà cung cấp"
+            android:hint="@string/SupplierCode"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,7 +42,7 @@
             android:id="@+id/editTextSupplierName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên nhà cung cấp"
+            android:hint="@string/SupplierName"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,7 +60,7 @@
             android:id="@+id/editTextSupplierAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Địa chỉ"
+            android:hint="@string/Address"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,7 +78,7 @@
             android:id="@+id/editTextSupplierPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Số điện thoại"
+            android:hint="@string/PhoneNumber"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +96,7 @@
             android:id="@+id/editTextSupplierEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Thêm nhà cung cấp"
+        android:text="@string/AddSupplier"
         app:layout_constraintTop_toBottomOf="@id/textInputSupplierEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

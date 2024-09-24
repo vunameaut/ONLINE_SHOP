@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
+        android:contentDescription="@string/back"
         android:src="@drawable/ic_back" />
 
     <!-- Tên nhà cung cấp -->
@@ -32,7 +32,7 @@
             android:id="@+id/editTextSupplierName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên nhà cung cấp"
+            android:hint="@string/SupplierName"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end"/>
@@ -52,7 +52,7 @@
             android:id="@+id/editTextSupplierAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Địa chỉ nhà cung cấp"
+            android:hint="@string/SupplierAddress"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -72,7 +72,7 @@
             android:id="@+id/editTextSupplierEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email nhà cung cấp"
+            android:hint="@string/SupplierEmail"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -92,7 +92,7 @@
             android:id="@+id/editTextSupplierPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Số điện thoại"
+            android:hint="@string/PhoneNumber"
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end" />
@@ -103,7 +103,7 @@
         android:id="@+id/btn_update_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cập nhật"
+        android:text="@string/Update"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_background" />
 
@@ -112,7 +112,7 @@
         android:id="@+id/btn_delete_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Xóa"
+        android:text="@string/Delete"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_background" />
 

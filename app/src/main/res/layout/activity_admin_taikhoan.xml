@@ -12,7 +12,7 @@
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:hint="Tìm kiếm ..."
+        android:hint="@string/AccountSearch"
         android:drawableEnd="@drawable/ic_search"
         android:padding="8dp"
         android:background="@drawable/search_bar_background"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        android:contentDescription="Nút thêm tài khoản"
+        android:contentDescription="@string/AddAccount"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -19,7 +19,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name: John Doe"
+        android:text="@string/Name"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/black"
@@ -29,7 +29,7 @@
         android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email: johndoe@example.com"
+        android:text="@string/Email"
         android:textSize="16sp"
         android:textColor="@color/gray"
         android:paddingBottom="6dp" />
@@ -38,7 +38,7 @@
         android:id="@+id/tv_role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Role: Administrator"
+        android:text="@string/Role"
         android:textSize="16sp"
         android:textColor="@color/black"
         android:paddingBottom="4dp" />

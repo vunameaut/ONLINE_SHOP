@@ -19,7 +19,7 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/ic_arrowback"
-            android:contentDescription="Back" />
+            android:contentDescription="@string/back" />
 
         <!-- Tiêu đề đơn hàng -->
         <TextView
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Chi tiết đơn hàng"
+            android:text="@string/order_details"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Đơn hàng: xxxx" />
+        android:text="@string/order" />
 
     <!-- Ngày đặt hàng -->
     <TextView
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Ngày đặt hàng: xx/xx/xxxx" />
+        android:text="@string/dateOrder" />
 
     <!-- Tổng tiền -->
     <TextView
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Tổng tiền: xxxxxx VND" />
+        android:text="@string/TotalAmount" />
 
     <!-- Trạng thái đơn hàng -->
     <TextView
@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Trạng thái: xxxxxxx" />
+        android:text="@string/status" />
 
     <!-- Danh sách sản phẩm trong đơn hàng -->
     <TextView
@@ -71,5 +71,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Danh sách sản phẩm:\n\n" />
+        android:text="@string/ProductList" />
 </LinearLayout>

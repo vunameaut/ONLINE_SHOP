@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.admin.donhang.AddDonhangActivity"
+    tools:context=".Activity.admin.donhang.add_donhang"
     android:padding="16dp">
 
     <!-- Tên khách hàng -->
@@ -22,7 +22,7 @@
             android:id="@+id/editTextCustomerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên khách hàng"
+            android:hint="@string/CustomerName"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,7 +40,7 @@
             android:id="@+id/editTextAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Địa chỉ"
+            android:hint="@string/Address"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +58,7 @@
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Số điện thoại"
+            android:hint="@string/PhoneNumber"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +76,7 @@
             android:id="@+id/editTextOrderDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ngày đặt hàng"
+            android:hint="@string/OrderDate"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +94,7 @@
             android:id="@+id/editTextOrderStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Trạng thái"
+            android:hint="@string/status"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +112,7 @@
             android:id="@+id/editTextTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tổng tiền"
+            android:hint="@string/TotalAmount"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -122,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Thêm đơn hàng"
+        android:text="@string/AddOrder"
         app:layout_constraintTop_toBottomOf="@id/textInputTotal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

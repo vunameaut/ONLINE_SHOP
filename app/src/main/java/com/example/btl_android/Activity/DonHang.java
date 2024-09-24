@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
@@ -60,14 +61,14 @@ public class DonHang extends AppCompatActivity {
     private void loadOrdersFromFirebase() {
         String uid = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("uid", null);
         if (uid != null) {
-            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang").child(uid);
+            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("don_hang");
+            Query query = ordersRef.orderByChild("uid").equalTo(uid);
 
-            ordersRef.addValueEventListener(new ValueEventListener() {
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     orderList.clear(); // Xóa dữ liệu cũ
                     for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
-                        // Chuyển dữ liệu thành đối tượng Order
                         OrderItem order = orderSnapshot.getValue(OrderItem.class);
                         if (order != null) {
                             orderList.add(order);
@@ -97,7 +98,7 @@ public class DonHang extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    // Xử lý lỗi nếu cần
                 }
             });
         }
