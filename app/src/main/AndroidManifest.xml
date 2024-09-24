@@ -17,6 +17,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTL_Android">
         <activity
+            android:name=".Activity.admin.donhang.AdminDonHangDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.donhang.AdminDonhangDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.donhang.add_donhang"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.admin.donhang.admin_donhang"
+            android:exported="false" />
+        <activity
             android:name=".Activity.admin.nhacungcap.AdminNhacungcapDetailActivity"
             android:exported="false" />
         <activity

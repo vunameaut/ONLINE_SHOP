@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.btl_android.Activity.Login;
 import com.example.btl_android.Activity.admin.ThongKe.ThongKe;
+import com.example.btl_android.Activity.admin.donhang.admin_donhang;
 import com.example.btl_android.Activity.admin.nhacungcap.admin_nhacungcap;
 import com.example.btl_android.Activity.admin.sanpham.admin_sanpham;
 import com.example.btl_android.Activity.admin.taikhoan.admin_taikhoan;
@@ -66,8 +67,8 @@ public class MainAdmin extends AppCompatActivity {
         });
 
         btnDonHang.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, admin_donhang.class);
-//            startActivity(intent);
+           Intent intent = new Intent(this, admin_donhang.class);
+           startActivity(intent);
 
         });
 
