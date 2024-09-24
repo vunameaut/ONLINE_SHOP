@@ -127,21 +127,20 @@ public class DanhThuFragment extends Fragment {
                 List<RevenueEntry> revenueEntries = new ArrayList<>();
 
                 for (DataSnapshot donHangSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot maDonHangSnapshot : donHangSnapshot.getChildren()) {
-                        String ngayDatHangStr = maDonHangSnapshot.child("ngayDatHang").getValue(String.class);
-                        Long tongTien = maDonHangSnapshot.child("tongTien").getValue(Long.class);
+                    String ngayDatHangStr = donHangSnapshot.child("ngayDatHang").getValue(String.class);
+                    Long tongTien = donHangSnapshot.child("tongTien").getValue(Long.class);
 
-                        try {
-                            Date ngayDatHang = dateFormat.parse(ngayDatHangStr);
-                            if (ngayDatHang != null && ngayDatHang.compareTo(fromDate) >= 0 && ngayDatHang.compareTo(toDate) <= 0) {
-                                if (tongTien != null) {
-                                    revenueEntries.add(new RevenueEntry(ngayDatHang, tongTien));
-                                }
+                    try {
+                        Date ngayDatHang = dateFormat.parse(ngayDatHangStr);
+                        if (ngayDatHang != null && ngayDatHang.compareTo(fromDate) >= 0 && ngayDatHang.compareTo(toDate) <= 0) {
+                            if (tongTien != null) {
+                                revenueEntries.add(new RevenueEntry(ngayDatHang, tongTien));
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
                 }
 
                 // Sắp xếp theo ngày

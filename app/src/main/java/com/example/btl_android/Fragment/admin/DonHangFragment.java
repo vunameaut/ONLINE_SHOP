@@ -61,29 +61,27 @@ public class DonHangFragment extends Fragment {
                 tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
 
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot orderSnapshot : productSnapshot.getChildren()) {
-                        String maSanPham = orderSnapshot.child("maDonHang").getValue(String.class);
-                        String ngayDatHang = orderSnapshot.child("ngayDatHang").getValue(String.class);
-                        long tongTien = orderSnapshot.child("tongTien").getValue(Long.class);
-                        String tenKhachHang = orderSnapshot.child("tenKhachHang").getValue(String.class);
-                        String trangThai = orderSnapshot.child("trangThai").getValue(String.class);
+                    String maSanPham = productSnapshot.child("maDonHang").getValue(String.class);
+                    String ngayDatHang = productSnapshot.child("ngayDatHang").getValue(String.class);
+                    long tongTien = productSnapshot.child("tongTien").getValue(Long.class);
+                    String tenKhachHang = productSnapshot.child("tenKhachHang").getValue(String.class);
+                    String trangThai = productSnapshot.child("trangThai").getValue(String.class);
 
-                        // Xử lý giá tiền
-                        String gia = new DecimalFormat("#,###").format(tongTien) + " VNĐ";
+                    // Xử lý giá tiền
+                    String gia = new DecimalFormat("#,###").format(tongTien) + " VNĐ";
 
-                        // Tạo hàng mới cho mỗi sản phẩm
-                        TableRow row = new TableRow(getContext());
+                    // Tạo hàng mới cho mỗi sản phẩm
+                    TableRow row = new TableRow(getContext());
 
-                        // Thêm cột vào hàng
-                        addCellToRow(row, maSanPham, 1);
-                        addCellToRow(row, tenKhachHang, 2);
-                        addCellToRow(row, gia, 1);
-                        addCellToRow(row, ngayDatHang, 1);
-                        addCellToRow(row, trangThai, 1);
+                    // Thêm cột vào hàng
+                    addCellToRow(row, maSanPham, 1);
+                    addCellToRow(row, tenKhachHang, 2);
+                    addCellToRow(row, gia, 1);
+                    addCellToRow(row, ngayDatHang, 1);
+                    addCellToRow(row, trangThai, 1);
 
-                        // Thêm hàng vào bảng
-                        tableLayout.addView(row);
-                    }
+                    // Thêm hàng vào bảng
+                    tableLayout.addView(row);
                 }
             }
 
