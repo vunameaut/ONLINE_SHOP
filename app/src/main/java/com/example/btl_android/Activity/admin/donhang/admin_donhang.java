@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.btl_android.Adapter.admin.Admin_donhang_adapter;
 import com.example.btl_android.R;
 import com.example.btl_android.item.admin.Admin_donhang_item;
@@ -100,7 +99,7 @@ public class admin_donhang extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Xử lý sự kiện click item đơn hàng
+        // Xử lý sự kiện click item đơn hàng để mở chi tiết
         donhangAdapter.setOnItemClickListener(donHang -> {
             Intent intent = new Intent(admin_donhang.this, AdminDonHangDetailActivity.class);
             intent.putExtra("orderItem", donHang);

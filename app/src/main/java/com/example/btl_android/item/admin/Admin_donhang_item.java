@@ -94,7 +94,7 @@ public class Admin_donhang_item implements Serializable {
     }
 
     // Lớp con để chứa thông tin sản phẩm trong đơn hàng
-    public static class SanPham {
+    public static class SanPham implements Serializable {
         private String tenSanPham;
         private int gia;
         private int soLuong;

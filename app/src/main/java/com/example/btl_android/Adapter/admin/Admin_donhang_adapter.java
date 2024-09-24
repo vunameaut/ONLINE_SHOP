@@ -51,6 +51,7 @@ public class Admin_donhang_adapter extends RecyclerView.Adapter<Admin_donhang_ad
         holder.tvOrderTotal.setText("Tổng tiền: " + donHang.getTongTien() + " VND");
         holder.tvOrderDate.setText("Ngày đặt: " + donHang.getNgayDatHang());
 
+        // Xử lý sự kiện click để gọi chi tiết đơn hàng
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(donHang);
