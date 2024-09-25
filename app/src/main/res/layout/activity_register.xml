@@ -17,7 +17,7 @@
         android:layout_marginTop="100dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/logo"
-        android:src="@drawable/logo" />
+        android:src="@mipmap/logo" />
 
     <!-- Tiêu đề Đăng ký -->
     <TextView
