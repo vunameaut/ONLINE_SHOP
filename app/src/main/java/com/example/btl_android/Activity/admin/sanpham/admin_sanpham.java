@@ -12,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.btl_android.Activity.admin.nhacungcap.add_nhacungcap;
 import com.example.btl_android.Adapter.admin.Admin_sanpham_adapter;
 import com.example.btl_android.R;
 import com.example.btl_android.Model.admin.Admin_sanpham_item;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +34,7 @@ public class admin_sanpham extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private EditText editTextSearchProduct;
     private ValueEventListener valueEventListener;
+    private FloatingActionButton btn_add;
 
     private static final int REQUEST_CODE_UPDATE_DELETE = 1;
 
@@ -46,6 +49,12 @@ public class admin_sanpham extends AppCompatActivity {
         sanPhamList = new ArrayList<>();
         sanPhamAdapter = new Admin_sanpham_adapter(sanPhamList, this);
         recyclerView.setAdapter(sanPhamAdapter);
+
+        btn_add = findViewById(R.id.btn_add_product);
+        btn_add.setOnClickListener(nhacungcap -> {
+            Intent intent = new Intent(this, add_sanpham.class);
+            startActivityForResult(intent, REQUEST_CODE_UPDATE_DELETE);
+        });
 
         editTextSearchProduct = findViewById(R.id.editTextSearchProduct);
 

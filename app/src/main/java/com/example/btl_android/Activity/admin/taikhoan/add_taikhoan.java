@@ -3,20 +3,15 @@ package com.example.btl_android.Activity.admin.taikhoan;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.example.btl_android.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.functions.FirebaseFunctions;
-import com.google.firebase.functions.HttpsCallableResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +66,7 @@ public class add_taikhoan extends AppCompatActivity {
             }
         });
     }
+
     private void addNewAccount(String username, String email, String phone, String address) {
         // Đặt mật khẩu mặc định cho user
         String password = "12345678";
@@ -92,7 +88,7 @@ public class add_taikhoan extends AppCompatActivity {
                                             account.put("uid", userId);
                                             account.put("username", username);
                                             account.put("email", email);
-                                            account.put("sdt", phone);
+                                            account.put("sdt", String.valueOf(phone)); // Lưu số điện thoại dưới dạng chuỗi
                                             account.put("diachi", address);
                                             account.put("role", "user"); // Đặt vai trò mặc định là "user"
                                             account.put("dieukhoan", true); // Mặc định đồng ý điều khoản
@@ -121,7 +117,4 @@ public class add_taikhoan extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
-
