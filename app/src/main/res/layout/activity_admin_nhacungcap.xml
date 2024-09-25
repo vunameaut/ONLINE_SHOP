@@ -27,8 +27,8 @@
     <!-- Danh sách nhà cung cấp -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/supplier_list_recyclerview"
-        android:layout_width="396dp"
-        android:layout_height="600dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/btn_add_supplier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
