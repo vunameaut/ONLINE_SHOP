@@ -144,14 +144,14 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
     // Phương thức để chỉ cập nhật phần sau dấu hai chấm
     private void updateProduct() {
         String updatedName = extractValueAfterColon(productNameEditText.getText().toString().trim());
-        int updatedPrice;
+        long updatedPrice; // Đổi từ int sang long
         String updatedDescription = extractValueAfterColon(productDescriptionEditText.getText().toString().trim());
         String updatedCategory = extractValueAfterColon(productCategoryEditText.getText().toString().trim());
-        int updatedStock;
+        long updatedStock; // Đổi từ int sang long
 
         try {
-            updatedPrice = Integer.parseInt(extractValueAfterColon(productPriceEditText.getText().toString().trim()));
-            updatedStock = Integer.parseInt(extractValueAfterColon(productStockEditText.getText().toString().trim()));
+            updatedPrice = Long.parseLong(extractValueAfterColon(productPriceEditText.getText().toString().trim())); // Sử dụng long
+            updatedStock = Long.parseLong(extractValueAfterColon(productStockEditText.getText().toString().trim())); // Sử dụng long
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Giá và số lượng tồn kho không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
@@ -160,9 +160,9 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
         // Tạo Map để lưu các thay đổi
         Map<String, Object> updates = new HashMap<>();
         updates.put("ten_san_pham", updatedName);
-        updates.put("gia", updatedPrice);
+        updates.put("gia", updatedPrice); // Cập nhật giá với kiểu long
         updates.put("mo_ta", updatedDescription);
-        updates.put("so_luong_ton_kho", updatedStock);
+        updates.put("so_luong_ton_kho", updatedStock); // Cập nhật số lượng tồn kho với kiểu long
         updates.put("loai", updatedCategory);
 
         // Cập nhật dữ liệu vào Firebase
@@ -176,6 +176,7 @@ public class AdminSanphamDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     // Hàm phụ để trích xuất giá trị sau dấu hai chấm
     private String extractValueAfterColon(String text) {

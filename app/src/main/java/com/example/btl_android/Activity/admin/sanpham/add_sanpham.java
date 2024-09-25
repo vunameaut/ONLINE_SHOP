@@ -87,9 +87,28 @@ public class add_sanpham extends AppCompatActivity {
         Map<String, Object> product = new HashMap<>();
         product.put("ten_san_pham", name);
         product.put("ma_san_pham", code);
-        product.put("gia", Integer.parseInt(price));
+
+        try {
+            // Chuyển đổi giá và số lượng tồn kho sang long để xử lý số lớn
+            if (TextUtils.isDigitsOnly(price)) {
+                product.put("gia", Long.parseLong(price)); // Sử dụng long
+            } else {
+                Toast.makeText(this, "Giá phải là số hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isDigitsOnly(stock)) {
+                product.put("so_luong_ton_kho", Long.parseLong(stock)); // Sử dụng long
+            } else {
+                Toast.makeText(this, "Số lượng tồn kho phải là số hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Giá hoặc số lượng không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         product.put("hinh_anh", imageUrl);
-        product.put("so_luong_ton_kho", Integer.parseInt(stock));
         product.put("mo_ta", description);
         product.put("nha_cung_cap", supplier);
         product.put("loai", type);
@@ -111,6 +130,9 @@ public class add_sanpham extends AppCompatActivity {
             Toast.makeText(add_sanpham.this, "Lỗi khi tạo sản phẩm mới", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
