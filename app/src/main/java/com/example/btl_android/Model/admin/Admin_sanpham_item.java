@@ -1,19 +1,18 @@
 package com.example.btl_android.Model.admin;
-import java.io.Serializable;
 
+import java.io.Serializable;
 import com.google.firebase.database.PropertyName;
 
 public class Admin_sanpham_item implements Serializable {
     private String uid;
     private String maSanPham;
     private String tenSanPham;
-    private int gia;
+    private long gia;  // Đổi từ int sang long
     private String moTa;
     private String nhaCungCap;
-    private int soLuongTonKho;
+    private long soLuongTonKho;  // Đổi từ int sang long
     private String hinhAnh;
     private String loai;
-
 
     public Admin_sanpham_item() {
     }
@@ -48,12 +47,12 @@ public class Admin_sanpham_item implements Serializable {
     }
 
     @PropertyName("gia")
-    public int getGia() {
+    public long getGia() {  // Đổi từ int sang long
         return gia;
     }
 
     @PropertyName("gia")
-    public void setGia(int gia) {
+    public void setGia(long gia) {  // Đổi từ int sang long
         this.gia = gia;
     }
 
@@ -78,12 +77,12 @@ public class Admin_sanpham_item implements Serializable {
     }
 
     @PropertyName("so_luong_ton_kho")
-    public int getSoLuongTonKho() {
+    public long getSoLuongTonKho() {  // Đổi từ int sang long
         return soLuongTonKho;
     }
 
     @PropertyName("so_luong_ton_kho")
-    public void setSoLuongTonKho(int soLuongTonKho) {
+    public void setSoLuongTonKho(long soLuongTonKho) {  // Đổi từ int sang long
         this.soLuongTonKho = soLuongTonKho;
     }
 
