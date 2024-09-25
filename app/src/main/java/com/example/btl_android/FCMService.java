@@ -29,7 +29,7 @@ public class FCMService extends FirebaseMessagingService {
         }
     }
 
-    private void sendNotification(String messageTitle, String messageBody) {
+    public void sendNotification(String messageTitle, String messageBody) {
         Intent intent = new Intent(this, Homepage.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
