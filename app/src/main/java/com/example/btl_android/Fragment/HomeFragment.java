@@ -85,7 +85,8 @@ public class HomeFragment extends Fragment {
 
                             ImageView imageView = new ImageView(getContext());
                             Picasso.get().load(imageUrl).into(imageView);
-                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                            // Thay đổi scaleType để tránh méo ảnh
+                            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);  // Hoặc CENTER_CROP
                             viewFlipper.addView(imageView);
                         });
                     }
@@ -97,6 +98,7 @@ public class HomeFragment extends Fragment {
         viewFlipper.setInAnimation(animationIn);
         viewFlipper.setOutAnimation(animationOut);
     }
+
 
     private void NewProduct() {
         dbRef.orderByKey().limitToLast(10).addValueEventListener(new ValueEventListener() {
