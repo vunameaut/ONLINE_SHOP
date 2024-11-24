@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,29 +8,29 @@
     android:gravity="center"
     android:background="#F9F9F9">
 
-    <!-- Horizontal LinearLayout for Back Button and Username Display -->
+    <!-- Thanh chứa nút Back và Username -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
-        <!-- Back Button -->
+        <!-- Nút Back -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/Back"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_back" />
 
-        <!-- Username Display -->
+        <!-- Tên người dùng -->
         <EditText
             android:id="@+id/editTextUsername"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/Username"
+            android:hint="Tên người dùng"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -39,7 +40,7 @@
             android:background="@null" />
     </LinearLayout>
 
-    <!-- Card View for details -->
+    <!-- Khung chứa thông tin tài khoản -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,96 +49,83 @@
         android:padding="16dp"
         android:layout_marginTop="16dp">
 
-        <!-- Dia chi -->
+        <!-- Địa chỉ -->
         <EditText
             android:id="@+id/editTextAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/Address"
+            android:hint="Địa chỉ"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"
-            android:background="@null" />
-
-        <!-- Dieu khoan -->
+            android:layout_marginBottom="8dp" />
 
         <!-- Email -->
         <EditText
             android:id="@+id/editTextEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/Email"
+            android:hint="Email"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"
-            android:background="@null" />
+            android:layout_marginBottom="8dp" />
 
-        <!-- Role -->
+        <!-- Vai trò -->
         <EditText
             android:id="@+id/editTextRole"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/Role"
+            android:hint="Vai trò"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"
-            android:background="@null" />
+            android:layout_marginBottom="8dp" />
 
-        <!-- Sdt -->
+        <!-- Số điện thoại -->
         <EditText
             android:id="@+id/editTextPhone"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/PhoneNumber"
+            android:hint="Số điện thoại"
             android:textSize="16sp"
             android:textColor="#000000"
-            android:layout_marginBottom="8dp"
-            android:background="@null" />
+            android:layout_marginBottom="8dp" />
 
-        <!-- Uid -->
+        <!-- UID -->
         <TextView
             android:id="@+id/TextViewUid"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/UID"
+            android:text="UID"
             android:textSize="16sp"
             android:textColor="#000000"
             android:layout_marginBottom="8dp"
             android:background="@null" />
-
     </LinearLayout>
 
-    <!-- Buttons -->
+    <!-- Các nút hành động -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:gravity="center">
 
-        <!-- Button Sửa -->
         <Button
             android:id="@+id/btnSua"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/Edit"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:background="@drawable/rounded_background"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/primary_color"
+            android:textColor="#FFFFFF"
+            android:text="Cập nhật" />
 
-        <!-- Button Xóa -->
         <Button
-            android:id="@+id/btnXoa"
+            android:id="@+id/btnKhoa"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/Delete"
-            android:textSize="18sp"
-            android:textColor="#FF0000"
-            android:background="@drawable/rounded_background"
-            android:layout_marginStart="8dp" />
+            android:backgroundTint="@color/error"
+            android:textColor="#FFFFFF"
+            android:text="Khóa" />
     </LinearLayout>
-
 </LinearLayout>

@@ -191,11 +191,21 @@
 
     <!-- Nút xóa -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_delete_order"
+        android:id="@+id/btn_cancel_order"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/Delete"
+        android:text="@string/cancel_order"
         app:layout_constraintTop_toBottomOf="@id/btn_update_order"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_approve_order"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/browse_orders"
+        app:layout_constraintTop_toBottomOf="@id/btn_cancel_order"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />

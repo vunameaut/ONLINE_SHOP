@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,8 +22,8 @@ import com.example.btl_android.LanguageHelper;
 import com.example.btl_android.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,17 +34,14 @@ import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 
-    // Khai báo các phần tử
     EditText mailEditText, passEditText;
     TextInputLayout mailInputLayout, passInputLayout;
     CheckBox rememberMeCheckBox;
     Button btn_Login, btn_Register, btn_FgPass, btn_Language;
 
     FirebaseAuth auth;
-
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = database.getReference("taikhoan");
-
     String languageCode;
 
     @SuppressLint("SetTextI18n")
@@ -52,99 +50,68 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         LanguageHelper.loadLocale(this);
-        setContentView(R.layout.activity_login); // Liên kết layout với Activity
+        setContentView(R.layout.activity_login);
 
-        auth = FirebaseAuth.getInstance(); // Khởi tạo FirebaseAuth
+        auth = FirebaseAuth.getInstance();
 
-        Mapping(); // Gọi hàm ánh xạ
-
+        Mapping();
         RegisterToLogin();
 
-        // Cập nhật văn bản nút theo ngôn ngữ đã lưu
         SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        languageCode = prefs.getString("language", "vi"); // Mặc định là "vi"
-        if (languageCode.equals("vi")) {
-            btn_Language.setText(getString(R.string.VI)); // VN
-        } else {
-            btn_Language.setText(getString(R.string.EN)); // EN
-        }
+        languageCode = prefs.getString("language", "vi");
+        btn_Language.setText(languageCode.equals("vi") ? getString(R.string.VI) : getString(R.string.EN));
 
-        // Lưu trạng thái khi checkbox "Remember Me" được chọn hoặc bỏ chọn
         rememberMeCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("remember", isChecked); // Lưu trạng thái checkbox
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("remember", isChecked);
             editor.apply();
         });
 
-        setupRememberMe(); // Thiết lập "Remember Me"
+        setupRememberMe();
 
-        // Quên mật khẩu
-        btn_FgPass.setOnClickListener(view -> Toast.makeText(this, "Chức năng đang phát triển", Toast.LENGTH_SHORT).show());
-
-        // Xử lý sự kiện khi nhấn nút Login
-        btn_Login.setOnClickListener(view -> LoginToHomepage());
-
-        // Xử lý sự kiện khi nhấn nút Register (chuyển sang màn hình đăng ký)
-        btn_Register.setOnClickListener(view -> {
-            Intent intent = new Intent(this, Register.class);
-            startActivity(intent);
-        });
-
-        // Xử lý sự kiện khi nhấn nút ForgotPass
         btn_FgPass.setOnClickListener(view -> {
             Intent intent = new Intent(this, ForgotPass.class);
             startActivity(intent);
         });
 
-        // Xử lý sự kiện khi nhấn nút Language
+        btn_Login.setOnClickListener(view -> LoginToHomepage());
+
+        btn_Register.setOnClickListener(view -> {
+            Intent intent = new Intent(this, Register.class);
+            startActivity(intent);
+        });
+
         btn_Language.setOnClickListener(view -> {
             SharedPreferences.Editor editor = prefs.edit();
-            if (languageCode.equals("vi")) {
-                languageCode = "en"; // Đổi sang tiếng Anh
-                btn_Language.setText(getString(R.string.EN)); // Cập nhật văn bản nút
-            } else {
-                languageCode = "vi"; // Đổi sang tiếng Việt
-                btn_Language.setText(getString(R.string.VI)); // Cập nhật văn bản nút
-            }
-
-            // Lưu ngôn ngữ đã chọn vào SharedPreferences
+            languageCode = languageCode.equals("vi") ? "en" : "vi";
+            btn_Language.setText(languageCode.equals("vi") ? getString(R.string.VI) : getString(R.string.EN));
             editor.putString("language", languageCode);
             editor.apply();
 
-            // Thay đổi ngôn ngữ
             LanguageHelper.changeLocale(this, languageCode);
-
-            recreate(); // Khởi động lại Activity
+            recreate();
         });
 
-
-
-        // Thiết lập trạng thái thông báo
         setSwitchNotif();
     }
 
-    // Phương thức ánh xạ các phần tử
     private void Mapping() {
         mailEditText = findViewById(R.id.et_mail);
         passEditText = findViewById(R.id.et_Pass);
         mailInputLayout = findViewById(R.id.til_Email);
         passInputLayout = findViewById(R.id.til_Pass);
         rememberMeCheckBox = findViewById(R.id.cb_remember);
-        btn_FgPass = findViewById(R.id.tv_FgPass);
+        btn_FgPass = findViewById(R.id.tv_FgPass); // Sửa lỗi tham chiếu
         btn_Login = findViewById(R.id.btn_Login);
         btn_Register = findViewById(R.id.btn_Register);
         btn_Language = findViewById(R.id.btn_Language);
     }
 
-    // Phương thức đăng nhập
-    protected void LoginToHomepage() {
+    private void LoginToHomepage() {
         String inputEmail = mailEditText.getText().toString();
         String inputPass = passEditText.getText().toString();
 
-        if (!checkInput(inputEmail, inputPass)) {
-            return;
-        }
+        if (!checkInput(inputEmail, inputPass)) return;
 
         auth.signInWithEmailAndPassword(inputEmail, inputPass)
                 .addOnCompleteListener(this, task -> {
@@ -152,167 +119,147 @@ public class Login extends AppCompatActivity {
                         FirebaseUser user = auth.getCurrentUser();
                         if (user != null) {
                             String uid = user.getUid();
-
-                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("uid", uid);
-                            editor.putString("email", inputEmail);
-                            editor.putString("password", inputPass);
-                            editor.apply();
-
+                            saveLoginInfo(uid, inputEmail, inputPass);
                             checkUserRole(uid, user);
                         }
                     } else {
-                        // Nếu đăng nhập thất bại
-                        Exception e = task.getException();
-                        String errorMessage;
-
-                        if (e instanceof FirebaseAuthException) {
-                            String errorCode = ((FirebaseAuthException) e).getErrorCode();
-                            switch (errorCode) {
-                                case "ERROR_INVALID_EMAIL":
-                                    mailInputLayout.setError("Email không đúng");
-                                    mailEditText.requestFocus();
-                                    errorMessage = "Email không đúng";
-                                    break;
-                                case "ERROR_WRONG_PASSWORD":
-                                    passInputLayout.setError("Mật khẩu không đúng");
-                                    passEditText.requestFocus();
-                                    errorMessage = "Mật khẩu không đúng";
-                                    break;
-                                case "ERROR_USER_NOT_FOUND":
-                                    errorMessage = "Người dùng không tồn tại.";
-                                    break;
-                                case "ERROR_USER_DISABLED":
-                                    errorMessage = "Tài khoản đã bị vô hiệu hóa.";
-                                    break;
-                                case "ERROR_TOO_MANY_REQUESTS":
-                                    errorMessage = "Quá nhiều yêu cầu. Vui lòng thử lại sau.";
-                                    break;
-                                case "ERROR_NETWORK_REQUEST_FAILED":
-                                    errorMessage = "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.";
-                                    break;
-                                default:
-                                    errorMessage = "Lỗi đăng nhập: " + errorCode;
-                                    break;
-                            }
-                        } else {
-                            errorMessage = "Lỗi đăng nhập: " + e.getMessage();
-                        }
-
-                        Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        handleLoginError(task.getException());
                     }
                 });
     }
 
     private void checkUserRole(String uid, FirebaseUser user) {
-        dbRef.child(uid).child("role").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String role = task.getResult().getValue(String.class);
-                if (role != null) {
-                    // Nếu là admin
-                    if ("admin".equals(role)) {
-                        Toast.makeText(Login.this, "Đăng nhập thành công! Vai trò: Admin", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Login.this, MainAdmin.class);
-                        intent.putExtra("uid", uid);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish(); // Kết thúc Login activity
-                    } else {
-                        // Người dùng không phải admin, kiểm tra xác thực email
-                        if (user.isEmailVerified()) {
-                            // Nếu email đã được xác thực, chuyển màn hình
-                            dbRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Boolean dieukhoan = snapshot.child("dieukhoan").getValue(Boolean.class);
+        dbRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String role = snapshot.child("role").getValue(String.class);
+                    String status = snapshot.child("status").getValue(String.class);
 
-                                    if (Boolean.TRUE.equals(dieukhoan)) {
-                                        Toast.makeText(Login.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(Login.this, Homepage.class);
-                                        intent.putExtra("ACTIVITY", "Login");
-                                        intent.putExtra("intent_uid", uid);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                        finish();
-                                        // Đóng màn hình đăng nhập
-                                    } else {
-                                        Intent intent = new Intent(Login.this, DieuKhoan.class);
-                                        intent.putExtra("ACTIVITY", "Login");
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish(); // Đóng màn hình đăng nhập
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    // Xử lý lỗi nếu cần
-                                }
-                            });
-                        } else {
-                            Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
-                        }
+                    if (status != null && "disabled".equals(status)) {
+                        Toast.makeText(Login.this, "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.", Toast.LENGTH_LONG).show();
+                        auth.signOut(); // Đăng xuất nếu tài khoản bị khóa
+                        return;
                     }
 
+                    if (role != null) {
+                        if ("admin".equals(role)) {
+                            Intent intent = new Intent(Login.this, MainAdmin.class);
+                            intent.putExtra("uid", uid);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            if (user.isEmailVerified()) {
+                                Boolean dieukhoan = snapshot.child("dieukhoan").getValue(Boolean.class);
+                                if (Boolean.TRUE.equals(dieukhoan)) {
+                                    Intent intent = new Intent(Login.this, Homepage.class);
+                                    intent.putExtra("ACTIVITY", "Login");
+                                    intent.putExtra("intent_uid", uid);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(Login.this, DieuKhoan.class);
+                                    intent.putExtra("ACTIVITY", "Login");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            } else {
+                                Toast.makeText(Login.this, "Vui lòng xác thực email trước khi đăng nhập.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(Login.this, "Không tìm thấy thông tin tài khoản.", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(Login.this, "Không thể lấy thông tin role", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(Login.this, "Lỗi khi lấy thông tin tài khoản: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Phương thức kiểm tra tính hợp lệ của dữ liệu đầu vào
-    protected boolean checkInput(String inputEmail, String inputPass) {
+    private void saveLoginInfo(String uid, String email, String password) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("uid", uid);
+        editor.putString("email", email);
+        editor.putString("password", password); // Mã hóa trước khi lưu nếu cần
+        editor.apply();
+    }
+
+    private void handleLoginError(Exception e) {
+        String errorMessage = "Đăng nhập không thành công. Vui lòng thử lại.";
+        if (e instanceof FirebaseAuthException) {
+            String errorCode = ((FirebaseAuthException) e).getErrorCode();
+            errorMessage = getFirebaseAuthErrorMessage(errorCode);
+        } else if (e != null) {
+            errorMessage = e.getLocalizedMessage();
+        }
+        Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    private String getFirebaseAuthErrorMessage(String errorCode) {
+        switch (errorCode) {
+            case "ERROR_INVALID_EMAIL":
+                mailInputLayout.setError("Email không đúng định dạng");
+                mailEditText.requestFocus();
+                return "Email không đúng định dạng.";
+            case "ERROR_WRONG_PASSWORD":
+                passInputLayout.setError("Mật khẩu không chính xác");
+                passEditText.requestFocus();
+                return "Mật khẩu không chính xác.";
+            case "ERROR_USER_NOT_FOUND":
+                return "Người dùng không tồn tại.";
+            case "ERROR_USER_DISABLED":
+                return "Tài khoản đã bị vô hiệu hóa.";
+            case "ERROR_TOO_MANY_REQUESTS":
+                return "Quá nhiều yêu cầu đăng nhập. Vui lòng thử lại sau.";
+            case "ERROR_NETWORK_REQUEST_FAILED":
+                return "Lỗi mạng. Vui lòng kiểm tra kết nối.";
+            case "ERROR_INVALID_CREDENTIAL": // Bổ sung xử lý lỗi này
+                return "Thông tin tài khoản không hợp lệ. Vui lòng thử lại.";
+            default:
+                return "Lỗi không xác định: " + errorCode;
+        }
+    }
+
+
+
+    private boolean checkInput(String inputEmail, String inputPass) {
         boolean isValid = true;
 
-        // Kiểm tra email trống
-        if (inputEmail.isEmpty()) {
-            mailInputLayout.setError("Vui lòng nhập email");
-            mailEditText.requestFocus();
-            isValid = false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()) {
+        if (inputEmail.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(inputEmail).matches()) {
             mailInputLayout.setError("Email không hợp lệ");
             mailEditText.requestFocus();
             isValid = false;
         } else {
-            mailInputLayout.setError(null); // Xóa lỗi nếu có
+            mailInputLayout.setError(null);
         }
 
-        // Kiểm tra mật khẩu trống
-        if (inputPass.isEmpty()) {
-            passInputLayout.setError("Vui lòng nhập mật khẩu");
-            passEditText.requestFocus();
-            isValid = false;
-        } else if (inputPass.length() < 6) { // Ví dụ, mật khẩu phải có ít nhất 6 ký tự
+        if (inputPass.isEmpty() || inputPass.length() < 6) {
             passInputLayout.setError("Mật khẩu phải có ít nhất 6 ký tự");
             passEditText.requestFocus();
             isValid = false;
         } else {
-            passInputLayout.setError(null); // Xóa lỗi nếu có
+            passInputLayout.setError(null);
         }
 
         return isValid;
     }
 
-    // Phương thức thiết lập chức năng "Remember Me"
     private void setupRememberMe() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         boolean isRemembered = sharedPreferences.getBoolean("remember", false);
-        rememberMeCheckBox.setChecked(isRemembered); // Cập nhật trạng thái checkbox
+        rememberMeCheckBox.setChecked(isRemembered);
 
         if (isRemembered) {
-            // Nếu đã chọn "Remember Me", lấy thông tin email và mật khẩu từ SharedPreferences
-            String email = sharedPreferences.getString("email", "");
-            String password = sharedPreferences.getString("password", "");
-
-            // Đặt giá trị email và mật khẩu vào EditText
-            mailEditText.setText(email);
-            passEditText.setText(password);
-        } else {
-            mailEditText.setText("");
-            passEditText.setText("");
+            mailEditText.setText(sharedPreferences.getString("email", ""));
+            passEditText.setText(sharedPreferences.getString("password", ""));
         }
     }
 
@@ -327,12 +274,11 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    // Phương thức thiết lập trạng thái thông báo
     private void setSwitchNotif() {
         SharedPreferences sharedPreferences = getSharedPreferences(ThongBao.PREFS_NAME, MODE_PRIVATE);
         if (!sharedPreferences.contains(ThongBao.KEY_APP_SWITCH)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(ThongBao.KEY_APP_SWITCH, true); // Bật thông báo
+            editor.putBoolean(ThongBao.KEY_APP_SWITCH, true);
             editor.apply();
         }
     }

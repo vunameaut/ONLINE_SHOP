@@ -42,5 +42,6 @@
     <color name="lightgray">#BCBABA</color>
     <color name="secondary_text_color">#666666</color>
     <color name="status_text_color">#FF5722</color>
+    <color name="error">#D32F2F</color>
 
 </resources>

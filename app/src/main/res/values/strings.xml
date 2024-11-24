@@ -172,6 +172,9 @@
     <string name="fgPass">Quên mật khẩu</string>
     <string name="lang_en">Tiếng Anh</string>
     <string name="lang_vn">Tiếng Việt</string>
+    <string name="cancel_order">Huỷ đơn hàng</string>
+    <string name="browse_orders">Duyệt đơn hàng</string>
+    <string name="Block">"Khoá "</string>
 
 
 </resources>

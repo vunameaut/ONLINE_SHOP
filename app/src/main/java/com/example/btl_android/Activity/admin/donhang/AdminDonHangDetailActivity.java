@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AdminDonHangDetailActivity extends AppCompatActivity {
 
     private EditText editTextOrderCode, editTextCustomerName, editTextAddress, editTextPhone, editTextOrderDate, editTextOrderStatus, editTextTotal;
-    private Button btnUpdateOrder, btnDeleteOrder;
+    private Button btnUpdateOrder, btnCancelOrder, btnApproveOrder;
     private DatabaseReference databaseReference;
     private String orderCode;
     private ImageButton btnBack;
@@ -35,8 +35,9 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
         editTextOrderStatus = findViewById(R.id.editTextOrderStatus);
         editTextTotal = findViewById(R.id.editTextTotal);
         btnUpdateOrder = findViewById(R.id.btn_update_order);
-        btnDeleteOrder = findViewById(R.id.btn_delete_order);
-        btnBack = findViewById(R.id.btnBack); // Ánh xạ nút Back
+        btnCancelOrder = findViewById(R.id.btn_cancel_order);
+        btnApproveOrder = findViewById(R.id.btn_approve_order);
+        btnBack = findViewById(R.id.btnBack);
 
         // Nhận đối tượng AdminDonhangItem từ Intent
         Admin_donhang_item order = (Admin_donhang_item) getIntent().getSerializableExtra("orderItem");
@@ -47,7 +48,7 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Hiển thị dữ liệu trong các EditText
+        // Hiển thị dữ liệu
         editTextOrderCode.setText(order.getMaDonHang());
         editTextCustomerName.setText(order.getTenKhachHang());
         editTextAddress.setText(order.getDiaChi());
@@ -56,18 +57,15 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
         editTextOrderStatus.setText(order.getTrangThai());
         editTextTotal.setText(String.valueOf(order.getTongTien()));
 
-        // Lưu orderCode để sử dụng cho các thao tác cập nhật và xóa
+        // Lưu orderCode
         orderCode = order.getMaDonHang();
         databaseReference = FirebaseDatabase.getInstance().getReference("don_hang").child(orderCode);
 
-        // Xử lý sự kiện nhấn nút Cập nhật
+        // Xử lý sự kiện
         btnUpdateOrder.setOnClickListener(v -> updateOrder());
-
-        // Xử lý sự kiện nhấn nút Xóa
-        btnDeleteOrder.setOnClickListener(v -> deleteOrder());
-
-        // Xử lý sự kiện nhấn nút Back
-        btnBack.setOnClickListener(v -> finish()); // Quay lại hoạt động trước
+        btnCancelOrder.setOnClickListener(v -> cancelOrder());
+        btnApproveOrder.setOnClickListener(v -> approveOrder());
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void updateOrder() {
@@ -78,32 +76,42 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
         String updatedOrderStatus = editTextOrderStatus.getText().toString().trim();
         int updatedTotal = Integer.parseInt(editTextTotal.getText().toString().trim());
 
-        // Kiểm tra các trường không được để trống
         if (updatedCustomerName.isEmpty() || updatedAddress.isEmpty() || updatedPhone.isEmpty() || updatedOrderDate.isEmpty() || updatedOrderStatus.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Cập nhật thông tin lên Firebase dựa trên orderCode
         Admin_donhang_item updatedOrder = new Admin_donhang_item(orderCode, updatedCustomerName, updatedAddress, updatedPhone, updatedOrderDate, updatedOrderStatus, updatedTotal, null);
         databaseReference.setValue(updatedOrder).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(AdminDonHangDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                Toast.makeText(AdminDonHangDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void deleteOrder() {
-        // Xóa đơn hàng từ Firebase dựa trên orderCode
-        databaseReference.removeValue().addOnCompleteListener(task -> {
+    private void cancelOrder() {
+        // Cập nhật trạng thái thành "Đã hủy"
+        databaseReference.child("trangThai").setValue("Đã hủy").addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(AdminDonHangDetailActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Đơn hàng đã bị hủy", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                Toast.makeText(AdminDonHangDetailActivity.this, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Hủy đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void approveOrder() {
+        // Cập nhật trạng thái thành "Đã duyệt"
+        databaseReference.child("trangThai").setValue("Đã duyệt").addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "Đơn hàng đã được duyệt", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Duyệt đơn hàng thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -50,11 +50,6 @@ public class admin_donhang extends AppCompatActivity {
         recyclerView.setAdapter(donhangAdapter);
 
         editTextSearchOrder = findViewById(R.id.editTextSearchOrder);
-        btnAddOrder = findViewById(R.id.btn_add_order);
-        btnAddOrder.setOnClickListener(v -> {
-            Intent intent = new Intent(this, add_donhang.class);
-            startActivityForResult(intent, REQUEST_CODE_UPDATE_DELETE);
-        });
 
         // Khởi tạo DatabaseReference
         databaseReference = FirebaseDatabase.getInstance().getReference("don_hang");

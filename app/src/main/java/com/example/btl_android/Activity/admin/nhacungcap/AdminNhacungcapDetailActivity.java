@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class AdminNhacungcapDetailActivity extends AppCompatActivity {
 
     private EditText editTextSupplierName, editTextSupplierAddress, editTextSupplierEmail, editTextSupplierPhone;
-    private Button btnUpdateSupplier, btnDeleteSupplier;
+    private Button btnUpdateSupplier;
     private DatabaseReference databaseReference;
     private String supplierId;
     private ImageButton btnBack;
@@ -32,7 +32,6 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
         editTextSupplierEmail = findViewById(R.id.editTextSupplierEmail);
         editTextSupplierPhone = findViewById(R.id.editTextSupplierPhone);
         btnUpdateSupplier = findViewById(R.id.btn_update_supplier);
-        btnDeleteSupplier = findViewById(R.id.btn_delete_supplier);
         btnBack = findViewById(R.id.btnBack);
 
 
@@ -58,8 +57,6 @@ public class AdminNhacungcapDetailActivity extends AppCompatActivity {
         // Xử lý sự kiện nhấn nút Cập nhật
         btnUpdateSupplier.setOnClickListener(v -> updateSupplier());
 
-        // Xử lý sự kiện nhấn nút Xóa
-        btnDeleteSupplier.setOnClickListener(v -> deleteSupplier());
 
         // Xử lý sự kiện nhấn nút Back
         btnBack.setOnClickListener(v -> finish());

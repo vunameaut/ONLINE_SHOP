@@ -11,27 +11,23 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.btl_android.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import android.text.Editable;
-import android.text.TextWatcher;
 
 public class AdminAccountDetailActivity extends AppCompatActivity {
 
     private EditText editTextUsername, editTextEmail, editTextPhone, editTextAddress, editTextRole;
     private TextView textViewUid;
-    private Button btnUpdate, btnDelete;
+    private Button btnUpdate, btnBlock;
     private ImageButton btnBack;
-    private DatabaseReference databaseReference;
-    private String uid;
 
-    // Chuỗi cố định cho các trường
-    private static final String USERNAME_PREFIX = "Tên người dùng: ";
-    private static final String EMAIL_PREFIX = "Email: ";
-    private static final String PHONE_PREFIX = "Số điện thoại: ";
-    private static final String ADDRESS_PREFIX = "Địa chỉ: ";
-    private static final String ROLE_PREFIX = "Vai trò: ";
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
+
+    private String uid;
+    private boolean isAccountDisabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +42,10 @@ public class AdminAccountDetailActivity extends AppCompatActivity {
         editTextRole = findViewById(R.id.editTextRole);
         textViewUid = findViewById(R.id.TextViewUid);
         btnUpdate = findViewById(R.id.btnSua);
-        btnDelete = findViewById(R.id.btnXoa);
+        btnBlock = findViewById(R.id.btnKhoa);
         btnBack = findViewById(R.id.btnBack);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
@@ -58,81 +56,63 @@ public class AdminAccountDetailActivity extends AppCompatActivity {
         String role = intent.getStringExtra("role");
         uid = intent.getStringExtra("uid");
 
-        // Hiển thị thông tin với nhãn
-        editTextUsername.setText(USERNAME_PREFIX + username);
-        editTextEmail.setText(EMAIL_PREFIX + email);
-        editTextPhone.setText(PHONE_PREFIX + phone);
-        editTextAddress.setText(ADDRESS_PREFIX + address);
-        editTextRole.setText(ROLE_PREFIX + role);
+        // Hiển thị thông tin
+        editTextUsername.setText(username);
+        editTextEmail.setText(email);
+        editTextPhone.setText(phone);
+        editTextAddress.setText(address);
+        editTextRole.setText(role);
         textViewUid.setText("UID: " + uid);
 
-        // Khóa phần trước dấu hai chấm trong EditText
-        lockPrefixInEditText(editTextUsername, USERNAME_PREFIX);
-        lockPrefixInEditText(editTextEmail, EMAIL_PREFIX);
-        lockPrefixInEditText(editTextPhone, PHONE_PREFIX);
-        lockPrefixInEditText(editTextAddress, ADDRESS_PREFIX);
-        lockPrefixInEditText(editTextRole, ROLE_PREFIX);
-
-        // Khởi tạo DatabaseReference
+        // Firebase Reference
         databaseReference = FirebaseDatabase.getInstance().getReference("taikhoan").child(uid);
 
-        // Xử lý sự kiện nhấn nút Update
+        // Kiểm tra trạng thái tài khoản
+        checkAccountStatus();
+
+        // Cập nhật
         btnUpdate.setOnClickListener(v -> updateAccount());
 
-        // Xử lý sự kiện nhấn nút Delete
-        btnDelete.setOnClickListener(v -> deleteAccount());
+        // Khóa/mở tài khoản
+        btnBlock.setOnClickListener(v -> toggleAccountStatus());
 
-        // Xử lý sự kiện nhấn nút Back
+        // Quay lại
         btnBack.setOnClickListener(v -> finish());
     }
 
-    // Phương thức khóa phần trước dấu hai chấm
-    private void lockPrefixInEditText(EditText editText, String prefix) {
-        editText.addTextChangedListener(new TextWatcher() {
-            boolean isEditing;
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (isEditing) return;
-                isEditing = true;
-
-                // Kiểm tra nếu phần đầu không khớp với prefix thì đặt lại
-                if (!s.toString().startsWith(prefix)) {
-                    editText.setText(prefix);
-                    editText.setSelection(prefix.length());  // Di chuyển con trỏ sau prefix
-                } else {
-                    // Ngăn người dùng chỉnh sửa phần prefix
-                    if (s.length() < prefix.length()) {
-                        editText.setText(prefix);
-                        editText.setSelection(prefix.length());
-                    }
-                }
-
-                isEditing = false;
+    private void checkAccountStatus() {
+        databaseReference.child("status").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                isAccountDisabled = "disabled".equals(task.getResult().getValue(String.class));
+                updateBlockButton();
             }
         });
     }
 
-    // Phương thức để chỉ cập nhật phần sau dấu hai chấm
+    private void toggleAccountStatus() {
+        String newStatus = isAccountDisabled ? "enabled" : "disabled";
+        databaseReference.child("status").setValue(newStatus).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                isAccountDisabled = !isAccountDisabled;
+                updateBlockButton();
+                Toast.makeText(this, isAccountDisabled ? "Tài khoản đã bị khóa" : "Tài khoản đã mở khóa", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Thay đổi trạng thái thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateBlockButton() {
+        btnBlock.setText(isAccountDisabled ? "Mở khóa" : "Khóa");
+    }
+
     private void updateAccount() {
-        String updatedUsername = extractData(editTextUsername.getText().toString().trim(), USERNAME_PREFIX);
-        String updatedEmail = extractData(editTextEmail.getText().toString().trim(), EMAIL_PREFIX);
-        String phoneString = extractData(editTextPhone.getText().toString().trim(), PHONE_PREFIX);
+        String updatedUsername = editTextUsername.getText().toString().trim();
+        String updatedEmail = editTextEmail.getText().toString().trim();
+        String updatedPhone = editTextPhone.getText().toString().trim();
+        String updatedAddress = editTextAddress.getText().toString().trim();
+        String updatedRole = editTextRole.getText().toString().trim();
 
-        // Xóa mọi ký tự không phải số nếu cần
-        String numericPhoneString = phoneString.replaceAll("[^0-9]", "");
-
-        Long updatedPhone = phoneString.isEmpty() ? null : Long.valueOf(numericPhoneString);
-        String updatedAddress = extractData(editTextAddress.getText().toString().trim(), ADDRESS_PREFIX);
-        String updatedRole = extractData(editTextRole.getText().toString().trim(), ROLE_PREFIX);
-
-        // Cập nhật dữ liệu vào Firebase
         databaseReference.child("username").setValue(updatedUsername);
         databaseReference.child("email").setValue(updatedEmail);
         databaseReference.child("sdt").setValue(updatedPhone);
@@ -140,31 +120,11 @@ public class AdminAccountDetailActivity extends AppCompatActivity {
         databaseReference.child("role").setValue(updatedRole)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(AdminAccountDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(AdminAccountDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void deleteAccount() {
-        // Xóa tài khoản khỏi Firebase
-        databaseReference.removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(AdminAccountDetailActivity.this, "Xóa tài khoản thành công", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(AdminAccountDetailActivity.this, "Xóa tài khoản thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private String extractData(String text, String label) {
-        if (text.startsWith(label)) {
-            return text.substring(label.length()).trim();
-        }
-        return text;
     }
 }

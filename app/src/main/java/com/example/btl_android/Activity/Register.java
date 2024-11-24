@@ -87,7 +87,6 @@ public class Register extends AppCompatActivity {
                         // Đăng ký thành công
                         FirebaseUser user = auth.getCurrentUser(); // Lấy thông tin người dùng hiện tại
                         if (user != null) {
-                            // Gửi email xác thực đến người dùng
                             user.sendEmailVerification()
                                     .addOnCompleteListener(emailTask -> {
                                         if (emailTask.isSuccessful()) {
@@ -103,6 +102,7 @@ public class Register extends AppCompatActivity {
                                             userRef.child("sdt").setValue(""); // Số điện thoại mặc định
                                             userRef.child("role").setValue("user"); // Sửa vai trò nếu cần
                                             userRef.child("dieukhoan").setValue(false); // Đặt giá trị mặc định là false
+                                            userRef.child("status").setValue("enabled"); // Thêm trạng thái mặc định là enabled
 
                                             Toast.makeText(this, "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.", Toast.LENGTH_LONG).show();
 
@@ -118,6 +118,7 @@ public class Register extends AppCompatActivity {
                                         }
                                     });
                         }
+
                     } else {
                         // Nếu đăng ký thất bại
                         String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
