@@ -175,6 +175,7 @@
     <string name="cancel_order">Huỷ đơn hàng</string>
     <string name="browse_orders">Duyệt đơn hàng</string>
     <string name="Block">"Khoá "</string>
+    <string name="Revenue_statistics">Thống kê doanh thu</string>
 
 
 </resources>

@@ -101,7 +101,7 @@ public class Login extends AppCompatActivity {
         mailInputLayout = findViewById(R.id.til_Email);
         passInputLayout = findViewById(R.id.til_Pass);
         rememberMeCheckBox = findViewById(R.id.cb_remember);
-        btn_FgPass = findViewById(R.id.tv_FgPass); // Sửa lỗi tham chiếu
+        btn_FgPass = findViewById(R.id.tv_FgPass); 
         btn_Login = findViewById(R.id.btn_Login);
         btn_Register = findViewById(R.id.btn_Register);
         btn_Language = findViewById(R.id.btn_Language);
