@@ -155,6 +155,7 @@
     <string name="CommunityStandards">Community Standards</string>
     <string name="AgreeToTheTerms">I agree to the terms</string>
     <string name="Continue">Continue</string>
+    <string name="Revenue_statistics">Revenue statistics</string>
 
     <string-array name="role_options">
         <item>user</item>

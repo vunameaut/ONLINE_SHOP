@@ -93,26 +93,55 @@ public class AdminDonHangDetailActivity extends AppCompatActivity {
     }
 
     private void cancelOrder() {
-        // Cập nhật trạng thái thành "Đã hủy"
-        databaseReference.child("trangThai").setValue("Đã hủy").addOnCompleteListener(task -> {
+        // Kiểm tra trạng thái hiện tại trước khi hủy
+        databaseReference.child("trangThai").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(this, "Đơn hàng đã bị hủy", Toast.LENGTH_SHORT).show();
-                finish();
+                String currentStatus = task.getResult().getValue(String.class);
+                if ("Đã duyệt".equals(currentStatus)) {
+                    Toast.makeText(this, "Không thể hủy đơn hàng đã được duyệt", Toast.LENGTH_SHORT).show();
+                } else if ("Đã hủy".equals(currentStatus)) {
+                    Toast.makeText(this, "Đơn hàng đã bị hủy trước đó", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Cập nhật trạng thái thành "Đã hủy"
+                    databaseReference.child("trangThai").setValue("Đã hủy").addOnCompleteListener(updateTask -> {
+                        if (updateTask.isSuccessful()) {
+                            Toast.makeText(this, "Đơn hàng đã bị hủy", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, "Hủy đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             } else {
-                Toast.makeText(this, "Hủy đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Không thể kiểm tra trạng thái đơn hàng", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void approveOrder() {
-        // Cập nhật trạng thái thành "Đã duyệt"
-        databaseReference.child("trangThai").setValue("Đã duyệt").addOnCompleteListener(task -> {
+        // Kiểm tra trạng thái hiện tại trước khi duyệt
+        databaseReference.child("trangThai").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(this, "Đơn hàng đã được duyệt", Toast.LENGTH_SHORT).show();
-                finish();
+                String currentStatus = task.getResult().getValue(String.class);
+                if ("Đã hủy".equals(currentStatus)) {
+                    Toast.makeText(this, "Không thể duyệt đơn hàng đã bị hủy", Toast.LENGTH_SHORT).show();
+                } else if ("Đã duyệt".equals(currentStatus)) {
+                    Toast.makeText(this, "Đơn hàng đã được duyệt trước đó", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Cập nhật trạng thái thành "Đã duyệt"
+                    databaseReference.child("trangThai").setValue("Đã duyệt").addOnCompleteListener(updateTask -> {
+                        if (updateTask.isSuccessful()) {
+                            Toast.makeText(this, "Đơn hàng đã được duyệt", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, "Duyệt đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             } else {
-                Toast.makeText(this, "Duyệt đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Không thể kiểm tra trạng thái đơn hàng", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

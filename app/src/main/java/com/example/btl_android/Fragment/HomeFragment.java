@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,8 @@ public class HomeFragment extends Fragment {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference dbRef = database.getReference("san_pham");
 
+    private ValueEventListener valueEventListener; // Khai báo listener để hủy đúng cách
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +69,9 @@ public class HomeFragment extends Fragment {
         if (CheckConn.haveNetworkConn(requireContext())) {
             ActionViewFlipper();
             NewProduct();
-        }
-        else
+        } else {
             CheckConn.showToast(requireContext(), "Không có kết nối mạng");
+        }
 
         return view;
     }
@@ -83,32 +86,34 @@ public class HomeFragment extends Fragment {
                             String imageUrl = uri.toString();
                             imageAdvertise.add(imageUrl);
 
-                            ImageView imageView = new ImageView(getContext());
-                            Picasso.get().load(imageUrl).into(imageView);
-                            // Thay đổi scaleType để tránh méo ảnh
-                            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);  // Hoặc CENTER_CROP
-                            viewFlipper.addView(imageView);
+                            if (isAdded()) { // Kiểm tra Fragment còn gắn với Context
+                                ImageView imageView = new ImageView(requireContext());
+                                Picasso.get().load(imageUrl).into(imageView);
+                                // Thay đổi scaleType để tránh méo ảnh
+                                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                                viewFlipper.addView(imageView);
+                            }
                         });
                     }
                 });
-        viewFlipper.setFlipInterval(5000);
-        viewFlipper.setAutoStart(true);
-        Animation animationIn = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_right);
-        Animation animationOut = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_right);
-        viewFlipper.setInAnimation(animationIn);
-        viewFlipper.setOutAnimation(animationOut);
+        if (isAdded()) { // Kiểm tra trước khi thiết lập animation
+            viewFlipper.setFlipInterval(5000);
+            viewFlipper.setAutoStart(true);
+            Animation animationIn = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right);
+            Animation animationOut = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_right);
+            viewFlipper.setInAnimation(animationIn);
+            viewFlipper.setOutAnimation(animationOut);
+        }
     }
 
-
     private void NewProduct() {
-        dbRef.orderByKey().limitToLast(10).addValueEventListener(new ValueEventListener() {
+        valueEventListener = dbRef.orderByKey().limitToLast(10).addValueEventListener(new ValueEventListener() {
 
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mangSanPham.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
                     String ten = snapshot.child("ten_san_pham").getValue(String.class);
                     Integer gia = snapshot.child("gia").getValue(Integer.class);
                     String anh = snapshot.child("hinh_anh").getValue(String.class);
@@ -116,15 +121,26 @@ public class HomeFragment extends Fragment {
                     Integer soLuong = snapshot.child("so_luong_ton_kho").getValue(Integer.class);
                     String moTa = snapshot.child("mo_ta").getValue(String.class);
                     mangSanPham.add(new SanPham(ten, gia, anh, loai, soLuong, moTa));
-                    //Log.d("PhoneFragment", "Tên sản phẩm: " + ten);
                     adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                CheckConn.showToast(requireContext(), "Lỗi: " + error.getMessage());
+                if (isAdded()) { // Kiểm tra Fragment còn gắn với Activity
+                    CheckConn.showToast(requireContext(), "Lỗi: " + error.getMessage());
+                } else {
+                    Log.w("HomeFragment", "Fragment not attached to context. Error: " + error.getMessage());
+                }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (dbRef != null && valueEventListener != null) {
+            dbRef.removeEventListener(valueEventListener); // Hủy listener Firebase
+        }
     }
 }
