@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,6 +41,7 @@ public class Login extends AppCompatActivity {
     TextInputLayout mailInputLayout, passInputLayout;
     CheckBox rememberMeCheckBox;
     Button btn_Login, btn_Register, btn_FgPass, btn_Language;
+    RelativeLayout loaderLayout;
 
     FirebaseAuth auth;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -74,7 +78,10 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btn_Login.setOnClickListener(view -> LoginToHomepage());
+        btn_Login.setOnClickListener(view -> {
+            showLoader(); // Hiển thị loader khi bắt đầu đăng nhập
+            LoginToHomepage();
+        });
 
         btn_Register.setOnClickListener(view -> {
             Intent intent = new Intent(this, Register.class);
@@ -101,17 +108,29 @@ public class Login extends AppCompatActivity {
         mailInputLayout = findViewById(R.id.til_Email);
         passInputLayout = findViewById(R.id.til_Pass);
         rememberMeCheckBox = findViewById(R.id.cb_remember);
-        btn_FgPass = findViewById(R.id.tv_FgPass); 
+        btn_FgPass = findViewById(R.id.tv_FgPass);
         btn_Login = findViewById(R.id.btn_Login);
         btn_Register = findViewById(R.id.btn_Register);
         btn_Language = findViewById(R.id.btn_Language);
+        loaderLayout = findViewById(R.id.loader_layout);
+    }
+
+    private void showLoader() {
+        loaderLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoader() {
+        loaderLayout.setVisibility(View.GONE);
     }
 
     private void LoginToHomepage() {
         String inputEmail = mailEditText.getText().toString();
         String inputPass = passEditText.getText().toString();
 
-        if (!checkInput(inputEmail, inputPass)) return;
+        if (!checkInput(inputEmail, inputPass)) {
+            hideLoader(); // Ẩn loader nếu input không hợp lệ
+            return;
+        }
 
         auth.signInWithEmailAndPassword(inputEmail, inputPass)
                 .addOnCompleteListener(this, task -> {
@@ -124,10 +143,10 @@ public class Login extends AppCompatActivity {
                         }
                     } else {
                         handleLoginError(task.getException());
+                        hideLoader(); // Ẩn loader khi đăng nhập thất bại
                     }
                 });
     }
-
     private void checkUserRole(String uid, FirebaseUser user) {
         dbRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
